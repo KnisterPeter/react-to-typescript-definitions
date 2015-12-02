@@ -2,6 +2,7 @@ declare module 'simple-component' {
 	import * as React from 'react';
 
 	interface Props {
+		optionalAny?: any;
 		optionalArray?: any[];
 		optionalBool?: boolean;
 		optionalFunc?: (...args: any[]) => any;

@@ -92,18 +92,20 @@ function getTypeFromPropType(node: any): string {
 		if (isMemberExpression(node)) {
 			const type = convertMemberExpression(node);
 			switch (type) {
-				case 'React.PropTypes.number':
-					return 'number';
-				case 'React.PropTypes.string':
-					return 'string';
+				case 'React.PropTypes.any':
+					return 'any';
 				case 'React.PropTypes.array':
 					return 'any[]';
 				case 'React.PropTypes.bool':
 					return 'boolean';
 				case 'React.PropTypes.func':
 					return '(...args: any[]) => any';
+				case 'React.PropTypes.number':
+					return 'number';
 				case 'React.PropTypes.object':
 					return 'Object';
+				case 'React.PropTypes.string':
+					return 'string';
 				case 'React.PropTypes.node':
 					return 'React.ReactNode';
 				case 'React.PropTypes.element':

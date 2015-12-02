@@ -3,6 +3,7 @@ import * as React from 'react';
 export default class SimpleComponent extends React.Component {
 
 	static propTypes = {
+		optionalAny: React.PropTypes.any,
 		optionalArray: React.PropTypes.array,
 		optionalBool: React.PropTypes.bool,
 		optionalFunc: React.PropTypes.func,
