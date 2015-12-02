@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "KnisterPeter/webtunes"
+    "url": "KnisterPeter/react-to-typescript-definitions"
   },
   "license": "MIT",
   "devDependencies": {

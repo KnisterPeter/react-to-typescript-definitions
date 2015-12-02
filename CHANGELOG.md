@@ -1,10 +1,4 @@
 <a name="0.2.1"></a>
-## [0.2.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.2.1...v0.2.1) (2015-12-02)
-
-
-
-
-<a name="0.2.1"></a>
 ## [0.2.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.2.0...v0.2.1) (2015-12-02)
 
 
