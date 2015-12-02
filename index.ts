@@ -104,6 +104,10 @@ function getTypeFromPropType(node: any): string {
 					return '(...args: any[]) => any';
 				case 'React.PropTypes.object':
 					return 'Object';
+				case 'React.PropTypes.node':
+					return 'React.ReactNode';
+				case 'React.PropTypes.element':
+					return 'React.ReactElement<any>';
 			}
 		}
 	}

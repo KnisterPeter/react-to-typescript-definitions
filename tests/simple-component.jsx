@@ -3,12 +3,14 @@ import * as React from 'react';
 export default class SimpleComponent extends React.Component {
 
 	static propTypes = {
-		number: React.PropTypes.number,
-		string: React.PropTypes.string,
-		array: React.PropTypes.array,
-		bool: React.PropTypes.bool,
-		func: React.PropTypes.func,
-		object: React.PropTypes.object
+		optionalArray: React.PropTypes.array,
+		optionalBool: React.PropTypes.bool,
+		optionalFunc: React.PropTypes.func,
+		optionalNumber: React.PropTypes.number,
+		optionalObject: React.PropTypes.object,
+		optionalString: React.PropTypes.string,
+		optionalNode: React.PropTypes.node,
+		optionalElement: React.PropTypes.element,
 	};
 
 	render() {
