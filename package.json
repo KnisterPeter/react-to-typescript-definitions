@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && node -r babel/register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec"
+    "test": "npm run build && node -r babel/register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec",
+    "prepublish": "not-in-install && npm run build || echo 'In install cycle, skipping prepublish'"
   },
   "author": {
     "name": "Markus Wolf",
@@ -19,6 +20,7 @@
   "devDependencies": {
     "babel": "5.8.29",
     "cz-conventional-changelog": "1.1.4",
+    "in-publish": "2.0.0",
     "react": "0.14.3",
     "tap-spec": "4.1.1",
     "tape": "4.2.2",
