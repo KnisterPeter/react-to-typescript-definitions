@@ -6,6 +6,7 @@
 	"scripts": {
 		"build": "tsc",
 		"test": "npm run build && node -r babel-register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec",
+		"changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
 		"prepublish": "not-in-install && npm run build || echo 'In install cycle, skipping prepublish'"
 	},
 	"author": {
