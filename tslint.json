@@ -1,0 +1,50 @@
+{
+  "class-name": true,
+  "curly": true,
+  "eofline": true,
+  "jsdoc-format": true,
+  "member-access": {
+    "check-accessor": true,
+    "check-constructor": true
+  },
+  "member-ordering": {
+    "static-before-instance": true,
+    "variables-before-functions": true
+  },
+  "no-any": true,
+  "no-arg": true,
+  "no-conditional-assignment": true,
+  "no-consecutive-blank-lines": true,
+  "no-construct": true,
+  "no-duplicate-key": true,
+  "no-duplicate-variable": true,
+  "no-empty": true,
+  "no-eval": true,
+  "no-internal-module": true,
+  "no-require-imports": true,
+  "no-shadowed-variable": true,
+  "no-switch-case-fall-through": true,
+  "no-trailing-whitespace": true,
+  "no-unreachable": true,
+  "no-unused-expression": true,
+  "no-unused-variable": true,
+  "no-use-before-declare": true,
+  "no-var-keyword": true,
+  "no-var-requires": true,
+  "one-line": {
+    "check-catch": true,
+    "check-else": true,
+    "check-open-brace": true,
+    "check-whitespace": true
+  },
+  "quotemark": [true, "single", "avoid-escape"],
+  "radix": true,
+  "semicolon": true,
+  "typedef": {
+    "call-signature": true,
+    "parameter": true,
+    "property-declaration": true,
+    "variable-declaration": true,
+    "member-variable-declaration": true
+  }
+}

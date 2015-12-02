@@ -1,0 +1,30 @@
+{
+	"name": "react-to-typescript-definitions",
+	"version": "0.1.0",
+	"description": "Create typescript definitions files (d.ts) from react components",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "tsc",
+		"test": "npm run build && node -r babel/register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec"
+	},
+	"author": {
+		"name": "Markus Wolf",
+		"email": "knister.peter@shadowrun-clan.de"
+	},
+	"repository": {
+		"type": "git",
+		"url": "KnisterPeter/webtunes"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"babel": "5.8.29",
+		"react": "0.14.3",
+		"tap-spec": "4.1.1",
+		"tape": "4.2.2",
+		"tslint": "3.1.1",
+		"typescript": "1.7.3"
+	},
+	"dependencies": {
+		"babylon": "6.3.0"
+	}
+}
