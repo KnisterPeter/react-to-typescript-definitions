@@ -30,7 +30,7 @@
 		"typescript": "1.7.3"
 	},
 	"dependencies": {
-		"babylon": "6.3.0"
+		"babylon": "6.3.14"
 	},
 	"config": {
 		"commitizen": {
