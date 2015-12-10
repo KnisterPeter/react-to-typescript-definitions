@@ -1,9 +1,15 @@
+#!/usr/bin/env node
 import * as path from 'path';
 import * as fs from 'fs';
 import * as babylon from 'babylon';
+const minimist = require('minimist');
 
-export function generate(name: string, path: string): string {
-	const ast = babylon.parse(fs.readFileSync(path).toString(), {
+export function generateFromFile(name: string, path: string): string {
+	return generate(name, fs.readFileSync(path).toString());
+}
+
+export function generate(name: string, code: string): string {
+	const ast = babylon.parse(code, {
 		sourceType: 'module',
 		plugins: [
 			'jsx',
@@ -203,3 +209,20 @@ class Writer {
 	}
 
 }
+
+const options = minimist(process.argv.slice(2), {
+	string: 'name'
+});
+
+const stdinCode: string[] = [];
+process.stdin.resume();
+process.stdin.on('data', (data: Buffer) => {
+	stdinCode.push(data.toString());
+});
+process.stdin.on('end', () => {
+	if (!options.name) {
+		console.error('Failed to specify --name parameter');
+		process.exit(1);
+	}
+	process.stdout.write(generate(options.name, stdinCode.join('')));
+});

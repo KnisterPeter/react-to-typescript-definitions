@@ -3,6 +3,9 @@
 	"version": "0.2.1",
 	"description": "Create typescript definitions files (d.ts) from react components",
 	"main": "index.js",
+	"bin": {
+		"react2dts": "index.js"
+	},
 	"scripts": {
 		"build": "tsc",
 		"test": "npm run build && node -r babel-register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec",
@@ -30,7 +33,8 @@
 		"typescript": "1.7.3"
 	},
 	"dependencies": {
-		"babylon": "6.3.15"
+		"babylon": "6.3.15",
+		"minimist": "1.2.0"
 	},
 	"config": {
 		"commitizen": {
