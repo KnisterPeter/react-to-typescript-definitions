@@ -17,13 +17,26 @@ Install as npm package:
 ```sh
 npm install react-to-typescript-definitions --save-dev
 ```
+or
+```sh
+npm install -g react-to-typescript-definitions
+```
+
+
+## CLI
+
+```sh
+cat <some/react/component.jsx> |react2dts --name module-name
+```
 
 ## API
 
 ```js
 import * as react2dts from 'react-to-typescript-definitions';
 
-// react2dts.generate('<module-name>', '<path/to/react-component>');
-react2dts.generate('component', path.join(__dirname, 'component.jsx'));
+// react2dts.generateFromFile('<module-name>', '<path/to/react-component>');
+react2dts.generateFromFile('component', path.join(__dirname, 'component.jsx'));
 
+// react2dts.generate('<module-name>', '<code of the component>');
+react2dts.generate('component', 'component-code');
 ```
