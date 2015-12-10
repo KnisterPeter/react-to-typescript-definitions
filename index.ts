@@ -215,9 +215,14 @@ const options = minimist(process.argv.slice(2), {
 });
 
 const stdinCode: string[] = [];
-process.stdin.resume();
-process.stdin.on('data', (data: Buffer) => {
-	stdinCode.push(data.toString());
+process.stdin.on('readable', () => {
+	const chunk = process.stdin.read();
+	if (chunk !== null) {
+		stdinCode.push(chunk.toString());
+	} else {
+		// No stdin -> let node terminate
+		process.stdin.pause();
+	}
 });
 process.stdin.on('end', () => {
 	if (!options.name) {
