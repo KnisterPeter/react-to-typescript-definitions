@@ -29,34 +29,35 @@ export function generate(name: string, code: string): string {
 	});
 	const writer = new Writer();
 	writer.declareModule(name, () => {
-		writer.import('* as React', 'react', () => {
-			writer.nl();
-			walk(ast.program, {
-				'ExportDefaultDeclaration': (node: any) => {
-					walk(node, {
-						'ClassDeclaration': (node: any) => {
-							let propTypes: any = false;
-							walk(node.body, {
-								'ClassProperty': (node: any) => {
-									if (node.key.name == 'propTypes') {
-										propTypes = {};
-										walk(node.value, {
-											'ObjectProperty': (node: any) => {
-												propTypes[node.key.name] = getTypeFromPropType(node.value);
-											}
-										});
-									}
+		writer.import('* as React', 'react');
+		writer.nl();
+		walk(ast.program, {
+			'ExportDefaultDeclaration': (node: any) => {
+				let name: string;
+				let propTypes: any = false;
+				walk(node, {
+					'ClassDeclaration': (node: any) => {
+						name = node.id.name;
+						walk(node.body, {
+							'ClassProperty': (node: any) => {
+								if (node.key.name == 'propTypes') {
+									propTypes = {};
+									walk(node.value, {
+										'ObjectProperty': (node: any) => {
+											propTypes[node.key.name] = getTypeFromPropType(node.value);
+										}
+									});
 								}
-							});
-							writer.props(node.id.name, propTypes);
-							writer.nl();
-							writer.exportDefault(() => {
-								writer.class(node.id.name, !!propTypes);
-							});
-						}
-					});
-				}
-			});
+							}
+						});
+						writer.props(name, propTypes);
+						writer.nl();
+					}
+				});
+				writer.exportDefault(() => {
+					writer.class(name, !!propTypes);
+				});
+			}
 		});
 	});
 	return writer.toString();
@@ -154,11 +155,11 @@ class Writer {
 		this.nl();
 	}
 
-	import(decl: string, from: string, fn: () => void) {
+	import(decl: string, from: string, fn?: () => void) {
 		this.indent();
 		this.code += `import ${decl} from '${from}';`;
 		this.nl();
-		fn();
+		fn && fn();
 	}
 
 	props(name: string, props: any, fn?: () => void) {
