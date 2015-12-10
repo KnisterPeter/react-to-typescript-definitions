@@ -1,7 +1,7 @@
 declare module 'simple-component' {
 	import * as React from 'react';
 
-	interface Props {
+	interface SimpleComponentProps {
 		optionalAny?: any;
 		optionalArray?: any[];
 		optionalBool?: boolean;
@@ -13,6 +13,6 @@ declare module 'simple-component' {
 		optionalElement?: React.ReactElement<any>;
 	}
 
-	export default class SimpleComponent extends React.Component<Props, any> {
+	export default class SimpleComponent extends React.Component<SimpleComponentProps, any> {
 	}
 }

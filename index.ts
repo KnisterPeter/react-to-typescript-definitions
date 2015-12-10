@@ -48,7 +48,7 @@ export function generate(name: string, code: string): string {
 									}
 								}
 							});
-							writer.props(propTypes);
+							writer.props(node.id.name, propTypes);
 							writer.nl();
 							writer.exportDefault(() => {
 								writer.class(node.id.name, !!propTypes);
@@ -161,8 +161,8 @@ class Writer {
 		fn();
 	}
 
-	props(props: any, fn?: () => void) {
-		this.interface('Props', () => {
+	props(name: string, props: any, fn?: () => void) {
+		this.interface(`${name}Props`, () => {
 			Object.keys(props).forEach((propName: any) => this.prop(propName, props[propName], true));
 		});
 		fn && fn();
@@ -194,7 +194,7 @@ class Writer {
 	}
 
 	class(name: string, props: boolean, fn?: () => void) {
-		this.code += `class ${name} extends React.Component<${props ? 'Props' : 'any'}, any> {`;
+		this.code += `class ${name} extends React.Component<${props ? `${name}Props` : 'any'}, any> {`;
 		this.nl();
 		this.indentLevel++;
 		fn && fn();
