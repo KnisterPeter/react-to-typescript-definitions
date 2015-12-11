@@ -1,11 +1,12 @@
 {
-	"compilerOptions": {
-		"target": "ES5",
-		"module": "commonjs",
-		"noImplicitAny": true
-	},
-	"files": [
-		"typings/tsd.d.ts",
-		"index.ts"
-	]
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "sourceMap": true
+  },
+  "files": [
+    "typings/tsd.d.ts",
+    "index.ts"
+  ]
 }
