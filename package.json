@@ -4,7 +4,7 @@
   "description": "Create typescript definitions files (d.ts) from react components",
   "main": "index.js",
   "bin": {
-    "react2dts": "index.js"
+    "react2dts": "cli.js"
   },
   "scripts": {
     "build": "tsc",

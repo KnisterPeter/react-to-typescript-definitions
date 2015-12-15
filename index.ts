@@ -1,7 +1,25 @@
-#!/usr/bin/env node
 import * as fs from 'fs';
 import * as babylon from 'babylon';
-const minimist: any = require('minimist');
+
+export function cli(options: any) {
+  const stdinCode: string[] = [];
+  process.stdin.on('readable', () => {
+    const chunk: string|Buffer = process.stdin.read();
+    if (chunk !== null) {
+      stdinCode.push(chunk.toString());
+    } else {
+      // No stdin -> let node terminate
+      process.stdin.pause();
+    }
+  });
+  process.stdin.on('end', () => {
+    if (!options.name) {
+      console.error('Failed to specify --name parameter');
+      process.exit(1);
+    }
+    process.stdout.write(generate(options.name, stdinCode.join('')));
+  });
+}
 
 export function generateFromFile(name: string, path: string): string {
   return generate(name, fs.readFileSync(path).toString());
@@ -222,25 +240,3 @@ class Writer {
   }
 
 }
-
-const options: any = minimist(process.argv.slice(2), {
-  string: 'name'
-});
-
-const stdinCode: string[] = [];
-process.stdin.on('readable', () => {
-  const chunk: string|Buffer = process.stdin.read();
-  if (chunk !== null) {
-    stdinCode.push(chunk.toString());
-  } else {
-    // No stdin -> let node terminate
-    process.stdin.pause();
-  }
-});
-process.stdin.on('end', () => {
-  if (!options.name) {
-    console.error('Failed to specify --name parameter');
-    process.exit(1);
-  }
-  process.stdout.write(generate(options.name, stdinCode.join('')));
-});
