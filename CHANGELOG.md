@@ -1,3 +1,13 @@
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.3.1...v0.3.2) (2015-12-15)
+
+
+### Performance Improvements
+
+* Reduced indention depth ([d981864](https://github.com/knisterpeter/react-to-typescript-definitions/commit/d981864))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.3.0...v0.3.1) (2015-12-10)
 
