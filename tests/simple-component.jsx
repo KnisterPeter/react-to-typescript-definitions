@@ -11,7 +11,7 @@ export default class SimpleComponent extends React.Component {
 		optionalObject: React.PropTypes.object,
 		optionalString: React.PropTypes.string,
 		optionalNode: React.PropTypes.node,
-		optionalElement: React.PropTypes.element,
+		optionalElement: React.PropTypes.element
 	};
 
 	render() {
