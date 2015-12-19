@@ -188,6 +188,7 @@ class Writer {
 
   public props(name: string, props: any, fn?: () => void): void {
     this.interface(`${name}Props`, () => {
+      this.prop('key', 'any', true);
       Object.keys(props).forEach((propName: any) => this.prop(propName, props[propName], true));
     });
     if (fn) {

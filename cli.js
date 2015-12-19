@@ -3,7 +3,7 @@ var react2dts = require('./index');
 var minimist = require('minimist');
 
 var options = minimist(process.argv.slice(2), {
-  string: 'name'
+  string: ['name']
 });
 
 react2dts.cli(options);
