@@ -7,6 +7,7 @@
   },
   "files": [
     "typings/tsd.d.ts",
-    "index.ts"
+    "index.ts",
+    "tests/component-test.ts"
   ]
 }

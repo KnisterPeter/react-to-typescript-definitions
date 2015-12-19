@@ -7,6 +7,8 @@
     "react2dts": "cli.js"
   },
   "scripts": {
+    "clean": "rm -f index.js index.js.map tests/*.js tests/*.js.map",
+    "prebuild": "npm run clean",
     "build": "tsc",
     "pretest": "npm run build",
     "test": "mocha -r babel-register 'tests/**/*-test.js'",
