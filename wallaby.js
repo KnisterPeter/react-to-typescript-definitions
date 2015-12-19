@@ -6,7 +6,7 @@ module.exports = function (wallaby) {
       'tests/**/*.d.ts'
     ],
     tests: [
-      'tests/**/*-test.js'
+      'tests/**/*-test.ts'
     ],
     testFramework: 'mocha',
     env: {
@@ -16,10 +16,6 @@ module.exports = function (wallaby) {
       '**/*.ts': wallaby.compilers.typeScript({
         typescript: require('typescript'),
         module: 1 // commonjs
-      }),
-      'tests/**/*.js': wallaby.compilers.babel({
-        babel: require('babel-core'),
-        presets: ['es2015']
       })
     }
   };

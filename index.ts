@@ -145,7 +145,7 @@ function getTypeFromPropType(node: any): string {
   return 'any';
 }
 
-class Writer {
+export class Writer {
 
   private static NL: string = '\n';
 

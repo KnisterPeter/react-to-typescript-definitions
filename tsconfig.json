@@ -8,6 +8,7 @@
   "files": [
     "typings/tsd.d.ts",
     "index.ts",
+    "tests/writer-test.ts",
     "tests/component-test.ts"
   ]
 }
