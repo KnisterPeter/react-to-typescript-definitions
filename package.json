@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "npm run build && node -r babel-register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec",
+    "pretest": "npm run build",
+    "test": "node -r babel-register ./node_modules/.bin/tape 'tests/**/*-test.js' |tap-spec",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
     "preversion": "npm test",
     "version": "npm run build && conventional-changelog -p angular -v -r 0 > CHANGELOG.md && git add -A .",
