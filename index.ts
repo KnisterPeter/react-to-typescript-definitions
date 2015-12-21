@@ -27,6 +27,7 @@ export interface IProp {
   optional: boolean;
   importType?: string;
   importPath?: string;
+  documentation?: string;
 }
 
 export interface IPropTypes {
@@ -121,7 +122,9 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
             propTypes = {};
             walk(attributeNode.value, {
               'ObjectProperty': (propertyNode: any): void => {
-                propTypes[propertyNode.key.name] = getTypeFromPropType(propertyNode.value, instanceOfResolver);
+                const prop: IProp = getTypeFromPropType(propertyNode.value, instanceOfResolver);
+                prop.documentation = getOptionalDocumentation(propertyNode);
+                propTypes[propertyNode.key.name] = prop;
               }
             });
           }
@@ -133,6 +136,12 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
     classname,
     propTypes
   };
+}
+
+function getOptionalDocumentation(propertyNode: any): string {
+  return (((propertyNode.leadingComments || []) as any[])
+    .filter((comment: any) => comment.type == 'CommentBlock')[0] || {})
+    .value;
 }
 
 interface IAstWalkHandlers {
@@ -293,12 +302,12 @@ export class Writer {
     }
   }
 
-  public props(name: string, props: any, fn?: () => void): void {
+  public props(name: string, props: IPropTypes, fn?: () => void): void {
     this.interface(`${name}Props`, () => {
       this.prop('key', 'any', true);
       Object.keys(props).forEach((propName: any) => {
         const prop: IProp = props[propName];
-        this.prop(propName, prop.type, prop.optional);
+        this.prop(propName, prop.type, prop.optional, prop.documentation);
       });
     });
     if (fn) {
@@ -306,13 +315,28 @@ export class Writer {
     }
   }
 
-  public prop(name: string, type: string, optional: boolean, fn?: () => void): void {
+  public prop(name: string, type: string, optional: boolean, documentation?: string): void {
     this.indent();
+    if (documentation) {
+      this.comment(documentation);
+    }
     this.code += `${name}${optional ? '?' : ''}: ${type};`;
     this.nl();
-    if (fn) {
-      fn();
-    }
+  }
+
+  public comment(comment: string): void {
+    this.code += '/*';
+    const lines: string[] = (comment || '').replace(/\t/g, '').split(/\n/g);
+    lines.forEach((line: string, index: number) => {
+      this.code += line;
+      if (index < lines.length - 1) {
+        this.nl();
+        this.indent();
+      }
+    });
+    this.code += '*/';
+    this.nl();
+    this.indent();
   }
 
   public interface(name: string, fn: () => void): void {

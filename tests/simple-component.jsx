@@ -3,6 +3,9 @@ import * as React from 'react';
 export default class SimpleComponent extends React.Component {
 
 	static propTypes = {
+		/**
+		 * This is a jsdoc comment for optionalAny.
+		 */
 		optionalAny: React.PropTypes.any,
 		optionalArray: React.PropTypes.array,
 		optionalBool: React.PropTypes.bool,

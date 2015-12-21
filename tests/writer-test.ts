@@ -36,4 +36,8 @@ describe('The Writer', () => {
     writer.class('Name', false);
     assert.equal(writer.toString(), 'class Name extends React.Component<any, any> {\n}\n');
   });
+  it('should write an indented block comment', () => {
+    writer.comment('* yada\n\t\t\t\tyada\n ');
+    assert.equal(writer.toString(), '/** yada\nyada\n */\n');
+  });
 });

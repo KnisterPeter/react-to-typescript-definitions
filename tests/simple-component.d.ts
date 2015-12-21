@@ -4,6 +4,9 @@ declare module 'simple-component' {
 
 	interface SimpleComponentProps {
 		key?: any;
+		/**
+		 * This is a jsdoc comment for optionalAny.
+		 */
 		optionalAny?: any;
 		optionalArray?: any[];
 		optionalBool?: boolean;
