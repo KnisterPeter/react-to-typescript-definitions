@@ -1,3 +1,15 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.4.0...v0.5.0) (2015-12-21)
+
+
+### Features
+
+* Added arrayOf type props ([faa9e0b](https://github.com/knisterpeter/react-to-typescript-definitions/commit/faa9e0b))
+* Added required props ([f5d8cf7](https://github.com/knisterpeter/react-to-typescript-definitions/commit/f5d8cf7))
+* Added union proptypes ([033a159](https://github.com/knisterpeter/react-to-typescript-definitions/commit/033a159))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.3.2...v0.4.0) (2015-12-19)
 
