@@ -12,6 +12,8 @@ declare module 'simple-component' {
 		optionalString?: string;
 		optionalNode?: React.ReactNode;
 		optionalElement?: React.ReactElement<any>;
+		requiredFunc: (...args: any[]) => any;
+		requiredAny: any;
 	}
 
 	export default class SimpleComponent extends React.Component<SimpleComponentProps, any> {

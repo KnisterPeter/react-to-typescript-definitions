@@ -25,7 +25,7 @@ describe('The Writer', () => {
     assert.equal(writer.toString(), 'name?: type;\n');
   });
   it('should write a property interface', () => {
-    writer.props('Name', {prop: 'type'});
+    writer.props('Name', {prop: {type: 'type', optional: true}});
     assert.equal(writer.toString(), 'interface NameProps {\n\tkey?: any;\n\tprop?: type;\n}\n');
   });
   it('should write a class with props declaration', () => {

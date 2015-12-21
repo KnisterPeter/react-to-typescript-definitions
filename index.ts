@@ -102,47 +102,66 @@ function isNode(obj: any): boolean {
   return obj && typeof obj.type != 'undefined' && typeof obj.loc != 'undefined';
 }
 
-export function getTypeFromPropType(node: any): string {
+function getReactPropTypeFromExpression(node: any): any {
+  if (node.object.type == 'MemberExpression'
+      && node.object.object.name == 'React' && node.object.property.name == 'PropTypes') {
+    return node.property;
+  }
+  return 'undefined';
+}
+
+function isRequiredPropType(node: any): any {
+  const isRequired: boolean = node.type == 'MemberExpression' && node.property.name == 'isRequired';
+  return {
+    isRequired,
+    type: getReactPropTypeFromExpression(isRequired ? node.object : node)
+  };
+}
+
+interface IProperty {
+  type: string;
+  optional: boolean;
+}
+
+export function getTypeFromPropType(node: any): IProperty {
+  const result: any = {
+    type: 'any',
+    optional: true
+  };
   if (isNode(node)) {
-    const isMemberExpression = (node: any): boolean => {
-      return node.type == 'MemberExpression';
-    };
-    const convertMemberExpression = (node: any): string => {
-      if (isMemberExpression(node.object)) {
-        return convertMemberExpression(node.object) + '.' + node.property.name;
-      }
-      return node.object.name + '.' + node.property.name;
-    };
-    if (isMemberExpression(node)) {
-      const type: string = convertMemberExpression(node);
-      switch (type) {
-        case 'React.PropTypes.any':
-          return 'any';
-        case 'React.PropTypes.array':
-          return 'any[]';
-        case 'React.PropTypes.bool':
-          return 'boolean';
-        case 'React.PropTypes.func':
-          return '(...args: any[]) => any';
-        case 'React.PropTypes.number':
-          return 'number';
-        case 'React.PropTypes.object':
-          return 'Object';
-        case 'React.PropTypes.string':
-          return 'string';
-        case 'React.PropTypes.node':
-          return 'React.ReactNode';
-        case 'React.PropTypes.element':
-          return 'React.ReactElement<any>';
-        // - React.PropTypes.instanceOf - Would only be possible if the TS
-        //   class is known to the definition file. Probably then all code
-        //   is written in TS.
-        // - React.PropTypes.oneOf - Currently this could not be expressed
-        //   in a typesave manner in TS.
-      }
+    const {isRequired, type}: any = isRequiredPropType(node);
+    result.optional = !isRequired;
+    switch (type.name) {
+      case 'any':
+        result.type = 'any';
+        break;
+      case 'array':
+        result.type = 'any[]';
+        break;
+      case 'bool':
+        result.type = 'boolean';
+        break;
+      case 'func':
+        result.type = '(...args: any[]) => any';
+        break;
+      case 'number':
+        result.type = 'number';
+        break;
+      case 'object':
+        result.type = 'Object';
+        break;
+      case 'string':
+        result.type = 'string';
+        break;
+      case 'node':
+        result.type = 'React.ReactNode';
+        break;
+      case 'element':
+        result.type = 'React.ReactElement<any>';
+        break;
     }
   }
-  return 'any';
+  return result;
 }
 
 export class Writer {
@@ -189,7 +208,10 @@ export class Writer {
   public props(name: string, props: any, fn?: () => void): void {
     this.interface(`${name}Props`, () => {
       this.prop('key', 'any', true);
-      Object.keys(props).forEach((propName: any) => this.prop(propName, props[propName], true));
+      Object.keys(props).forEach((propName: any) => {
+        const prop: IProperty = props[propName];
+        this.prop(propName, prop.type, prop.optional);
+      });
     });
     if (fn) {
       fn();

@@ -11,7 +11,22 @@ export default class SimpleComponent extends React.Component {
 		optionalObject: React.PropTypes.object,
 		optionalString: React.PropTypes.string,
 		optionalNode: React.PropTypes.node,
-		optionalElement: React.PropTypes.element
+		optionalElement: React.PropTypes.element,
+		//optionalMessage: React.PropTypes.instanceOf(Message),
+		//optionalEnum: React.PropTypes.oneOf(['News', 'Photos']),
+		//optionalUnion: React.PropTypes.oneOfType([
+		//	React.PropTypes.string,
+		//	React.PropTypes.number,
+		//	React.PropTypes.instanceOf(Message)
+		//]),
+		//optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
+		//optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
+		//optionalObjectWithShape: React.PropTypes.shape({
+		//	color: React.PropTypes.string,
+		//	fontSize: React.PropTypes.number
+		//}),
+		requiredFunc: React.PropTypes.func.isRequired,
+		requiredAny: React.PropTypes.any.isRequired,
 	};
 
 	render() {

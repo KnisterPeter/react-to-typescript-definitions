@@ -12,7 +12,7 @@ describe('The PropType parser', () => {
       }
     };
   it('should return any on unknown PropTypes', () => {
-    assert.equal(getTypeFromPropType({}), 'any');
+    assert.deepEqual(getTypeFromPropType({}), {type: 'any', optional: true});
   });
   it('should return any[] for generic array prop types', () => {
     const ast: any = {
@@ -23,7 +23,7 @@ describe('The PropType parser', () => {
         name: 'array'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'any[]');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'any[]', optional: true});
   });
   it('should return boolean for bool prop types', () => {
     const ast: any = {
@@ -34,7 +34,7 @@ describe('The PropType parser', () => {
         name: 'bool'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'boolean');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'boolean', optional: true});
   });
   it('should return a generic function for func prop types', () => {
     const ast: any = {
@@ -45,7 +45,25 @@ describe('The PropType parser', () => {
         name: 'func'
       }
     };
-    assert.equal(getTypeFromPropType(ast), '(...args: any[]) => any');
+    assert.deepEqual(getTypeFromPropType(ast), {type: '(...args: any[]) => any', optional: true});
+  });
+  it('should return a generic required function for func.isRequired prop types', () => {
+    const ast: any = {
+      type: 'MemberExpression',
+      loc: {},
+      object: {
+        object: reactPropTypesMemberExpression,
+        property: {
+          name: 'func'
+        }
+      },
+      property: {
+        name: 'isRequired'
+      }
+    };
+    const result: any = getTypeFromPropType(ast);
+    assert.equal(result.type, '(...args: any[]) => any');
+    assert.equal(result.optional, false);
   });
   it('should return number for number prop types', () => {
     const ast: any = {
@@ -56,7 +74,7 @@ describe('The PropType parser', () => {
         name: 'number'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'number');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'number', optional: true});
   });
   it('should return Object for object prop types', () => {
     const ast: any = {
@@ -67,7 +85,7 @@ describe('The PropType parser', () => {
         name: 'object'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'Object');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'Object', optional: true});
   });
   it('should return string for string prop types', () => {
     const ast: any = {
@@ -78,7 +96,7 @@ describe('The PropType parser', () => {
         name: 'string'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'string');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'string', optional: true});
   });
   it('should return React.ReactNode for node prop types', () => {
     const ast: any = {
@@ -89,7 +107,7 @@ describe('The PropType parser', () => {
         name: 'node'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'React.ReactNode');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'React.ReactNode', optional: true});
   });
   it('should return React.ReactElement<any> for element prop types', () => {
     const ast: any = {
@@ -100,6 +118,6 @@ describe('The PropType parser', () => {
         name: 'element'
       }
     };
-    assert.equal(getTypeFromPropType(ast), 'React.ReactElement<any>');
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'React.ReactElement<any>', optional: true});
   });
 });
