@@ -9,6 +9,14 @@
 
 Create typescript definitions files (d.ts) from react components.
 
+# Features
+
+* Most PropTypes
+ * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf
+* required PropTypes
+* instanceOf PropTypes (when using API and giving a resolve function)
+* jsdoc
+
 # Usage
 
 ## Installation
