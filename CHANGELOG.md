@@ -1,3 +1,14 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.5.0...v0.6.0) (2015-12-21)
+
+
+### Features
+
+* Added instanceOf proptypes ([c548b7b](https://github.com/knisterpeter/react-to-typescript-definitions/commit/c548b7b))
+* Added jsdoc to d.ts files ([1a40858](https://github.com/knisterpeter/react-to-typescript-definitions/commit/1a40858))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.4.0...v0.5.0) (2015-12-21)
 
