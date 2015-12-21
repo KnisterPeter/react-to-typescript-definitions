@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
 
-export function cli(options: any) {
+export function cli(options: any): void {
   const stdinCode: string[] = [];
   process.stdin.on('readable', () => {
     const chunk: string|Buffer = process.stdin.read();
