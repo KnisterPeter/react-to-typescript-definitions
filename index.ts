@@ -82,7 +82,7 @@ export function generateFromSource(name: string, code: string, options: IOptions
 const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
 
 export function generateFromAst(name: string, ast: any, options: IOptions = {}): string {
-  const {classname, propTypes}: IParsingResult = parseAst(ast, options);
+  const {classname, propTypes}: IParsingResult = parseAst(ast, options.instanceOfResolver);
   const writer: Writer = options.writer || new Writer();
   writer.declareModule(name, () => {
     writer.import('* as React', 'react');
@@ -109,7 +109,7 @@ interface IParsingResult {
   propTypes: IPropTypes;
 }
 
-function parseAst(ast: any, options: IOptions): IParsingResult {
+function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingResult {
   let classname: string;
   let propTypes: IPropTypes = undefined;
   walk(ast.program, {
@@ -121,7 +121,7 @@ function parseAst(ast: any, options: IOptions): IParsingResult {
             propTypes = {};
             walk(attributeNode.value, {
               'ObjectProperty': (propertyNode: any): void => {
-                propTypes[propertyNode.key.name] = getTypeFromPropType(propertyNode.value, options.instanceOfResolver);
+                propTypes[propertyNode.key.name] = getTypeFromPropType(propertyNode.value, instanceOfResolver);
               }
             });
           }
