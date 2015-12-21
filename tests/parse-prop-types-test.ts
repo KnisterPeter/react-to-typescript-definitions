@@ -12,7 +12,11 @@ describe('The PropType parser', () => {
       }
     };
   it('should return any on unknown PropTypes', () => {
-    assert.deepEqual(getTypeFromPropType({}), {type: 'any', optional: true});
+    const ast: any = {
+      type: '',
+      loc: {}
+    };
+    assert.deepEqual(getTypeFromPropType(ast), {type: 'any', optional: true});
   });
   it('should return any[] for generic array prop types', () => {
     const ast: any = {
@@ -146,6 +150,47 @@ describe('The PropType parser', () => {
     };
     const result: any = getTypeFromPropType(ast);
     assert.equal(result.type, 'number[]');
+    assert.equal(result.optional, true);
+  });
+  it('should return number|string for oneOfType([React.PropTypes.number, React.PropTypes.string]) prop types', () => {
+    const ast: any = {
+      type: 'CallExpression',
+      loc: {},
+      callee: {
+        type: 'MemberExpression',
+        loc: {},
+        object: reactPropTypesMemberExpression,
+        property: {
+          name: 'oneOfType'
+        }
+      },
+      arguments: [
+        {
+          type: 'ArrayExpression',
+          loc: {},
+          elements: [
+            {
+              type: 'MemberExpression',
+              loc: {},
+              object: reactPropTypesMemberExpression,
+              property: {
+                name: 'number'
+              }
+            },
+            {
+              type: 'MemberExpression',
+              loc: {},
+              object: reactPropTypesMemberExpression,
+              property: {
+                name: 'string'
+              }
+            }
+          ]
+        }
+      ]
+    };
+    const result: any = getTypeFromPropType(ast);
+    assert.equal(result.type, 'number|string');
     assert.equal(result.optional, true);
   });
 });

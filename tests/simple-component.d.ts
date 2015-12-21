@@ -12,9 +12,11 @@ declare module 'simple-component' {
 		optionalString?: string;
 		optionalNode?: React.ReactNode;
 		optionalElement?: React.ReactElement<any>;
+		optionalUnion?: string|number;
 		optionalArrayOf?: number[];
 		requiredFunc: (...args: any[]) => any;
 		requiredAny: any;
+		requiredUnion: any[]|boolean;
 		requiredArrayOf: string[];
 	}
 

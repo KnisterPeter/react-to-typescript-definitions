@@ -1,6 +1,21 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
 
+interface IASTNode {
+  type: string;
+  loc: Object;
+  [name: string]: any;
+}
+
+interface IProp {
+  type: string;
+  optional: boolean;
+}
+
+interface IPropTypes {
+  [name: string]: IProp;
+}
+
 export function cli(options: any): void {
   const stdinCode: string[] = [];
   process.stdin.on('readable', () => {
@@ -51,7 +66,7 @@ export function generate(name: string, code: string): string {
     walk(ast.program, {
       'ExportDefaultDeclaration': (node: any) => {
         let classname: string;
-        let propTypes: any = false;
+        let propTypes: IPropTypes = undefined;
         walk(node, {
           'ClassDeclaration': (node: any) => {
             classname = node.id.name;
@@ -80,7 +95,7 @@ export function generate(name: string, code: string): string {
   return writer.toString();
 }
 
-function walk(node: any, handlers: any): void {
+function walk(node: IASTNode, handlers: any): void {
   if (isNode(node)) {
     if (typeof handlers[node.type] == 'function') {
       handlers[node.type](node);
@@ -98,7 +113,7 @@ function walk(node: any, handlers: any): void {
   }
 }
 
-function isNode(obj: any): boolean {
+function isNode(obj: IASTNode): boolean {
   return obj && typeof obj.type != 'undefined' && typeof obj.loc != 'undefined';
 }
 
@@ -107,11 +122,20 @@ function getReactPropTypeFromExpression(node: any): any {
       && node.object.object.name == 'React' && node.object.property.name == 'PropTypes') {
     return node.property;
   } else if (node.type == 'CallExpression') {
-    if (getReactPropTypeFromExpression(node.callee).name == 'arrayOf') {
-      return {
-        name: 'array',
-        arrayType: getReactPropTypeFromExpression(node.arguments[0])
-      };
+    const callType: any = getReactPropTypeFromExpression(node.callee);
+    switch (callType.name) {
+      case 'arrayOf':
+        return {
+          name: 'array',
+          arrayType: getTypeFromPropType(node.arguments[0]).type
+        };
+      case 'oneOfType':
+        return {
+          name: 'union',
+          types: node.arguments[0].elements.map((element: IASTNode) => {
+            return getTypeFromPropType(element).type;
+          })
+        };
     }
   }
   return 'undefined';
@@ -125,12 +149,7 @@ function isRequiredPropType(node: any): any {
   };
 }
 
-interface IProperty {
-  type: string;
-  optional: boolean;
-}
-
-export function getTypeFromPropType(node: any): IProperty {
+export function getTypeFromPropType(node: IASTNode): IProp {
   const result: any = {
     type: 'any',
     optional: true
@@ -143,8 +162,7 @@ export function getTypeFromPropType(node: any): IProperty {
         result.type = 'any';
         break;
       case 'array':
-        let arrayType: any = type.arrayType || {name: 'any'};
-        result.type = arrayType.name + '[]';
+        result.type = (type.arrayType || 'any') + '[]';
         break;
       case 'bool':
         result.type = 'boolean';
@@ -166,6 +184,9 @@ export function getTypeFromPropType(node: any): IProperty {
         break;
       case 'element':
         result.type = 'React.ReactElement<any>';
+        break;
+      case 'union':
+        result.type = type.types.map((unionType: string) => unionType).join('|');
         break;
     }
   }
@@ -217,7 +238,7 @@ export class Writer {
     this.interface(`${name}Props`, () => {
       this.prop('key', 'any', true);
       Object.keys(props).forEach((propName: any) => {
-        const prop: IProperty = props[propName];
+        const prop: IProp = props[propName];
         this.prop(propName, prop.type, prop.optional);
       });
     });

@@ -14,11 +14,10 @@ export default class SimpleComponent extends React.Component {
 		optionalElement: React.PropTypes.element,
 		//optionalMessage: React.PropTypes.instanceOf(Message),
 		//optionalEnum: React.PropTypes.oneOf(['News', 'Photos']),
-		//optionalUnion: React.PropTypes.oneOfType([
-		//	React.PropTypes.string,
-		//	React.PropTypes.number,
-		//	React.PropTypes.instanceOf(Message)
-		//]),
+		optionalUnion: React.PropTypes.oneOfType([
+			React.PropTypes.string,
+			React.PropTypes.number
+		]),
 		optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
 		//optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
 		//optionalObjectWithShape: React.PropTypes.shape({
@@ -27,7 +26,11 @@ export default class SimpleComponent extends React.Component {
 		//}),
 		requiredFunc: React.PropTypes.func.isRequired,
 		requiredAny: React.PropTypes.any.isRequired,
-    requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+		requiredUnion: React.PropTypes.oneOfType([
+			React.PropTypes.array,
+			React.PropTypes.bool
+		]).isRequired,
+		requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
 	};
 
 	render() {
