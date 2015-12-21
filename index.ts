@@ -102,7 +102,7 @@ function isNode(obj: any): boolean {
   return obj && typeof obj.type != 'undefined' && typeof obj.loc != 'undefined';
 }
 
-function getTypeFromPropType(node: any): string {
+export function getTypeFromPropType(node: any): string {
   if (isNode(node)) {
     const isMemberExpression = (node: any): boolean => {
       return node.type == 'MemberExpression';
