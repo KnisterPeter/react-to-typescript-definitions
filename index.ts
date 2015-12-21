@@ -103,9 +103,16 @@ function isNode(obj: any): boolean {
 }
 
 function getReactPropTypeFromExpression(node: any): any {
-  if (node.object.type == 'MemberExpression'
+  if (node.type == 'MemberExpression' && node.object.type == 'MemberExpression'
       && node.object.object.name == 'React' && node.object.property.name == 'PropTypes') {
     return node.property;
+  } else if (node.type == 'CallExpression') {
+    if (getReactPropTypeFromExpression(node.callee).name == 'arrayOf') {
+      return {
+        name: 'array',
+        arrayType: getReactPropTypeFromExpression(node.arguments[0])
+      };
+    }
   }
   return 'undefined';
 }
@@ -136,7 +143,8 @@ export function getTypeFromPropType(node: any): IProperty {
         result.type = 'any';
         break;
       case 'array':
-        result.type = 'any[]';
+        let arrayType: any = type.arrayType || {name: 'any'};
+        result.type = arrayType.name + '[]';
         break;
       case 'bool':
         result.type = 'boolean';

@@ -19,7 +19,7 @@ export default class SimpleComponent extends React.Component {
 		//	React.PropTypes.number,
 		//	React.PropTypes.instanceOf(Message)
 		//]),
-		//optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
+		optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
 		//optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
 		//optionalObjectWithShape: React.PropTypes.shape({
 		//	color: React.PropTypes.string,
@@ -27,6 +27,7 @@ export default class SimpleComponent extends React.Component {
 		//}),
 		requiredFunc: React.PropTypes.func.isRequired,
 		requiredAny: React.PropTypes.any.isRequired,
+    requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
 	};
 
 	render() {

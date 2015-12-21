@@ -52,6 +52,7 @@ describe('The PropType parser', () => {
       type: 'MemberExpression',
       loc: {},
       object: {
+        type: 'MemberExpression',
         object: reactPropTypesMemberExpression,
         property: {
           name: 'func'
@@ -119,5 +120,32 @@ describe('The PropType parser', () => {
       }
     };
     assert.deepEqual(getTypeFromPropType(ast), {type: 'React.ReactElement<any>', optional: true});
+  });
+  it('should return number[] for arrayOf(React.PropTypes.number) prop types', () => {
+    const ast: any = {
+      type: 'CallExpression',
+      loc: {},
+      callee: {
+        type: 'MemberExpression',
+        loc: {},
+        object: reactPropTypesMemberExpression,
+        property: {
+          name: 'arrayOf'
+        }
+      },
+      arguments: [
+        {
+          type: 'MemberExpression',
+          loc: {},
+          object: reactPropTypesMemberExpression,
+          property: {
+            name: 'number'
+          }
+        }
+      ]
+    };
+    const result: any = getTypeFromPropType(ast);
+    assert.equal(result.type, 'number[]');
+    assert.equal(result.optional, true);
   });
 });
