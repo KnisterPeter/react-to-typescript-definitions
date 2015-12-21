@@ -1,18 +1,35 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
 
+type InstanceOfResolver = (name: string) => string;
+
+export interface IOptions {
+  /**
+   * Resolves type names to import paths.
+   * 
+   * @return Path to given name if resolveable, undefined otherwise
+   */
+  instanceOfResolver?: InstanceOfResolver;
+  /**
+   * The writer generating .d.ts code with.
+   */
+  writer?: Writer;
+}
+
 interface IASTNode {
   type: string;
   loc: Object;
   [name: string]: any;
 }
 
-interface IProp {
+export interface IProp {
   type: string;
   optional: boolean;
+  importType?: string;
+  importPath?: string;
 }
 
-interface IPropTypes {
+export interface IPropTypes {
   [name: string]: IProp;
 }
 
@@ -32,15 +49,15 @@ export function cli(options: any): void {
       console.error('Failed to specify --name parameter');
       process.exit(1);
     }
-    process.stdout.write(generate(options.name, stdinCode.join('')));
+    process.stdout.write(generateFromSource(options.name, stdinCode.join('')));
   });
 }
 
-export function generateFromFile(name: string, path: string): string {
-  return generate(name, fs.readFileSync(path).toString());
+export function generateFromFile(name: string, path: string, options?: IOptions): string {
+  return generateFromSource(name, fs.readFileSync(path).toString(), options);
 }
 
-export function generate(name: string, code: string): string {
+export function generateFromSource(name: string, code: string, options: IOptions = {}): string {
   const ast: any = babylon.parse(code, {
     sourceType: 'module',
     plugins: [
@@ -59,40 +76,67 @@ export function generate(name: string, code: string): string {
       'functionSent'
     ]
   });
-  const writer: Writer = new Writer();
+  return generateFromAst(name, ast, options);
+}
+
+const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
+
+export function generateFromAst(name: string, ast: any, options: IOptions = {}): string {
+  const {classname, propTypes}: IParsingResult = parseAst(ast, options);
+  const writer: Writer = options.writer || new Writer();
   writer.declareModule(name, () => {
     writer.import('* as React', 'react');
+    if (propTypes) {
+      Object.keys(propTypes).forEach((propName: string) => {
+        const prop: IProp = propTypes[propName];
+        if (prop.importPath) {
+          writer.import(prop.importType, prop.importPath);
+        }
+      });
+    }
     writer.nl();
-    walk(ast.program, {
-      'ExportDefaultDeclaration': (node: any) => {
-        let classname: string;
-        let propTypes: IPropTypes = undefined;
-        walk(node, {
-          'ClassDeclaration': (node: any) => {
-            classname = node.id.name;
-            walk(node.body, {
-              'ClassProperty': (node: any) => {
-                if (node.key.name == 'propTypes') {
-                  propTypes = {};
-                  walk(node.value, {
-                    'ObjectProperty': (node: any) => {
-                      propTypes[node.key.name] = getTypeFromPropType(node.value);
-                    }
-                  });
-                }
-              }
-            });
-            writer.props(classname, propTypes);
-            writer.nl();
-          }
-        });
-        writer.exportDefault(() => {
-          writer.class(classname, !!propTypes);
-        });
-      }
+    writer.props(classname, propTypes);
+    writer.nl();
+    writer.exportDefault(() => {
+      writer.class(classname, !!propTypes);
     });
   });
   return writer.toString();
+}
+
+interface IParsingResult {
+  classname: string;
+  propTypes: IPropTypes;
+}
+
+function parseAst(ast: any, options: IOptions): IParsingResult {
+  let classname: string;
+  let propTypes: IPropTypes = undefined;
+  walk(ast.program, {
+    'ExportDefaultDeclaration': (node: IASTNode) => {
+      walk(node, {
+        'ClassDeclaration': (node: any) => {
+          classname = node.id.name;
+          walk(node.body, {
+            'ClassProperty': (node: any) => {
+              if (node.key.name == 'propTypes') {
+                propTypes = {};
+                walk(node.value, {
+                  'ObjectProperty': (node: any) => {
+                    propTypes[node.key.name] = getTypeFromPropType(node.value, options.instanceOfResolver);
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+  });
+  return {
+    classname,
+    propTypes
+  };
 }
 
 function walk(node: IASTNode, handlers: any): void {
@@ -117,23 +161,29 @@ function isNode(obj: IASTNode): boolean {
   return obj && typeof obj.type != 'undefined' && typeof obj.loc != 'undefined';
 }
 
-function getReactPropTypeFromExpression(node: any): any {
+function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceOfResolver): any {
   if (node.type == 'MemberExpression' && node.object.type == 'MemberExpression'
       && node.object.object.name == 'React' && node.object.property.name == 'PropTypes') {
     return node.property;
   } else if (node.type == 'CallExpression') {
-    const callType: any = getReactPropTypeFromExpression(node.callee);
+    const callType: any = getReactPropTypeFromExpression(node.callee, instanceOfResolver);
     switch (callType.name) {
+      case 'instanceOf':
+        return {
+          name: 'instanceOf',
+          type: node.arguments[0].name,
+          importPath: instanceOfResolver(node.arguments[0].name)
+        };
       case 'arrayOf':
         return {
           name: 'array',
-          arrayType: getTypeFromPropType(node.arguments[0]).type
+          arrayType: getTypeFromPropType(node.arguments[0], instanceOfResolver).type
         };
       case 'oneOfType':
         return {
           name: 'union',
           types: node.arguments[0].elements.map((element: IASTNode) => {
-            return getTypeFromPropType(element).type;
+            return getTypeFromPropType(element, instanceOfResolver).type;
           })
         };
     }
@@ -141,21 +191,21 @@ function getReactPropTypeFromExpression(node: any): any {
   return 'undefined';
 }
 
-function isRequiredPropType(node: any): any {
+function isRequiredPropType(node: any, instanceOfResolver: InstanceOfResolver): any {
   const isRequired: boolean = node.type == 'MemberExpression' && node.property.name == 'isRequired';
   return {
     isRequired,
-    type: getReactPropTypeFromExpression(isRequired ? node.object : node)
+    type: getReactPropTypeFromExpression(isRequired ? node.object : node, instanceOfResolver)
   };
 }
 
-export function getTypeFromPropType(node: IASTNode): IProp {
+export function getTypeFromPropType(node: IASTNode, instanceOfResolver: InstanceOfResolver = defaultInstanceOfResolver): IProp {
   const result: any = {
     type: 'any',
     optional: true
   };
   if (isNode(node)) {
-    const {isRequired, type}: any = isRequiredPropType(node);
+    const {isRequired, type}: any = isRequiredPropType(node, instanceOfResolver);
     result.optional = !isRequired;
     switch (type.name) {
       case 'any':
@@ -187,6 +237,15 @@ export function getTypeFromPropType(node: IASTNode): IProp {
         break;
       case 'union':
         result.type = type.types.map((unionType: string) => unionType).join('|');
+        break;
+      case 'instanceOf':
+        if (type.importPath) {
+          result.type = 'typeof ' + type.type;
+          result.importType = type.type;
+          result.importPath = type.importPath;
+        } else {
+          result.type = 'any';
+        }
         break;
     }
   }

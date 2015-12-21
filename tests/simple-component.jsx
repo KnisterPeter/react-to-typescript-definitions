@@ -12,7 +12,7 @@ export default class SimpleComponent extends React.Component {
 		optionalString: React.PropTypes.string,
 		optionalNode: React.PropTypes.node,
 		optionalElement: React.PropTypes.element,
-		//optionalMessage: React.PropTypes.instanceOf(Message),
+		optionalMessage: React.PropTypes.instanceOf(Message),
 		//optionalEnum: React.PropTypes.oneOf(['News', 'Photos']),
 		optionalUnion: React.PropTypes.oneOfType([
 			React.PropTypes.string,

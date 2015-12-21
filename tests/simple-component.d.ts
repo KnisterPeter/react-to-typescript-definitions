@@ -1,5 +1,6 @@
 declare module 'simple-component' {
 	import * as React from 'react';
+	import Message from './path/to/Message';
 
 	interface SimpleComponentProps {
 		key?: any;
@@ -12,6 +13,7 @@ declare module 'simple-component' {
 		optionalString?: string;
 		optionalNode?: React.ReactNode;
 		optionalElement?: React.ReactElement<any>;
+		optionalMessage?: typeof Message;
 		optionalUnion?: string|number;
 		optionalArrayOf?: number[];
 		requiredFunc: (...args: any[]) => any;
