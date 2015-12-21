@@ -113,22 +113,18 @@ function parseAst(ast: any, options: IOptions): IParsingResult {
   let classname: string;
   let propTypes: IPropTypes = undefined;
   walk(ast.program, {
-    'ExportDefaultDeclaration': (node: IASTNode) => {
-      walk(node, {
-        'ClassDeclaration': (node: any) => {
-          classname = node.id.name;
-          walk(node.body, {
-            'ClassProperty': (node: any) => {
-              if (node.key.name == 'propTypes') {
-                propTypes = {};
-                walk(node.value, {
-                  'ObjectProperty': (node: any) => {
-                    propTypes[node.key.name] = getTypeFromPropType(node.value, options.instanceOfResolver);
-                  }
-                });
+    'ClassDeclaration': (classNode: any): void => {
+      classname = classNode.id.name;
+      walk(classNode.body, {
+        'ClassProperty': (attributeNode: any): void => {
+          if (attributeNode.key.name == 'propTypes') {
+            propTypes = {};
+            walk(attributeNode.value, {
+              'ObjectProperty': (propertyNode: any): void => {
+                propTypes[propertyNode.key.name] = getTypeFromPropType(propertyNode.value, options.instanceOfResolver);
               }
-            }
-          });
+            });
+          }
         }
       });
     }
@@ -139,7 +135,11 @@ function parseAst(ast: any, options: IOptions): IParsingResult {
   };
 }
 
-function walk(node: IASTNode, handlers: any): void {
+interface IAstWalkHandlers {
+  [type: string]: (node: IASTNode) => void;
+}
+
+function walk(node: IASTNode, handlers: IAstWalkHandlers): void {
   if (isNode(node)) {
     if (typeof handlers[node.type] == 'function') {
       handlers[node.type](node);
