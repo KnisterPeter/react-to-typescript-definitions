@@ -40,15 +40,49 @@ cat <some/react/component.jsx> |react2dts --name module-name
 
 ## API
 
+Functions:
 ```js
-import * as react2dts from 'react-to-typescript-definitions';
-
-// react2dts.generateFromFile('<module-name>', '<path/to/react-component>');
-react2dts.generateFromFile('component', path.join(__dirname, 'component.jsx'));
-
-// react2dts.generateFromSource('<module-name>', '<code of the component>');
-react2dts.generateFromSource('component', 'component-code');
-
-// react2dts.generateFromAst('<module-name>', babylonAstObject);
-react2dts.generateFromAst('component', babylonAstObject);
+/**
+ * Returns the typescript definition for the given file.
+ * 
+ * @param name The name of the generated module
+ * @param path The path to the file to parse
+ * @param options The options to use
+ * @return The type definition as string
+ */
+function generateFromFile(name, path, options)
 ```
+
+```js
+/**
+ * Returns the typescript definition for the given source.
+ * 
+ * @param name The name of the generated module
+ * @param code The code to parse
+ * @param options The options to use
+ * @return The type definition as string
+ */
+function generateFromSource(name, code, options)
+```
+
+```js
+/**
+ * Returns the typescript definition for the given babylon AST object.
+ * 
+ * @param name The name of the generated module
+ * @param ast The babylon ASt to parse
+ * @param options The options to use
+ * @return The type definition as string
+ */
+function generateFromAst(name, ast, options)
+``` 
+
+Options:
+* writer  
+  An instance of the exported writer class. This options is usefull to write
+  multiple declarations into one .d.ts file. The writer could be used
+  for consecutive function calls.
+* instanceOfResolver  
+  A function which gets a type name (as string) and should return the path
+  to the file defining the type or undefined if the type is not resolvable.
+  This function is required to generate instanceOf PropTypes.
