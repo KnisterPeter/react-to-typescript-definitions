@@ -1,8 +1,8 @@
-declare module 'simple-component' {
+declare module 'component' {
 	import * as React from 'react';
 	import Message from './path/to/Message';
 
-	interface SimpleComponentProps {
+	interface ComponentProps {
 		key?: any;
 		/**
 		 * This is a jsdoc comment for optionalAny.
@@ -25,6 +25,6 @@ declare module 'simple-component' {
 		requiredArrayOf: string[];
 	}
 
-	export default class SimpleComponent extends React.Component<SimpleComponentProps, any> {
+	export class Component extends React.Component<ComponentProps, any> {
 	}
 }

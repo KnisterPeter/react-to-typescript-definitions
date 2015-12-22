@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default class SimpleComponent extends React.Component {
+export default class Component extends React.Component {
 
 	static propTypes = {
 		/**

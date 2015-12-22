@@ -40,4 +40,12 @@ describe('The Writer', () => {
     writer.comment('* yada\n\t\t\t\tyada\n ');
     assert.equal(writer.toString(), '/** yada\nyada\n */\n');
   });
+  it('should write an export default declaration', () => {
+    writer.exportDeclaration(0, () => undefined);
+    assert.equal(writer.toString(), 'export default ');
+  });
+  it('should write a named export declaration', () => {
+    writer.exportDeclaration(1, () => undefined);
+    assert.equal(writer.toString(), 'export ');
+  });
 });

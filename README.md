@@ -11,6 +11,7 @@ Create typescript definitions files (d.ts) from react components.
 
 # Features
 
+* ES6 and ES7 class syntax
 * Most PropTypes
  * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf
 * required PropTypes

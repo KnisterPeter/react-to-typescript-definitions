@@ -83,7 +83,7 @@ export function generateFromSource(name: string, code: string, options: IOptions
 const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
 
 export function generateFromAst(name: string, ast: any, options: IOptions = {}): string {
-  const {classname, propTypes}: IParsingResult = parseAst(ast, options.instanceOfResolver);
+  const {exportType, classname, propTypes}: IParsingResult = parseAst(ast, options.instanceOfResolver);
   const writer: Writer = options.writer || new Writer();
   writer.declareModule(name, () => {
     writer.import('* as React', 'react');
@@ -98,44 +98,71 @@ export function generateFromAst(name: string, ast: any, options: IOptions = {}):
     writer.nl();
     writer.props(classname, propTypes);
     writer.nl();
-    writer.exportDefault(() => {
+    writer.exportDeclaration(exportType, () => {
       writer.class(classname, !!propTypes);
     });
   });
   return writer.toString();
 }
 
+enum ExportType {
+  default,
+  named
+}
+
 interface IParsingResult {
+  exportType: ExportType;
   classname: string;
   propTypes: IPropTypes;
 }
 
 function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingResult {
+  let exportType: ExportType;
   let classname: string;
-  let propTypes: IPropTypes = undefined;
+  let propTypes: IPropTypes = {};
   walk(ast.program, {
+    'ExportNamedDeclaration': (exportNode: any): void => {
+      exportType = ExportType.named;
+    },
+    'ExportDefaultDeclaration': (exportNode: any): void => {
+      exportType = ExportType.default;
+    },
     'ClassDeclaration': (classNode: any): void => {
       classname = classNode.id.name;
       walk(classNode.body, {
         'ClassProperty': (attributeNode: any): void => {
           if (attributeNode.key.name == 'propTypes') {
-            propTypes = {};
-            walk(attributeNode.value, {
-              'ObjectProperty': (propertyNode: any): void => {
-                const prop: IProp = getTypeFromPropType(propertyNode.value, instanceOfResolver);
-                prop.documentation = getOptionalDocumentation(propertyNode);
-                propTypes[propertyNode.key.name] = prop;
-              }
-            });
+            propTypes = parsePropTypes(attributeNode.value, instanceOfResolver);
           }
         }
       });
+    },
+    'ExpressionStatement': (expressionNode: any): void => {
+      if (expressionNode.expression.type == 'AssignmentExpression'
+          && expressionNode.expression.left.type == 'MemberExpression'
+          && expressionNode.expression.left.object.name == classname
+          && expressionNode.expression.left.property.name == 'propTypes') {
+        propTypes = parsePropTypes(expressionNode.expression.right, instanceOfResolver);
+      }
     }
   });
   return {
+    exportType,
     classname,
     propTypes
   };
+}
+
+function parsePropTypes(node: any, instanceOfResolver: InstanceOfResolver): IPropTypes {
+  let propTypes: IPropTypes = {};
+  walk(node, {
+    'ObjectProperty': (propertyNode: any): void => {
+      const prop: IProp = getTypeFromPropType(propertyNode.value, instanceOfResolver);
+      prop.documentation = getOptionalDocumentation(propertyNode);
+      propTypes[propertyNode.key.name] = prop;
+    }
+  });
+  return propTypes;
 }
 
 function getOptionalDocumentation(propertyNode: any): string {
@@ -351,9 +378,12 @@ export class Writer {
     this.nl();
   }
 
-  public exportDefault(fn: () => void): void {
+  public exportDeclaration(exportType: ExportType, fn: () => void): void {
     this.indent();
-    this.code += 'export default ';
+    this.code += 'export ';
+    if (exportType == ExportType.default) {
+      this.code += 'default ';
+    }
     fn();
   }
 
