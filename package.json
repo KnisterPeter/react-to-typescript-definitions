@@ -40,7 +40,7 @@
     "typescript": "1.7.5"
   },
   "dependencies": {
-    "babylon": "6.3.21",
+    "babylon": "6.3.25",
     "minimist": "1.2.0"
   },
   "publishConfig": {
