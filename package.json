@@ -35,7 +35,7 @@
     "cz-conventional-changelog": "1.1.5",
     "in-publish": "2.0.0",
     "mocha": "2.3.4",
-    "react": "0.14.3",
+    "react": "0.14.4",
     "tslint": "3.2.1",
     "typescript": "1.7.5"
   },
