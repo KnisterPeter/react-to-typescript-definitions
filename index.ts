@@ -11,9 +11,9 @@ export interface IOptions {
    */
   instanceOfResolver?: InstanceOfResolver;
   /**
-   * The writer generating .d.ts code with.
+   * The Generator generating .d.ts code with.
    */
-  writer?: Writer;
+  generator?: Generator;
 }
 
 interface IASTNode {
@@ -84,25 +84,25 @@ const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => 
 
 export function generateFromAst(name: string, ast: any, options: IOptions = {}): string {
   const {exportType, classname, propTypes}: IParsingResult = parseAst(ast, options.instanceOfResolver);
-  const writer: Writer = options.writer || new Writer();
-  writer.declareModule(name, () => {
-    writer.import('* as React', 'react');
+  const generator: Generator = options.generator || new Generator();
+  generator.declareModule(name, () => {
+    generator.import('* as React', 'react');
     if (propTypes) {
       Object.keys(propTypes).forEach((propName: string) => {
         const prop: IProp = propTypes[propName];
         if (prop.importPath) {
-          writer.import(prop.importType, prop.importPath);
+          generator.import(prop.importType, prop.importPath);
         }
       });
     }
-    writer.nl();
-    writer.props(classname, propTypes);
-    writer.nl();
-    writer.exportDeclaration(exportType, () => {
-      writer.class(classname, !!propTypes);
+    generator.nl();
+    generator.props(classname, propTypes);
+    generator.nl();
+    generator.exportDeclaration(exportType, () => {
+      generator.class(classname, !!propTypes);
     });
   });
-  return writer.toString();
+  return generator.toString();
 }
 
 enum ExportType {
@@ -288,7 +288,7 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver: Instance
   return result;
 }
 
-export class Writer {
+export class Generator {
 
   private static NL: string = '\n';
 
@@ -305,7 +305,7 @@ export class Writer {
   }
 
   public nl(): void {
-    this.code += Writer.NL;
+    this.code += Generator.NL;
   }
 
   public declareModule(name: string, fn: () => void): void {

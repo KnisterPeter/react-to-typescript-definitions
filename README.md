@@ -78,9 +78,9 @@ function generateFromAst(name, ast, options)
 ``` 
 
 Options:
-* writer  
-  An instance of the exported writer class. This options is usefull to write
-  multiple declarations into one .d.ts file. The writer could be used
+* generator  
+  An instance of the exported Generator class. This options is usefull to write
+  multiple declarations into one .d.ts file. The generator could be used
   for consecutive function calls.
 * instanceOfResolver  
   A function which gets a type name (as string) and should return the path

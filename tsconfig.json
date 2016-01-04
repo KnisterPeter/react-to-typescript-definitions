@@ -10,6 +10,6 @@
     "index.ts",
     "tests/parsing-test.ts",
     "tests/parse-prop-types-test.ts",
-    "tests/writer-test.ts"
+    "tests/generator-test.ts"
   ]
 }
