@@ -2,6 +2,7 @@
 
 [![GitHub license](https://img.shields.io/github/license/KnisterPeter/react-to-typescript-definitions.svg)]()
 [![Travis](https://img.shields.io/travis/KnisterPeter/react-to-typescript-definitions.svg)](https://travis-ci.org/KnisterPeter/react-to-typescript-definitions)
+[![Coveralls branch](https://img.shields.io/coveralls/KnisterPeter/react-to-typescript-definitions/master.svg)](https://coveralls.io/github/KnisterPeter/react-to-typescript-definitions)
 [![David](https://img.shields.io/david/KnisterPeter/react-to-typescript-definitions.svg)](https://david-dm.org/KnisterPeter/react-to-typescript-definitions)
 [![David](https://img.shields.io/david/dev/KnisterPeter/react-to-typescript-definitions.svg)](https://david-dm.org/KnisterPeter/react-to-typescript-definitions#info=devDependencies&view=table)
 [![npm](https://img.shields.io/npm/v/react-to-typescript-definitions.svg)](https://www.npmjs.com/package/react-to-typescript-definitions)
