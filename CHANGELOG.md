@@ -1,3 +1,13 @@
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.7.0...v0.8.0) (2016-01-21)
+
+
+### Features
+
+* Exported component interfaces ([511767d](https://github.com/knisterpeter/react-to-typescript-definitions/commit/511767d))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.6.0...v0.7.0) (2015-12-31)
 
