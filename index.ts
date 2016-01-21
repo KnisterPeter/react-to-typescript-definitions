@@ -368,7 +368,7 @@ export class Generator {
 
   public interface(name: string, fn: () => void): void {
     this.indent();
-    this.code += `interface ${name} {`;
+    this.code += `export interface ${name} {`;
     this.nl();
     this.indentLevel++;
     fn();

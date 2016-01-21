@@ -2,7 +2,7 @@ declare module 'component' {
 	import * as React from 'react';
 	import Message from './path/to/Message';
 
-	interface ComponentProps {
+	export interface ComponentProps {
 		key?: any;
 		/**
 		 * This is a jsdoc comment for optionalAny.
