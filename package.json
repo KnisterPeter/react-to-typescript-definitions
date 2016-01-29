@@ -38,7 +38,7 @@
     "in-publish": "2.0.0",
     "mocha": "2.4.4",
     "nyc": "5.5.0",
-    "react": "0.14.6",
+    "react": "0.14.7",
     "tslint": "3.3.0",
     "typescript": "1.7.5"
   },
