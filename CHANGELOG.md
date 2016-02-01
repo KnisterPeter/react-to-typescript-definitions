@@ -1,3 +1,13 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.9.0...v0.10.0) (2016-02-01)
+
+
+### Features
+
+* Added support for ref attributes ([d6f5b46](https://github.com/knisterpeter/react-to-typescript-definitions/commit/d6f5b46))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.8.0...v0.9.0) (2016-01-29)
 
