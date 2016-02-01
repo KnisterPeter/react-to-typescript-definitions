@@ -4,6 +4,7 @@ declare module 'component' {
 
 	export interface ComponentProps {
 		key?: any;
+		ref?: any;
 		/**
 		 * This is a jsdoc comment for optionalAny.
 		 */
