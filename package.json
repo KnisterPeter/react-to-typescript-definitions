@@ -39,7 +39,7 @@
     "mocha": "2.4.5",
     "nyc": "5.6.0",
     "react": "0.14.7",
-    "tslint": "3.3.0",
+    "tslint": "3.4.0",
     "typescript": "1.7.5"
   },
   "dependencies": {
