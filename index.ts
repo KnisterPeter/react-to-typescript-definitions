@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
 
-type InstanceOfResolver = (name: string) => string;
+export type InstanceOfResolver = (name: string) => string;
 
 export interface IOptions {
   /**
@@ -16,7 +16,7 @@ export interface IOptions {
   generator?: Generator;
 }
 
-interface IASTNode {
+export interface IASTNode {
   type: string;
   loc: Object;
   [name: string]: any;
@@ -105,7 +105,7 @@ export function generateFromAst(name: string, ast: any, options: IOptions = {}):
   return generator.toString();
 }
 
-enum ExportType {
+export enum ExportType {
   default,
   named
 }
@@ -331,8 +331,6 @@ export class Generator {
 
   public props(name: string, props: IPropTypes, fn?: () => void): void {
     this.interface(`${name}Props`, () => {
-      this.prop('key', 'any', true);
-      this.prop('ref', 'any', true);
       Object.keys(props).forEach((propName: any) => {
         const prop: IProp = props[propName];
         this.prop(propName, prop.type, prop.optional, prop.documentation);

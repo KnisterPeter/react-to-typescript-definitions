@@ -3,8 +3,6 @@ declare module 'component' {
 	import Message from './path/to/Message';
 
 	export interface ComponentProps {
-		key?: any;
-		ref?: any;
 		/**
 		 * This is a jsdoc comment for optionalAny.
 		 */

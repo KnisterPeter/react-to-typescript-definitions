@@ -26,7 +26,7 @@ describe('The Generator', () => {
   });
   it('should write a property interface', () => {
     generator.props('Name', {prop: {type: 'type', optional: true}});
-    assert.equal(generator.toString(), 'export interface NameProps {\n\tkey?: any;\n\tref?: any;\n\tprop?: type;\n}\n');
+    assert.equal(generator.toString(), 'export interface NameProps {\n\tprop?: type;\n}\n');
   });
   it('should write a class with props declaration', () => {
     generator.class('Name', true);

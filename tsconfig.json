@@ -2,13 +2,14 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "declaration": true,
+    "listFiles": true,
+    "pretty": true
   },
-  "files": [
-    "typings/tsd.d.ts",
-    "index.ts",
-    "tests/parsing-test.ts",
-    "tests/parse-prop-types-test.ts",
-    "tests/generator-test.ts"
+  "exclude": [
+    "node_modules",
+    "tests/es6-class.d.ts",
+    "tests/es7-class.d.ts"
   ]
 }
