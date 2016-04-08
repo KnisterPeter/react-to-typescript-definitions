@@ -6,7 +6,7 @@ export type InstanceOfResolver = (name: string) => string;
 export interface IOptions {
   /**
    * Resolves type names to import paths.
-   * 
+   *
    * @return Path to given name if resolveable, undefined otherwise
    */
   instanceOfResolver?: InstanceOfResolver;
@@ -61,6 +61,9 @@ export function generateFromFile(name: string, path: string, options?: IOptions)
 export function generateFromSource(name: string, code: string, options: IOptions = {}): string {
   const ast: any = babylon.parse(code, {
     sourceType: 'module',
+    allowReturnOutsideFunction: true,
+    allowImportExportEverywhere: true,
+    allowSuperOutsideMethod: true,
     plugins: [
       'jsx',
       'flow',
@@ -74,6 +77,7 @@ export function generateFromSource(name: string, code: string, options: IOptions
       'exportExtensions',
       'exponentiationOperator',
       'asyncGenerators',
+      'functionBind',
       'functionSent'
     ]
   });
