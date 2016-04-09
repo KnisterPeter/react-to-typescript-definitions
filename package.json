@@ -42,6 +42,7 @@
     "babel-register": "6.6.5",
     "chai": "3.5.0",
     "chokidar-cli": "1.2.0",
+    "conventional-changelog-cli": "1.1.1",
     "coveralls": "2.11.9",
     "cz-conventional-changelog": "1.1.5",
     "in-publish": "2.0.0",
