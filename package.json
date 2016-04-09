@@ -1,6 +1,6 @@
 {
   "name": "react-to-typescript-definitions",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Create typescript definitions files (d.ts) from react components",
   "main": "index.js",
   "bin": {

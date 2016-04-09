@@ -1,3 +1,15 @@
+Your git-log command is:
+git log --format="%B%n-hash-%n%H%n-gitTags-%n%d%n-committerDate-%n%ci%n------------------------ >8 ------------------------" "HEAD" --no-merges
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.10.0...v0.11.0) (2016-04-09)
+
+
+### Bug Fixes
+
+* **parser:** configure babel to be as permissive as possible ([586b5ec](https://github.com/knisterpeter/react-to-typescript-definitions/commit/586b5ec))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.9.0...v0.10.0) (2016-02-01)
 
