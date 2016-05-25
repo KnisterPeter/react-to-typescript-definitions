@@ -36,7 +36,11 @@ npm install -g react-to-typescript-definitions
 ## CLI
 
 ```sh
+# Create a definition which exports a module named 'module-name'
 cat <some/react/component.jsx> |react2dts --name module-name
+
+# Create a definition which exports top level definitions
+cat <some/react/component.jsx> |react2dts --top-level-module
 ```
 
 ## API
