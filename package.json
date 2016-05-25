@@ -13,14 +13,14 @@
     "index.js.map"
   ],
   "scripts": {
-    "start": "npm run test:watch",
+    "start": "npm test",
     "clean": "rm -f index.js index.js.map tests/*.js tests/*.js.map",
     "prebuild": "npm run clean",
     "build": "tsc --sourceMap",
-    "pretest": "tsc --inlineSourceMap",
-    "test": "mocha --compilers js:babel-register 'tests/**/*-test.js'",
-    "test:watch": "chokidar --initial \"index.ts\" -c \"npm run test -- --watch\"",
-    "coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls",
+    "build:inline": "tsc --inlineSourceMap",
+    "pretest": "npm run clean && npm run build:inline",
+    "test": "nyc --reporter lcov ./node_modules/.bin/mocha --recursive tests --all",
+    "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
     "preversion": "npm test",
     "version": "npm run build && conventional-changelog -p angular -v -r 0 > CHANGELOG.md && git add -A .",
@@ -63,5 +63,11 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "nyc": {
+    "exclude": [
+      "coverage",
+      "tests"
+    ]
   }
 }
