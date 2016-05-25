@@ -46,19 +46,22 @@ export function cli(options: any): void {
     }
   });
   process.stdin.on('end', () => {
-    if (!options.name) {
-      console.error('Failed to specify --name parameter');
+    if (options['top-level-module']) {
+      process.stdout.write(generateFromSource(null, stdinCode.join('')));
+    } else if (options['module-name']) {
+      process.stdout.write(generateFromSource(options['module-name'], stdinCode.join('')));
+    } else {
+      console.error('Failed to specify --module-name or --top-level-module parameter');
       process.exit(1);
     }
-    process.stdout.write(generateFromSource(options.name, stdinCode.join('')));
   });
 }
 
-export function generateFromFile(name: string, path: string, options?: IOptions): string {
-  return generateFromSource(name, fs.readFileSync(path).toString(), options);
+export function generateFromFile(moduleName: string, path: string, options?: IOptions): string {
+  return generateFromSource(moduleName, fs.readFileSync(path).toString(), options);
 }
 
-export function generateFromSource(name: string, code: string, options: IOptions = {}): string {
+export function generateFromSource(moduleName: string, code: string, options: IOptions = {}): string {
   const ast: any = babylon.parse(code, {
     sourceType: 'module',
     allowReturnOutsideFunction: true,
@@ -81,15 +84,16 @@ export function generateFromSource(name: string, code: string, options: IOptions
       'functionSent'
     ]
   });
-  return generateFromAst(name, ast, options);
+  return generateFromAst(moduleName, ast, options);
 }
 
 const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
 
-export function generateFromAst(name: string, ast: any, options: IOptions = {}): string {
+export function generateFromAst(moduleName: string, ast: any, options: IOptions = {}): string {
   const {exportType, classname, propTypes}: IParsingResult = parseAst(ast, options.instanceOfResolver);
   const generator: Generator = options.generator || new Generator();
-  generator.declareModule(name, () => {
+
+  const generateTypings: () => void = () => {
     generator.import('* as React', 'react');
     if (propTypes) {
       Object.keys(propTypes).forEach((propName: string) => {
@@ -105,7 +109,13 @@ export function generateFromAst(name: string, ast: any, options: IOptions = {}):
     generator.exportDeclaration(exportType, () => {
       generator.class(classname, !!propTypes);
     });
-  });
+  };
+
+  if (moduleName === null) {
+    generateTypings();
+  } else {
+    generator.declareModule(moduleName, generateTypings);
+  }
   return generator.toString();
 }
 

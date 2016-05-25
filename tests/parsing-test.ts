@@ -23,4 +23,13 @@ describe('Parsing', () => {
       fs.readFileSync(path.join(__dirname, 'es7-class.d.ts')).toString()
     );
   });
+  it('should create top-level module definition from es7 class component', () => {
+    const opts: react2dts.IOptions = {
+      instanceOfResolver: (name: string): string => './path/to/Message'
+    };
+    assert.equal(
+      react2dts.generateFromFile(null, path.join(__dirname, 'es7-class.jsx'), opts),
+      fs.readFileSync(path.join(__dirname, 'es7-class-top-level-module.d.ts')).toString()
+    );
+  });
 });
