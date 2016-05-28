@@ -22,10 +22,9 @@
     "test": "nyc --reporter lcov ./node_modules/.bin/mocha --recursive tests --all",
     "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
-    "preversion": "npm test",
-    "version": "npm run build && conventional-changelog -p angular -v -r 0 > CHANGELOG.md && git add -A .",
-    "postversion": "git push && git push --tags",
-    "prepublish": "not-in-install && npm run build || echo 'In install cycle, skipping prepublish'"
+    "prerelease": "npm test && npm run build",
+    "release": "standard-version",
+    "postrelease": "git --follow-tags push origin master && npm publish"
   },
   "author": {
     "name": "Markus Wolf",
@@ -49,6 +48,7 @@
     "mocha": "2.5.3",
     "nyc": "6.4.4",
     "react": "15.1.0",
+    "standard-version": "2.2.1",
     "tslint": "3.10.2",
     "typescript": "1.8.10"
   },
