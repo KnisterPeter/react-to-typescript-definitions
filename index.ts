@@ -154,12 +154,28 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
     'ExpressionStatement': (expressionNode: any): void => {
       if (expressionNode.expression.type == 'AssignmentExpression'
           && expressionNode.expression.left.type == 'MemberExpression'
-          && expressionNode.expression.left.object.name == classname
           && expressionNode.expression.left.property.name == 'propTypes') {
-        propTypes = parsePropTypes(expressionNode.expression.right, instanceOfResolver);
+        if (classname === undefined) {
+          classname = expressionNode.expression.left.object.name;
+        }
+        if (expressionNode.expression.left.object.name == classname) {
+          propTypes = parsePropTypes(expressionNode.expression.right, instanceOfResolver);
+        }
       }
     }
   });
+  if (exportType === undefined) {
+    walk(ast.program, {
+    'ExpressionStatement': (expressionNode: any): void => {
+      if (expressionNode.expression.type == 'AssignmentExpression'
+          && expressionNode.expression.left.type == 'MemberExpression'
+          && expressionNode.expression.left.object.name == 'exports'
+          && expressionNode.expression.left.property.name == 'default') {
+        exportType = ExportType.default;
+      }
+    }
+    });
+  }
   return {
     exportType,
     classname,

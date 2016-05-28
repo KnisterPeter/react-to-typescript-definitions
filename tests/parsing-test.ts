@@ -32,4 +32,13 @@ describe('Parsing', () => {
       fs.readFileSync(path.join(__dirname, 'es7-class-top-level-module.d.ts')).toString()
     );
   });
+  it('should create definition from babeled es7 class component', () => {
+    const opts: react2dts.IOptions = {
+      instanceOfResolver: (name: string): string => './path/to/Message'
+    };
+    assert.equal(
+      react2dts.generateFromFile('component', path.join(__dirname, 'es7-class-babeled.js'), opts),
+      fs.readFileSync(path.join(__dirname, 'es7-class.d.ts')).toString()
+    );
+  });
 });
