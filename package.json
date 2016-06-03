@@ -48,7 +48,7 @@
     "mocha": "2.5.3",
     "nyc": "6.4.4",
     "react": "15.1.0",
-    "standard-version": "2.2.1",
+    "standard-version": "2.3.0",
     "tslint": "3.10.2",
     "typescript": "1.8.10"
   },
