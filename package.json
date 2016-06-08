@@ -49,7 +49,7 @@
     "nyc": "6.4.4",
     "react": "15.1.0",
     "standard-version": "2.3.0",
-    "tslint": "3.10.2",
+    "tslint": "3.11.0",
     "typescript": "1.8.10"
   },
   "dependencies": {
