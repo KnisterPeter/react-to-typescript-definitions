@@ -46,7 +46,7 @@
     "cz-conventional-changelog": "1.1.6",
     "in-publish": "2.0.0",
     "mocha": "2.5.3",
-    "nyc": "6.4.4",
+    "nyc": "6.6.1",
     "react": "15.1.0",
     "standard-version": "2.3.0",
     "tslint": "3.11.0",
