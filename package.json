@@ -53,7 +53,7 @@
     "typescript": "1.8.10"
   },
   "dependencies": {
-    "babylon": "6.8.1",
+    "babylon": "6.8.2",
     "minimist": "1.2.0"
   },
   "publishConfig": {
