@@ -47,7 +47,7 @@
     "in-publish": "2.0.0",
     "mocha": "2.5.3",
     "nyc": "7.1.0",
-    "react": "15.2.1",
+    "react": "15.3.0",
     "standard-version": "2.4.0",
     "tslint": "3.14.0",
     "typescript": "1.8.10"
