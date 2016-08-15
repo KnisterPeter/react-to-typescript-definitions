@@ -10,7 +10,7 @@ describe('The Generator', () => {
     generator.declareModule('name', () => {
       //
     });
-    assert.equal(generator.toString(), "declare module 'name' {\n}\n");
+    assert.equal(generator.toString(), "declare module 'name' {\n\timport * as React from 'react';\n}\n");
   });
   it('should write an import statement', () => {
     generator.import('decls', 'from');
