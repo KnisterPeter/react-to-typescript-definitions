@@ -42,7 +42,7 @@
     "chai": "3.5.0",
     "chokidar-cli": "1.2.0",
     "conventional-changelog-cli": "1.2.0",
-    "coveralls": "2.11.13",
+    "coveralls": "2.11.14",
     "cz-conventional-changelog": "1.2.0",
     "in-publish": "2.0.0",
     "mocha": "3.0.2",
