@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
+import * as dom from 'dts-dom';
 
 export type InstanceOfResolver = (name: string) => string;
 
@@ -90,9 +91,77 @@ export function generateFromSource(moduleName: string, code: string, options: IO
 const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
 
 export function generateFromAst(moduleName: string, ast: any, options: IOptions = {}): string {
-  const {exportType, classname, propTypes}: IParsingResult = parseAst(ast, options.instanceOfResolver);
-  const generator: Generator = options.generator || new Generator();
+  const parsingResult: IParsingResult = parseAst(ast, options.instanceOfResolver);
+  if (options.generator) {
+    return deprecatedGenerator(options.generator, moduleName, parsingResult);
+  }
 
+  const {exportType, classname, propTypes}: IParsingResult = parsingResult;
+  if (moduleName === null) {
+    let code = '';
+
+    code += dom.emit(dom.create.importAll('React', 'react'));
+    if (propTypes) {
+      Object.keys(propTypes).forEach((propName: string) => {
+        const prop: IProp = propTypes[propName];
+        if (prop.importPath) {
+          code += dom.emit(dom.create.importDefault(prop.importType, prop.importPath));
+        }
+      });
+    }
+    const interf = dom.create.interface(`${classname}Props`);
+    interf.flags = dom.DeclarationFlags.Export;
+    Object.keys(propTypes).forEach((propName: any) => {
+      const prop: IProp = propTypes[propName];
+
+      // TODO: Set type here
+      const property = dom.create.property(propName, 'any',
+        prop.optional ? dom.DeclarationFlags.Optional : 0);
+      property.jsDocComment = prop.documentation;
+      interf.members.push(property);
+    });
+    code += dom.emit(interf);
+
+    const classDecl = dom.create.class(classname);
+    classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
+    classDecl.flags = dom.DeclarationFlags.Export;
+    code += dom.emit(classDecl);
+
+    return code;
+  } else {
+    const m = dom.create.module(moduleName);
+    m.members.push(dom.create.importAll('React', 'react'));
+    if (propTypes) {
+      Object.keys(propTypes).forEach((propName: string) => {
+        const prop: IProp = propTypes[propName];
+        if (prop.importPath) {
+          m.members.push(dom.create.importDefault(prop.importType, prop.importPath));
+        }
+      });
+    }
+    const interf = dom.create.interface(`${classname}Props`);
+    interf.flags = dom.DeclarationFlags.Export;
+    Object.keys(propTypes).forEach((propName: any) => {
+      const prop: IProp = propTypes[propName];
+
+      // TODO: Set type here
+      const property = dom.create.property(propName, 'any',
+        prop.optional ? dom.DeclarationFlags.Optional : 0);
+      property.jsDocComment = prop.documentation;
+      interf.members.push(property);
+    });
+    m.members.push(interf);
+
+    const classDecl = dom.create.class(classname);
+    classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
+    classDecl.flags = dom.DeclarationFlags.Export;
+    m.members.push(classDecl);
+
+    return dom.emit(m, dom.ContextFlags.Module);
+  }
+}
+
+function deprecatedGenerator(generator: Generator, moduleName: string, {exportType, classname, propTypes}: IParsingResult) {
   const generateTypings: () => void = () => {
     generator.import('* as React', 'react');
     if (propTypes) {
