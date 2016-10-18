@@ -17,7 +17,12 @@ describe('The PropType parser', () => {
       type: '',
       loc: {}
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'any', optional: true});
+    const expected = {
+      type: 'any',
+      type2: 'any',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return any[] for generic array prop types', () => {
     const ast: any = {
@@ -28,7 +33,12 @@ describe('The PropType parser', () => {
         name: 'array'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'any[]', optional: true});
+    const expected = {
+      type: 'any[]',
+      type2: {kind: 'array', type: 'any'},
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return boolean for bool prop types', () => {
     const ast: any = {
@@ -39,7 +49,12 @@ describe('The PropType parser', () => {
         name: 'bool'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'boolean', optional: true});
+    const expected = {
+      type: 'boolean',
+      type2: 'boolean',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return a generic function for func prop types', () => {
     const ast: any = {
@@ -50,7 +65,12 @@ describe('The PropType parser', () => {
         name: 'func'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: '(...args: any[]) => any', optional: true});
+    const expected = {
+      type: '(...args: any[]) => any',
+      type2: 'any',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return a generic required function for func.isRequired prop types', () => {
     const ast: any = {
@@ -69,6 +89,7 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, '(...args: any[]) => any');
+    assert.equal(result.type2, 'any');
     assert.equal(result.optional, false);
   });
   it('should return number for number prop types', () => {
@@ -80,7 +101,12 @@ describe('The PropType parser', () => {
         name: 'number'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'number', optional: true});
+    const expected = {
+      type: 'number',
+      type2: 'number',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return Object for object prop types', () => {
     const ast: any = {
@@ -91,7 +117,12 @@ describe('The PropType parser', () => {
         name: 'object'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'Object', optional: true});
+    const expected = {
+      type: 'Object',
+      type2: 'any',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return string for string prop types', () => {
     const ast: any = {
@@ -102,7 +133,12 @@ describe('The PropType parser', () => {
         name: 'string'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'string', optional: true});
+    const expected = {
+      type: 'string',
+      type2: 'string',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return React.ReactNode for node prop types', () => {
     const ast: any = {
@@ -113,7 +149,12 @@ describe('The PropType parser', () => {
         name: 'node'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'React.ReactNode', optional: true});
+    const expected = {
+      type: 'React.ReactNode',
+      type2: 'any',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return React.ReactElement<any> for element prop types', () => {
     const ast: any = {
@@ -124,7 +165,12 @@ describe('The PropType parser', () => {
         name: 'element'
       }
     };
-    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), {type: 'React.ReactElement<any>', optional: true});
+    const expected = {
+      type: 'React.ReactElement<any>',
+      type2: 'any',
+      optional: true
+    };
+    assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
   });
   it('should return number[] for arrayOf(React.PropTypes.number) prop types', () => {
     const ast: any = {
@@ -151,6 +197,7 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, 'number[]');
+    assert.deepEqual(result.type2, {kind: 'array', type: 'number'});
     assert.equal(result.optional, true);
   });
   it('should return number|string for oneOfType([React.PropTypes.number, React.PropTypes.string]) prop types', () => {
@@ -192,6 +239,7 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, 'number|string');
+    assert.equal(result.type2, 'any');
     assert.equal(result.optional, true);
   });
   it('should return typeof Message for instanceOf(Message) prop types', () => {
@@ -216,6 +264,7 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, (name: string): string => './some/path');
     assert.equal(result.type, 'typeof Message');
+    assert.equal(result.type2, 'any');
     assert.equal(result.optional, true);
     assert.equal(result.importType, 'Message');
     assert.equal(result.importPath, './some/path');
@@ -242,6 +291,7 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast);
     assert.equal(result.type, 'any');
+    assert.equal(result.type2, 'any');
     assert.equal(result.optional, true);
     assert.isUndefined(result.importType);
     assert.isUndefined(result.importPath);

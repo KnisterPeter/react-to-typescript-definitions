@@ -2,7 +2,9 @@ import * as fs from 'fs';
 import * as babylon from 'babylon';
 import * as dom from 'dts-dom';
 
-export type InstanceOfResolver = (name: string) => string;
+export interface InstanceOfResolver {
+  (name: string): string;
+};
 
 export interface IOptions {
   /**
@@ -21,10 +23,16 @@ export interface IASTNode {
   type: string;
   loc: Object;
   [name: string]: any;
+  value?: any;
+  key?: any;
+  expression?: any;
+  id?: any;
+  body?: any;
 }
 
 export interface IProp {
   type: string;
+  type2: dom.Type;
   optional: boolean;
   importType?: string;
   importPath?: string;
@@ -38,7 +46,7 @@ export interface IPropTypes {
 export function cli(options: any): void {
   const stdinCode: string[] = [];
   process.stdin.on('readable', () => {
-    const chunk: string|Buffer = process.stdin.read();
+    const chunk = process.stdin.read();
     if (chunk !== null) {
       stdinCode.push(chunk.toString());
     } else {
@@ -63,7 +71,7 @@ export function generateFromFile(moduleName: string, path: string, options?: IOp
 }
 
 export function generateFromSource(moduleName: string, code: string, options: IOptions = {}): string {
-  const ast: any = babylon.parse(code, {
+  const ast = babylon.parse(code, {
     sourceType: 'module',
     allowReturnOutsideFunction: true,
     allowImportExportEverywhere: true,
@@ -91,40 +99,28 @@ export function generateFromSource(moduleName: string, code: string, options: IO
 const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
 
 export function generateFromAst(moduleName: string, ast: any, options: IOptions = {}): string {
-  const parsingResult: IParsingResult = parseAst(ast, options.instanceOfResolver);
+  const parsingResult = parseAst(ast, options.instanceOfResolver);
   if (options.generator) {
     return deprecatedGenerator(options.generator, moduleName, parsingResult);
   }
 
-  const {exportType, classname, propTypes}: IParsingResult = parsingResult;
+  const {exportType, classname, propTypes} = parsingResult;
   if (moduleName === null) {
     let code = '';
 
     code += dom.emit(dom.create.importAll('React', 'react'));
     if (propTypes) {
-      Object.keys(propTypes).forEach((propName: string) => {
-        const prop: IProp = propTypes[propName];
+      Object.keys(propTypes).forEach(propName => {
+        const prop = propTypes[propName];
         if (prop.importPath) {
           code += dom.emit(dom.create.importDefault(prop.importType, prop.importPath));
         }
       });
     }
-    const interf = dom.create.interface(`${classname}Props`);
-    interf.flags = dom.DeclarationFlags.Export;
-    Object.keys(propTypes).forEach((propName: any) => {
-      const prop: IProp = propTypes[propName];
-
-      // TODO: Set type here
-      const property = dom.create.property(propName, 'any',
-        prop.optional ? dom.DeclarationFlags.Optional : 0);
-      property.jsDocComment = prop.documentation;
-      interf.members.push(property);
-    });
+    const interf = createReactPropInterface(classname, propTypes);
     code += dom.emit(interf);
 
-    const classDecl = dom.create.class(classname);
-    classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
-    classDecl.flags = dom.DeclarationFlags.Export;
+    const classDecl = createReactClassDeclaration(classname, propTypes, interf);
     code += dom.emit(classDecl);
 
     return code;
@@ -132,41 +128,58 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
     const m = dom.create.module(moduleName);
     m.members.push(dom.create.importAll('React', 'react'));
     if (propTypes) {
-      Object.keys(propTypes).forEach((propName: string) => {
-        const prop: IProp = propTypes[propName];
+      Object.keys(propTypes).forEach(propName => {
+        const prop = propTypes[propName];
         if (prop.importPath) {
           m.members.push(dom.create.importDefault(prop.importType, prop.importPath));
         }
       });
     }
-    const interf = dom.create.interface(`${classname}Props`);
-    interf.flags = dom.DeclarationFlags.Export;
-    Object.keys(propTypes).forEach((propName: any) => {
-      const prop: IProp = propTypes[propName];
-
-      // TODO: Set type here
-      const property = dom.create.property(propName, 'any',
-        prop.optional ? dom.DeclarationFlags.Optional : 0);
-      property.jsDocComment = prop.documentation;
-      interf.members.push(property);
-    });
+    const interf = createReactPropInterface(classname, propTypes);
     m.members.push(interf);
 
-    const classDecl = dom.create.class(classname);
-    classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
-    classDecl.flags = dom.DeclarationFlags.Export;
+    const classDecl = createReactClassDeclaration(classname, propTypes, interf);
     m.members.push(classDecl);
 
     return dom.emit(m, dom.ContextFlags.Module);
   }
 }
 
-function deprecatedGenerator(generator: Generator, moduleName: string, {exportType, classname, propTypes}: IParsingResult) {
-  const generateTypings: () => void = () => {
+function createReactPropInterface(classname: string, propTypes: IPropTypes): dom.InterfaceDeclaration {
+  const interf = dom.create.interface(`${classname}Props`);
+  interf.flags = dom.DeclarationFlags.Export;
+  Object.keys(propTypes).forEach(propName => {
+    const prop = propTypes[propName];
+
+    const property = dom.create.property(propName, prop.type2,
+      prop.optional ? dom.DeclarationFlags.Optional : 0);
+    if (prop.documentation) {
+      property.jsDocComment = prop.documentation
+            .split('\n')
+            .map(line => line.trim())
+            .map(line => line.replace(/^\*\*?/, ''))
+            .join('\n');
+    }
+    interf.members.push(property);
+  });
+  return interf;
+}
+
+function createReactClassDeclaration(classname: string, propTypes: IPropTypes,
+    interf: dom.InterfaceDeclaration): dom.ClassDeclaration {
+  const classDecl = dom.create.class(classname);
+  classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
+  classDecl.flags = dom.DeclarationFlags.Export;
+  return classDecl;
+}
+
+function deprecatedGenerator(generator: Generator, moduleName: string,
+    {exportType, classname, propTypes}: IParsingResult): string {
+  const generateTypings = () => {
     generator.import('* as React', 'react');
     if (propTypes) {
-      Object.keys(propTypes).forEach((propName: string) => {
-        const prop: IProp = propTypes[propName];
+      Object.keys(propTypes).forEach(propName => {
+        const prop = propTypes[propName];
         if (prop.importPath) {
           generator.import(prop.importType, prop.importPath);
         }
@@ -204,23 +217,23 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
   let classname: string;
   let propTypes: IPropTypes = {};
   walk(ast.program, {
-    'ExportNamedDeclaration': (exportNode: any): void => {
+    'ExportNamedDeclaration': exportNode => {
       exportType = ExportType.named;
     },
-    'ExportDefaultDeclaration': (exportNode: any): void => {
+    'ExportDefaultDeclaration': exportNode => {
       exportType = ExportType.default;
     },
-    'ClassDeclaration': (classNode: any): void => {
+    'ClassDeclaration': classNode => {
       classname = classNode.id.name;
       walk(classNode.body, {
-        'ClassProperty': (attributeNode: any): void => {
+        'ClassProperty': attributeNode => {
           if (attributeNode.key.name == 'propTypes') {
             propTypes = parsePropTypes(attributeNode.value, instanceOfResolver);
           }
         }
       });
     },
-    'ExpressionStatement': (expressionNode: any): void => {
+    'ExpressionStatement': expressionNode => {
       if (expressionNode.expression.type == 'AssignmentExpression'
           && expressionNode.expression.left.type == 'MemberExpression'
           && expressionNode.expression.left.property.name == 'propTypes') {
@@ -235,7 +248,7 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
   });
   if (exportType === undefined) {
     walk(ast.program, {
-    'ExpressionStatement': (expressionNode: any): void => {
+    'ExpressionStatement': expressionNode => {
       if (expressionNode.expression.type == 'AssignmentExpression'
           && expressionNode.expression.left.type == 'MemberExpression'
           && expressionNode.expression.left.object.name == 'exports'
@@ -255,7 +268,7 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
 function parsePropTypes(node: any, instanceOfResolver: InstanceOfResolver): IPropTypes {
   let propTypes: IPropTypes = {};
   walk(node, {
-    'ObjectProperty': (propertyNode: any): void => {
+    'ObjectProperty': propertyNode => {
       const prop: IProp = getTypeFromPropType(propertyNode.value, instanceOfResolver);
       prop.documentation = getOptionalDocumentation(propertyNode);
       propTypes[propertyNode.key.name] = prop;
@@ -266,7 +279,7 @@ function parsePropTypes(node: any, instanceOfResolver: InstanceOfResolver): IPro
 
 function getOptionalDocumentation(propertyNode: any): string {
   return (((propertyNode.leadingComments || []) as any[])
-    .filter((comment: any) => comment.type == 'CommentBlock')[0] || {})
+    .filter(comment => comment.type == 'CommentBlock')[0] || {})
     .value;
 }
 
@@ -279,13 +292,13 @@ function walk(node: IASTNode, handlers: IAstWalkHandlers): void {
     if (typeof handlers[node.type] == 'function') {
       handlers[node.type](node);
     }
-    Object.keys(node).forEach((childKey: any) => {
-      const child: any = node[childKey];
+    Object.keys(node).forEach(childKey => {
+      const child = node[childKey];
       let children: any[] = child;
       if (!Array.isArray(child)) {
         children = [child];
       }
-      children.forEach((child: any) => {
+      children.forEach(child => {
         walk(child, handlers);
       });
     });
@@ -301,7 +314,7 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
       && node.object.object.name == 'React' && node.object.property.name == 'PropTypes') {
     return node.property;
   } else if (node.type == 'CallExpression') {
-    const callType: any = getReactPropTypeFromExpression(node.callee, instanceOfResolver);
+    const callType = getReactPropTypeFromExpression(node.callee, instanceOfResolver);
     switch (callType.name) {
       case 'instanceOf':
         return {
@@ -310,9 +323,11 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
           importPath: instanceOfResolver(node.arguments[0].name)
         };
       case 'arrayOf':
+        const arrayType = getTypeFromPropType(node.arguments[0], instanceOfResolver);
         return {
           name: 'array',
-          arrayType: getTypeFromPropType(node.arguments[0], instanceOfResolver).type
+          arrayType: arrayType.type,
+          arrayType2: arrayType.type2
         };
       case 'oneOfType':
         return {
@@ -327,42 +342,51 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
 }
 
 function isRequiredPropType(node: any, instanceOfResolver: InstanceOfResolver): any {
-  const isRequired: boolean = node.type == 'MemberExpression' && node.property.name == 'isRequired';
+  const isRequired = node.type == 'MemberExpression' && node.property.name == 'isRequired';
   return {
     isRequired,
     type: getReactPropTypeFromExpression(isRequired ? node.object : node, instanceOfResolver)
   };
 }
 
-export function getTypeFromPropType(node: IASTNode, instanceOfResolver: InstanceOfResolver = defaultInstanceOfResolver): IProp {
-  const result: any = {
+/**
+ * This is for internal use only
+ */
+export function getTypeFromPropType(node: IASTNode, instanceOfResolver = defaultInstanceOfResolver): IProp {
+  const result: IProp = {
     type: 'any',
+    type2: 'any',
     optional: true
   };
   if (isNode(node)) {
-    const {isRequired, type}: any = isRequiredPropType(node, instanceOfResolver);
+    const {isRequired, type} = isRequiredPropType(node, instanceOfResolver);
     result.optional = !isRequired;
     switch (type.name) {
       case 'any':
         result.type = 'any';
+        result.type2 = 'any';
         break;
       case 'array':
         result.type = (type.arrayType || 'any') + '[]';
+        result.type2 = {kind: 'array', type: type.arrayType2 || 'any'};
         break;
       case 'bool':
         result.type = 'boolean';
+        result.type2 = 'boolean';
         break;
       case 'func':
         result.type = '(...args: any[]) => any';
         break;
       case 'number':
         result.type = 'number';
+        result.type2 = 'number';
         break;
       case 'object':
         result.type = 'Object';
         break;
       case 'string':
         result.type = 'string';
+        result.type2 = 'string';
         break;
       case 'node':
         result.type = 'React.ReactNode';
@@ -376,8 +400,8 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver: Instance
       case 'instanceOf':
         if (type.importPath) {
           result.type = 'typeof ' + type.type;
-          result.importType = type.type;
-          result.importPath = type.importPath;
+          (result as any).importType = type.type;
+          (result as any).importPath = type.importPath;
         } else {
           result.type = 'any';
         }
@@ -396,8 +420,8 @@ export class Generator {
   private code: string = '';
 
   private indent(): void {
-    let result: string = '';
-    for (let i: number = 0, n: number = this.indentLevel; i < n; i++) {
+    let result = '';
+    for (let i = 0, n = this.indentLevel; i < n; i++) {
       result += '\t';
     }
     this.code += result;
@@ -430,8 +454,8 @@ export class Generator {
 
   public props(name: string, props: IPropTypes, fn?: () => void): void {
     this.interface(`${name}Props`, () => {
-      Object.keys(props).forEach((propName: any) => {
-        const prop: IProp = props[propName];
+      Object.keys(props).forEach(propName => {
+        const prop = props[propName];
         this.prop(propName, prop.type, prop.optional, prop.documentation);
       });
     });
@@ -451,8 +475,8 @@ export class Generator {
 
   public comment(comment: string): void {
     this.code += '/*';
-    const lines: string[] = (comment || '').replace(/\t/g, '').split(/\n/g);
-    lines.forEach((line: string, index: number) => {
+    const lines = (comment || '').replace(/\t/g, '').split(/\n/g);
+    lines.forEach((line, index) => {
       this.code += line;
       if (index < lines.length - 1) {
         this.nl();
