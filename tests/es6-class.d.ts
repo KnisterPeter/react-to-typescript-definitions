@@ -15,11 +15,11 @@ declare module 'component' {
         optionalNode?: React.ReactNode;
         optionalElement?: React.ReactElement<any>;
         optionalMessage?: typeof Message;
-        optionalUnion?: string|number;
+        optionalUnion?: string | number;
         optionalArrayOf?: number[];
         requiredFunc: (...args: any[])=>any;
         requiredAny: any;
-        requiredUnion: any[]|boolean;
+        requiredUnion: any[] | boolean;
         requiredArrayOf: string[];
     }
     export class Component extends React.Component<ComponentProps, any>{

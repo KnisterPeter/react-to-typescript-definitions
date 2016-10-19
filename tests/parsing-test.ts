@@ -9,7 +9,6 @@ import * as react2dts from '../index';
 function textDiff(actual: string, expected: string): void {
   const differences = diff.diffChars(expected, actual);
   if (differences.length > 1) {
-    console.log(differences);
     const result = differences
       .map(part => {
         const value = part.value.trim() ? part.value : (part.added ? '+' : '-') + part.value;

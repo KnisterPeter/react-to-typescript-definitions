@@ -337,10 +337,7 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
         return {
           name: 'instanceOf',
           type: node.arguments[0].name,
-          type2: {
-            kind: 'name',
-            name: node.arguments[0].name
-          },
+          type2: dom.create.namedTypeReference(node.arguments[0].name),
           importPath: instanceOfResolver(node.arguments[0].name)
         };
       case 'arrayOf':
@@ -390,10 +387,7 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'array':
         result.type = (type.arrayType || 'any') + '[]';
-        result.type2 = {
-          kind: 'array',
-          type: type.arrayType2 || 'any'
-        };
+        result.type2 = dom.create.array(type.arrayType2 || 'any');
         break;
       case 'bool':
         result.type = 'boolean';
@@ -401,22 +395,8 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'func':
         result.type = '(...args: any[]) => any';
-        result.type2 = {
-          kind: 'function',
-          name: '',
-          parameters: [
-            {
-              kind: 'parameter',
-              name: 'args',
-              type: {
-                kind: 'array',
-                type: 'any'
-              },
-              flags: dom.ParameterFlags.Rest
-            }
-          ],
-          returnType: 'any'
-        };
+        result.type2 = dom.create.functionType([
+          dom.create.parameter('args', dom.create.array('any'), dom.ParameterFlags.Rest)], 'any');
         break;
       case 'number':
         result.type = 'number';
@@ -424,10 +404,7 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'object':
         result.type = 'Object';
-        result.type2 = {
-          kind: 'name',
-          name: 'Object'
-        };
+        result.type2 = dom.create.namedTypeReference('Object');
         break;
       case 'string':
         result.type = 'string';
@@ -435,32 +412,20 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'node':
         result.type = 'React.ReactNode';
-        result.type2 = {
-          kind: 'name',
-          name: 'React.ReactNode'
-        };
+        result.type2 = dom.create.namedTypeReference('React.ReactNode');
         break;
       case 'element':
         result.type = 'React.ReactElement<any>';
-        result.type2 = {
-          kind: 'name',
-          name: 'React.ReactElement<any>'
-        };
+        result.type2 = dom.create.namedTypeReference('React.ReactElement<any>');
         break;
       case 'union':
         result.type = type.types.map((unionType: string) => unionType).join('|');
-        result.type2 = {
-          kind: 'union',
-          members: type.types2
-        };
+        result.type2 = dom.create.union(type.types2);
         break;
       case 'instanceOf':
         if (type.importPath) {
           result.type = 'typeof ' + type.type;
-          result.type2 = {
-            kind: 'typeof',
-            type: type.type2
-          };
+          result.type2 = dom.create.typeof(type.type2);
           (result as any).importType = type.type;
           (result as any).importPath = type.importPath;
         } else {
