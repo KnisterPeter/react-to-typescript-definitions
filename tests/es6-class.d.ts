@@ -1,7 +1,6 @@
 declare module 'component' {
     import * as React from 'react';
     import Message from './path/to/Message';
-
     export interface ComponentProps {
         /**
          * This is a jsdoc comment for optionalAny.
@@ -23,7 +22,6 @@ declare module 'component' {
         requiredUnion: any[]|boolean;
         requiredArrayOf: string[];
     }
-
     export class Component extends React.Component<ComponentProps, any>{
     }
 }
