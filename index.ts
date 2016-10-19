@@ -125,7 +125,7 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
     const interf = createReactPropInterface(classname, propTypes);
     code += dom.emit(interf);
 
-    const classDecl = createReactClassDeclaration(classname, propTypes, interf);
+    const classDecl = createReactClassDeclaration(classname, exportType, propTypes, interf);
     code += dom.emit(classDecl);
 
     return code;
@@ -143,7 +143,7 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
     const interf = createReactPropInterface(classname, propTypes);
     m.members.push(interf);
 
-    const classDecl = createReactClassDeclaration(classname, propTypes, interf);
+    const classDecl = createReactClassDeclaration(classname, exportType, propTypes, interf);
     m.members.push(classDecl);
 
     return dom.emit(m, dom.ContextFlags.Module);
@@ -180,11 +180,13 @@ function trimLines(): (line: string) => boolean {
   return (line: string) => (characterFound = Boolean(line)) && Boolean(line);
 }
 
-function createReactClassDeclaration(classname: string, propTypes: IPropTypes,
+function createReactClassDeclaration(classname: string, exportType: ExportType, propTypes: IPropTypes,
     interf: dom.InterfaceDeclaration): dom.ClassDeclaration {
   const classDecl = dom.create.class(classname);
   classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
-  classDecl.flags = dom.DeclarationFlags.Export;
+  classDecl.flags = exportType === ExportType.default ?
+    dom.DeclarationFlags.ExportDefault :
+    dom.DeclarationFlags.Export;
   return classDecl;
 }
 
