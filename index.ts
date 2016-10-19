@@ -15,6 +15,11 @@ export interface IOptions {
   instanceOfResolver?: InstanceOfResolver;
   /**
    * The Generator generating .d.ts code with.
+   *
+   * This option is deprecated with 0.13 and is not supported anymore.
+   * any new feature will not work with the deprecated Generator interface.
+
+   * @deprecated
    */
   generator?: Generator;
 }
@@ -158,11 +163,21 @@ function createReactPropInterface(classname: string, propTypes: IPropTypes): dom
             .split('\n')
             .map(line => line.trim())
             .map(line => line.replace(/^\*\*?/, ''))
+            .map(line => line.trim())
+            .filter(trimLines())
+            .reverse()
+            .filter(trimLines())
+            .reverse()
             .join('\n');
     }
     interf.members.push(property);
   });
   return interf;
+}
+
+function trimLines(): (line: string) => boolean {
+  let characterFound = false;
+  return (line: string) => (characterFound = Boolean(line)) && Boolean(line);
 }
 
 function createReactClassDeclaration(classname: string, propTypes: IPropTypes,
@@ -320,6 +335,10 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
         return {
           name: 'instanceOf',
           type: node.arguments[0].name,
+          type2: {
+            kind: 'name',
+            name: node.arguments[0].name
+          },
           importPath: instanceOfResolver(node.arguments[0].name)
         };
       case 'arrayOf':
@@ -330,11 +349,12 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
           arrayType2: arrayType.type2
         };
       case 'oneOfType':
+        const unionTypes = node.arguments[0].elements.map((element: IASTNode) =>
+          getTypeFromPropType(element, instanceOfResolver));
         return {
           name: 'union',
-          types: node.arguments[0].elements.map((element: IASTNode) => {
-            return getTypeFromPropType(element, instanceOfResolver).type;
-          })
+          types: unionTypes.map((type: any) => type.type),
+          types2: unionTypes.map((type: any) => type.type2)
         };
     }
   }
@@ -368,7 +388,10 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'array':
         result.type = (type.arrayType || 'any') + '[]';
-        result.type2 = {kind: 'array', type: type.arrayType2 || 'any'};
+        result.type2 = {
+          kind: 'array',
+          type: type.arrayType2 || 'any'
+        };
         break;
       case 'bool':
         result.type = 'boolean';
@@ -376,6 +399,22 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'func':
         result.type = '(...args: any[]) => any';
+        result.type2 = {
+          kind: 'function',
+          name: '',
+          parameters: [
+            {
+              kind: 'parameter',
+              name: 'args',
+              type: {
+                kind: 'array',
+                type: 'any'
+              },
+              flags: dom.ParameterFlags.Rest
+            }
+          ],
+          returnType: 'any'
+        };
         break;
       case 'number':
         result.type = 'number';
@@ -383,6 +422,10 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'object':
         result.type = 'Object';
+        result.type2 = {
+          kind: 'name',
+          name: 'Object'
+        };
         break;
       case 'string':
         result.type = 'string';
@@ -390,20 +433,37 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'node':
         result.type = 'React.ReactNode';
+        result.type2 = {
+          kind: 'name',
+          name: 'React.ReactNode'
+        };
         break;
       case 'element':
         result.type = 'React.ReactElement<any>';
+        result.type2 = {
+          kind: 'name',
+          name: 'React.ReactElement<any>'
+        };
         break;
       case 'union':
         result.type = type.types.map((unionType: string) => unionType).join('|');
+        result.type2 = {
+          kind: 'union',
+          members: type.types2
+        };
         break;
       case 'instanceOf':
         if (type.importPath) {
           result.type = 'typeof ' + type.type;
+          result.type2 = {
+            kind: 'typeof',
+            type: type.type2
+          };
           (result as any).importType = type.type;
           (result as any).importPath = type.importPath;
         } else {
           result.type = 'any';
+          result.type2 = 'any';
         }
         break;
     }

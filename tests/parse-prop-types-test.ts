@@ -1,4 +1,5 @@
 import { assert } from 'chai';
+import * as dom from 'dts-dom';
 import { getTypeFromPropType, IProp } from '../index';
 
 describe('The PropType parser', () => {
@@ -67,7 +68,22 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: '(...args: any[]) => any',
-      type2: 'any',
+      type2: {
+        kind: 'function',
+        name: '',
+        parameters: [
+          {
+            kind: 'parameter',
+            name: 'args',
+            type: {
+              kind: 'array',
+              type: 'any'
+            },
+            flags: dom.ParameterFlags.Rest
+          }
+        ],
+        returnType: 'any'
+      },
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -89,7 +105,22 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, '(...args: any[]) => any');
-    assert.equal(result.type2, 'any');
+    assert.deepEqual(result.type2, {
+      kind: 'function',
+      name: '',
+      parameters: [
+        {
+          kind: 'parameter',
+          name: 'args',
+          type: {
+            kind: 'array',
+            type: 'any'
+          },
+          flags: dom.ParameterFlags.Rest
+        }
+      ],
+      returnType: 'any'
+    });
     assert.equal(result.optional, false);
   });
   it('should return number for number prop types', () => {
@@ -119,7 +150,10 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'Object',
-      type2: 'any',
+      type2: {
+        kind: 'name',
+        name: 'Object'
+      },
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -151,7 +185,10 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'React.ReactNode',
-      type2: 'any',
+      type2: {
+        kind: 'name',
+        name: 'React.ReactNode'
+      },
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -167,7 +204,10 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'React.ReactElement<any>',
-      type2: 'any',
+      type2: {
+        kind: 'name',
+        name: 'React.ReactElement<any>'
+      },
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -239,7 +279,13 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, 'number|string');
-    assert.equal(result.type2, 'any');
+    assert.deepEqual(result.type2, {
+      kind: 'union',
+      members: [
+        'number',
+        'string'
+      ]
+    });
     assert.equal(result.optional, true);
   });
   it('should return typeof Message for instanceOf(Message) prop types', () => {
@@ -264,7 +310,13 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, (name: string): string => './some/path');
     assert.equal(result.type, 'typeof Message');
-    assert.equal(result.type2, 'any');
+    assert.deepEqual(result.type2, {
+      kind: 'typeof',
+      type: {
+        kind: 'name',
+        name: 'Message'
+      }
+    });
     assert.equal(result.optional, true);
     assert.equal(result.importType, 'Message');
     assert.equal(result.importPath, './some/path');

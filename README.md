@@ -1,6 +1,6 @@
 # react-to-typescript-definitions
 
-[![GitHub license](https://img.shields.io/github/license/KnisterPeter/react-to-typescript-definitions.svg)]()
+[![GitHub license](https://img.shields.io/github/license/KnisterPeter/react-to-typescript-definitions.svg)](https://github.com/KnisterPeter/react-to-typescript-definitions)
 [![Travis](https://img.shields.io/travis/KnisterPeter/react-to-typescript-definitions.svg)](https://travis-ci.org/KnisterPeter/react-to-typescript-definitions)
 [![Coveralls branch](https://img.shields.io/coveralls/KnisterPeter/react-to-typescript-definitions/master.svg)](https://coveralls.io/github/KnisterPeter/react-to-typescript-definitions)
 [![David](https://img.shields.io/david/KnisterPeter/react-to-typescript-definitions.svg)](https://david-dm.org/KnisterPeter/react-to-typescript-definitions)
@@ -11,30 +11,32 @@
 
 Create typescript definitions files (d.ts) from react components.
 
-# Features
+## Features
 
 * ES6 and ES7 class syntax
 * Most PropTypes
- * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf
+  * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf
 * required PropTypes
 * instanceOf PropTypes (when using API and giving a resolve function)
 * jsdoc
 
-# Usage
+## Usage
 
-## Installation
+### Installation
+
 Install as npm package:
 
 ```sh
 npm install react-to-typescript-definitions --save-dev
 ```
+
 or
+
 ```sh
 npm install -g react-to-typescript-definitions
 ```
 
-
-## CLI
+### CLI
 
 ```sh
 # Create a definition which exports a module named 'module-name'
@@ -44,13 +46,14 @@ cat <some/react/component.jsx> |react2dts --name module-name
 cat <some/react/component.jsx> |react2dts --top-level-module
 ```
 
-## API
+### API
 
 Functions:
+
 ```js
 /**
  * Returns the typescript definition for the given file.
- * 
+ *
  * @param name The name of the generated module
  * @param path The path to the file to parse
  * @param options The options to use
@@ -62,7 +65,7 @@ function generateFromFile(name, path, options)
 ```js
 /**
  * Returns the typescript definition for the given source.
- * 
+ *
  * @param name The name of the generated module
  * @param code The code to parse
  * @param options The options to use
@@ -74,20 +77,17 @@ function generateFromSource(name, code, options)
 ```js
 /**
  * Returns the typescript definition for the given babylon AST object.
- * 
+ *
  * @param name The name of the generated module
  * @param ast The babylon ASt to parse
  * @param options The options to use
  * @return The type definition as string
  */
 function generateFromAst(name, ast, options)
-``` 
+```
 
 Options:
-* generator  
-  An instance of the exported Generator class. This options is usefull to write
-  multiple declarations into one .d.ts file. The generator could be used
-  for consecutive function calls.
+
 * instanceOfResolver  
   A function which gets a type name (as string) and should return the path
   to the file defining the type or undefined if the type is not resolvable.
