@@ -94,7 +94,6 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
   const generator: Generator = options.generator || new Generator();
 
   const generateTypings: () => void = () => {
-    generator.import('* as React', 'react');
     if (propTypes) {
       Object.keys(propTypes).forEach((propName: string) => {
         const prop: IProp = propTypes[propName];
@@ -112,6 +111,9 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
   };
 
   if (moduleName === null) {
+    if (!options.generator) {
+      generator.import('* as React', 'react');
+    }
     generateTypings();
   } else {
     generator.declareModule(moduleName, generateTypings);
@@ -343,6 +345,7 @@ export class Generator {
     this.code += `declare module '${name}' {`;
     this.nl();
     this.indentLevel++;
+    this.import('* as React', 'react');
     fn();
     this.indentLevel--;
     this.indent();
