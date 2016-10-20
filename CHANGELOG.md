@@ -1,3 +1,17 @@
+# Change Log
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.12.0...v0.13.0) (2016-10-20)
+
+
+### Features
+
+* **parsing:** Add ability to parse babeled files (#121) ([a19c80c](https://github.com/knisterpeter/react-to-typescript-definitions/commit/a19c80c))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.11.1...v0.12.0) (2016-05-25)
 
