@@ -3,22 +3,23 @@ import * as babylon from 'babylon';
 import * as dom from 'dts-dom';
 
 export interface InstanceOfResolver {
-  (name: string): string;
+  (name: string): string|undefined;
 };
 
 export interface IOptions {
+
   /**
    * Resolves type names to import paths.
    *
    * @return Path to given name if resolveable, undefined otherwise
    */
   instanceOfResolver?: InstanceOfResolver;
+
   /**
    * The Generator generating .d.ts code with.
    *
    * This option is deprecated with 0.13 and is not supported anymore.
    * any new feature will not work with the deprecated Generator interface.
-
    * @deprecated
    */
   generator?: Generator;
@@ -71,11 +72,11 @@ export function cli(options: any): void {
   });
 }
 
-export function generateFromFile(moduleName: string, path: string, options?: IOptions): string {
+export function generateFromFile(moduleName: string|null, path: string, options?: IOptions): string {
   return generateFromSource(moduleName, fs.readFileSync(path).toString(), options);
 }
 
-export function generateFromSource(moduleName: string, code: string, options: IOptions = {}): string {
+export function generateFromSource(moduleName: string|null, code: string, options: IOptions = {}): string {
   const ast = babylon.parse(code, {
     sourceType: 'module',
     allowReturnOutsideFunction: true,
@@ -101,9 +102,9 @@ export function generateFromSource(moduleName: string, code: string, options: IO
   return generateFromAst(moduleName, ast, options);
 }
 
-const defaultInstanceOfResolver: InstanceOfResolver = (name: string): string => undefined;
+const defaultInstanceOfResolver: InstanceOfResolver = (_name: string): undefined => undefined;
 
-export function generateFromAst(moduleName: string, ast: any, options: IOptions = {}): string {
+export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {}): string {
   const parsingResult = parseAst(ast, options.instanceOfResolver);
   if (options.generator) {
     return deprecatedGenerator(options.generator, moduleName, parsingResult);
@@ -117,7 +118,7 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
     if (propTypes) {
       Object.keys(propTypes).forEach(propName => {
         const prop = propTypes[propName];
-        if (prop.importPath) {
+        if (prop.importType && prop.importPath) {
           code += dom.emit(dom.create.importDefault(prop.importType, prop.importPath));
         }
       });
@@ -135,7 +136,7 @@ export function generateFromAst(moduleName: string, ast: any, options: IOptions 
     if (propTypes) {
       Object.keys(propTypes).forEach(propName => {
         const prop = propTypes[propName];
-        if (prop.importPath) {
+        if (prop.importType && prop.importPath) {
           m.members.push(dom.create.importDefault(prop.importType, prop.importPath));
         }
       });
@@ -190,14 +191,14 @@ function createReactClassDeclaration(classname: string, exportType: ExportType, 
   return classDecl;
 }
 
-function deprecatedGenerator(generator: Generator, moduleName: string,
+function deprecatedGenerator(generator: Generator, moduleName: string|null,
     {exportType, classname, propTypes}: IParsingResult): string {
   const generateTypings = () => {
     generator.import('* as React', 'react');
     if (propTypes) {
       Object.keys(propTypes).forEach(propName => {
         const prop = propTypes[propName];
-        if (prop.importPath) {
+        if (prop.importType && prop.importPath) {
           generator.import(prop.importType, prop.importPath);
         }
       });
@@ -229,15 +230,15 @@ interface IParsingResult {
   propTypes: IPropTypes;
 }
 
-function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingResult {
-  let exportType: ExportType;
-  let classname: string;
+function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingResult {
+  let exportType: ExportType|undefined;
+  let classname: string|undefined;
   let propTypes: IPropTypes = {};
   walk(ast.program, {
-    'ExportNamedDeclaration': exportNode => {
+    'ExportNamedDeclaration': () => {
       exportType = ExportType.named;
     },
-    'ExportDefaultDeclaration': exportNode => {
+    'ExportDefaultDeclaration': () => {
       exportType = ExportType.default;
     },
     'ClassDeclaration': classNode => {
@@ -275,6 +276,12 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
     }
     });
   }
+  if (exportType === undefined) {
+    throw new Error('No exported class found');
+  }
+  if (!classname) {
+    throw new Error('Anonymous classes are not supported');
+  }
   return {
     exportType,
     classname,
@@ -282,7 +289,7 @@ function parseAst(ast: any, instanceOfResolver: InstanceOfResolver): IParsingRes
   };
 }
 
-function parsePropTypes(node: any, instanceOfResolver: InstanceOfResolver): IPropTypes {
+function parsePropTypes(node: any, instanceOfResolver?: InstanceOfResolver): IPropTypes {
   let propTypes: IPropTypes = {};
   walk(node, {
     'ObjectProperty': propertyNode => {
@@ -369,7 +376,7 @@ function isRequiredPropType(node: any, instanceOfResolver: InstanceOfResolver): 
 }
 
 /**
- * This is for internal use only
+ * @internal
  */
 export function getTypeFromPropType(node: IASTNode, instanceOfResolver = defaultInstanceOfResolver): IProp {
   const result: IProp = {

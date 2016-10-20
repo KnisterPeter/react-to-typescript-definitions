@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { Generator, generateFromSource } from '../index';
+import { Generator, generateFromSource } from '../src/index';
 
 describe('The Generator', () => {
   let generator: Generator;
@@ -58,25 +58,31 @@ describe('Generating typings with given custom generator', () => {
   });
 
   it('should delare a module if name given', () => {
-    let name: string = undefined;
+    let name: string|undefined;
     generator.declareModule = moduleName => {
       name = moduleName;
     };
 
-    generateFromSource('module', '', {generator});
+    const source = `
+      export class Test {}
+    `;
+    generateFromSource('module', source, {generator});
 
     assert.equal(name, 'module');
   });
 
   it('should import react', () => {
-    let decl: string = undefined;
-    let from: string = undefined;
+    let decl: string|undefined;
+    let from: string|undefined;
     generator.import = (_decl, _from) => {
       decl = _decl;
       from = _from;
     };
 
-    generateFromSource(null, '', {generator});
+    const source = `
+      export class Test {}
+    `;
+    generateFromSource(null, source, {generator});
 
     assert.equal(decl, '* as React');
     assert.equal(from, 'react');

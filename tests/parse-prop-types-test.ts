@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import * as dom from 'dts-dom';
-import { getTypeFromPropType, IProp } from '../index';
+import { getTypeFromPropType, IProp } from '../src/index';
 
 describe('The PropType parser', () => {
   const instanceOfResolver = (): any => undefined;
@@ -265,7 +265,7 @@ describe('The PropType parser', () => {
         }
       ]
     };
-    const result: IProp = getTypeFromPropType(ast, (name: string): string => './some/path');
+    const result: IProp = getTypeFromPropType(ast, (): string => './some/path');
     assert.equal(result.type, 'typeof Message');
     assert.deepEqual(result.type2, dom.create.typeof(dom.create.namedTypeReference('Message')));
     assert.equal(result.optional, true);
