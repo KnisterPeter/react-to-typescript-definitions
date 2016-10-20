@@ -62,9 +62,6 @@
     "dts-dom": "0.1.11",
     "minimist": "1.2.0"
   },
-  "publishConfig": {
-    "tag": "next"
-  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
