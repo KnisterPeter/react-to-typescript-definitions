@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { Generator } from '../index';
+import { Generator, generateFromSource } from '../index';
 
 describe('The Generator', () => {
   let generator: Generator;
@@ -25,7 +25,7 @@ describe('The Generator', () => {
     assert.equal(generator.toString(), 'name?: type;\n');
   });
   it('should write a property interface', () => {
-    generator.props('Name', {prop: {type: 'type', optional: true}});
+    generator.props('Name', {prop: {type: 'type', type2: 'any', optional: true}});
     assert.equal(generator.toString(), 'export interface NameProps {\n\tprop?: type;\n}\n');
   });
   it('should write a class with props declaration', () => {
@@ -47,5 +47,38 @@ describe('The Generator', () => {
   it('should write a named export declaration', () => {
     generator.exportDeclaration(1, () => undefined);
     assert.equal(generator.toString(), 'export ');
+  });
+});
+
+describe('Generating typings with given custom generator', () => {
+  let generator: Generator;
+
+  beforeEach(() => {
+    generator = new Generator();
+  });
+
+  it('should delare a module if name given', () => {
+    let name: string = undefined;
+    generator.declareModule = moduleName => {
+      name = moduleName;
+    };
+
+    generateFromSource('module', '', {generator});
+
+    assert.equal(name, 'module');
+  });
+
+  it('should import react', () => {
+    let decl: string = undefined;
+    let from: string = undefined;
+    generator.import = (_decl, _from) => {
+      decl = _decl;
+      from = _from;
+    };
+
+    generateFromSource(null, '', {generator});
+
+    assert.equal(decl, '* as React');
+    assert.equal(from, 'react');
   });
 });

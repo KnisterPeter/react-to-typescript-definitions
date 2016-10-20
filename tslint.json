@@ -1,5 +1,6 @@
 {
   "rules": {
+    "max-line-length": [true, 120],
     "class-name": true,
     "comment-format": [
       true,
@@ -27,7 +28,7 @@
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,
-    "no-inferrable-types": false,
+    "no-inferrable-types": true,
     "no-internal-module": true,
     "no-require-imports": false,
     "no-shadowed-variable": true,
@@ -52,13 +53,11 @@
       "avoid-escape"
     ],
     "radix": true,
-    "semicolon": true,
+    "semicolon": [true, "always"],
     "typedef": [
       true,
       "call-signature",
-      "parameter",
       "property-declaration",
-      "variable-declaration",
       "member-variable-declaration"
     ],
     "typedef-whitespace": [
