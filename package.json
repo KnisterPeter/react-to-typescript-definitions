@@ -70,7 +70,8 @@
     "exclude": [
       "node_modules",
       "coverage",
-      "dist/tests"
+      "dist/tests",
+      "tests"
     ]
   }
 }
