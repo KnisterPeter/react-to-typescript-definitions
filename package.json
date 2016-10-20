@@ -24,7 +24,7 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
     "prerelease": "npm test && npm run build",
     "release": "standard-version",
-    "postrelease": "git --follow-tags push origin master && npm publish"
+    "postrelease": "git push --follow-tags origin master && npm publish"
   },
   "author": {
     "name": "Markus Wolf",
