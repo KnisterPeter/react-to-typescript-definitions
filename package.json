@@ -2,15 +2,14 @@
   "name": "react-to-typescript-definitions",
   "version": "0.13.0",
   "description": "Create typescript definitions files (d.ts) from react components",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "bin": {
     "react2dts": "cli.js"
   },
   "files": [
-    "index.js",
+    "dist",
     "cli.js",
-    "index.d.ts",
-    "index.js.map"
+    "index.d.ts"
   ],
   "scripts": {
     "start": "npm test",
@@ -19,7 +18,7 @@
     "build": "tsc --sourceMap",
     "build:inline": "tsc --inlineSourceMap",
     "pretest": "npm run clean && npm run build:inline",
-    "test": "nyc --all --reporter lcov ./node_modules/.bin/mocha --require source-map-support --recursive tests/*-test.js",
+    "test": "nyc --all --reporter lcov ./node_modules/.bin/mocha --require source-map-support --recursive dist/tests/*-test.js",
     "coverage": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
     "prerelease": "npm test && npm run build",
@@ -71,6 +70,7 @@
     "exclude": [
       "node_modules",
       "coverage",
+      "dist/tests",
       "tests"
     ]
   }

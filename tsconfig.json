@@ -1,13 +1,24 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "noImplicitAny": true,
     "declaration": true,
     "listFiles": false,
-    "pretty": true
+    "module": "commonjs",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist",
+    "pretty": true,
+    "strictNullChecks": true,
+    "stripInternal": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5"
   },
   "exclude": [
+    "index.d.ts",
+    "dist",
     "node_modules",
     "tests/es6-class.d.ts",
     "tests/es7-class.d.ts",

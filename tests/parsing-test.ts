@@ -4,7 +4,9 @@ import * as path from 'path';
 import * as chalk from 'chalk';
 import * as diff from 'diff';
 
-import * as react2dts from '../index';
+import * as react2dts from '../src/index';
+
+const basedir = path.join(__dirname, '..', '..', 'tests');
 
 function textDiff(actual: string, expected: string): void {
   const differences = diff.diffChars(expected, actual);
@@ -22,38 +24,38 @@ function textDiff(actual: string, expected: string): void {
 describe('Parsing', () => {
   it('should create definition from es6 class component', () => {
     const opts: react2dts.IOptions = {
-      instanceOfResolver: (name: string): string => './path/to/Message'
+      instanceOfResolver: (): string => './path/to/Message'
     };
     textDiff(
-      react2dts.generateFromFile('component', path.join(__dirname, 'es6-class.jsx'), opts),
-      fs.readFileSync(path.join(__dirname, 'es6-class.d.ts')).toString()
+      react2dts.generateFromFile('component', path.join(basedir, 'es6-class.jsx'), opts),
+      fs.readFileSync(path.join(basedir, 'es6-class.d.ts')).toString()
     );
   });
   it('should create definition from es7 class component', () => {
     const opts: react2dts.IOptions = {
-      instanceOfResolver: (name: string): string => './path/to/Message'
+      instanceOfResolver: (): string => './path/to/Message'
     };
     textDiff(
-      react2dts.generateFromFile('component', path.join(__dirname, 'es7-class.jsx'), opts),
-      fs.readFileSync(path.join(__dirname, 'es7-class.d.ts')).toString()
+      react2dts.generateFromFile('component', path.join(basedir, 'es7-class.jsx'), opts),
+      fs.readFileSync(path.join(basedir, 'es7-class.d.ts')).toString()
     );
   });
   it('should create top-level module definition from es7 class component', () => {
     const opts: react2dts.IOptions = {
-      instanceOfResolver: (name: string): string => './path/to/Message'
+      instanceOfResolver: (): string => './path/to/Message'
     };
     textDiff(
-      react2dts.generateFromFile(null, path.join(__dirname, 'es7-class.jsx'), opts),
-      fs.readFileSync(path.join(__dirname, 'es7-class-top-level-module.d.ts')).toString()
+      react2dts.generateFromFile(null, path.join(basedir, 'es7-class.jsx'), opts),
+      fs.readFileSync(path.join(basedir, 'es7-class-top-level-module.d.ts')).toString()
     );
   });
   it('should create definition from babeled es7 class component', () => {
     const opts: react2dts.IOptions = {
-      instanceOfResolver: (name: string): string => './path/to/Message'
+      instanceOfResolver: (): string => './path/to/Message'
     };
     textDiff(
-      react2dts.generateFromFile('component', path.join(__dirname, 'es7-class-babeled.js'), opts),
-      fs.readFileSync(path.join(__dirname, 'es7-class.d.ts')).toString()
+      react2dts.generateFromFile('component', path.join(basedir, 'es7-class-babeled.js'), opts),
+      fs.readFileSync(path.join(basedir, 'es7-class.d.ts')).toString()
     );
   });
 });

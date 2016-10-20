@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var react2dts = require('./index');
+var react2dts = require('./dist/src/index');
 var minimist = require('minimist');
 
 var options = minimist(process.argv.slice(2), {
