@@ -1,5 +1,6 @@
 import { assert } from 'chai';
-import { Generator, generateFromSource } from '../src/index';
+import { Generator } from '../src/generator';
+import { generateFromSource } from '../src/index';
 
 describe('The Generator', () => {
   let generator: Generator;
