@@ -4,42 +4,28 @@ import { IParsingResult, IPropTypes, ExportType } from './index';
 
 export function generateTypings(moduleName: string|null, parsingResult: IParsingResult): string {
   const {exportType, classname, propTypes} = parsingResult;
+
+  const m = dom.create.module(moduleName || 'moduleName');
+  m.members.push(dom.create.importAll('React', 'react'));
+  if (propTypes) {
+    Object.keys(propTypes).forEach(propName => {
+      const prop = propTypes[propName];
+      if (prop.importType && prop.importPath) {
+        m.members.push(dom.create.importDefault(prop.importType, prop.importPath));
+      }
+    });
+  }
+  const interf = createReactPropInterface(classname, propTypes);
+  m.members.push(interf);
+
+  const classDecl = createReactClassDeclaration(classname, exportType, propTypes, interf);
+  m.members.push(classDecl);
+
   if (moduleName === null) {
-    let code = '';
-
-    code += dom.emit(dom.create.importAll('React', 'react'));
-    if (propTypes) {
-      Object.keys(propTypes).forEach(propName => {
-        const prop = propTypes[propName];
-        if (prop.importType && prop.importPath) {
-          code += dom.emit(dom.create.importDefault(prop.importType, prop.importPath));
-        }
-      });
-    }
-    const interf = createReactPropInterface(classname, propTypes);
-    code += dom.emit(interf);
-
-    const classDecl = createReactClassDeclaration(classname, exportType, propTypes, interf);
-    code += dom.emit(classDecl);
-
-    return code;
+    return m.members
+      .map(member => dom.emit(member, dom.ContextFlags.None))
+      .join('');
   } else {
-    const m = dom.create.module(moduleName);
-    m.members.push(dom.create.importAll('React', 'react'));
-    if (propTypes) {
-      Object.keys(propTypes).forEach(propName => {
-        const prop = propTypes[propName];
-        if (prop.importType && prop.importPath) {
-          m.members.push(dom.create.importDefault(prop.importType, prop.importPath));
-        }
-      });
-    }
-    const interf = createReactPropInterface(classname, propTypes);
-    m.members.push(interf);
-
-    const classDecl = createReactClassDeclaration(classname, exportType, propTypes, interf);
-    m.members.push(classDecl);
-
     return dom.emit(m, dom.ContextFlags.Module);
   }
 }

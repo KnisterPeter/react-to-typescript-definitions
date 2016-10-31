@@ -164,7 +164,6 @@ function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingRe
   let propTypes: IPropTypes = {};
 
   const astq = new ASTQ();
-  // Search classes with proptypes (es7 style)
   const classDeclarationNodes = astq.query(ast, `
     //ClassDeclaration[
         /:id Identifier[@name]
@@ -183,6 +182,7 @@ function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingRe
       const propTypesNodes = astq.query(ast, `
         //AssignmentExpression[
           /:left MemberExpression[
+            /:object Identifier[@name == '${classname}'] &&
             /:property Identifier[@name == 'propTypes']
           ]
         ] /:right *
