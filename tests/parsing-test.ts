@@ -49,6 +49,15 @@ describe('Parsing', () => {
       fs.readFileSync(path.join(basedir, 'es7-class-top-level-module.d.ts')).toString()
     );
   });
+  it('should create definition from babeled es7 class component', () => {
+    const opts: react2dts.IOptions = {
+      instanceOfResolver: (): string => './path/to/Message'
+    };
+    textDiff(
+      react2dts.generateFromFile('component', path.join(basedir, 'es7-class-babeled.js'), opts),
+      fs.readFileSync(path.join(basedir, 'es7-class.d.ts')).toString()
+    );
+  });
   it('should create definition from stateless function component', () => {
     textDiff(
       react2dts.generateFromFile('component', path.join(basedir, 'stateless.jsx')),

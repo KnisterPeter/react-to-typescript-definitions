@@ -165,8 +165,7 @@ function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingRe
   let functionname: string|undefined;
   let propTypes: IPropTypes|undefined;
 
-  const astq = new ASTQ();
-  const classname = getClassName(ast);
+  let classname = getClassName(ast);
   if (classname) {
     propTypes = getEs7StyleClassPropTypes(ast, classname, instanceOfResolver);
     exportType = getClassExportType(ast, classname);
@@ -174,6 +173,7 @@ function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingRe
   if (!propTypes) {
     const componentName = getComponentNameByPropTypeAssignment(ast);
     if (componentName) {
+      const astq = new ASTQ();
       const exportTypeNodes = astq.query(ast, `
         //ExportNamedDeclaration // VariableDeclarator[
           /:id Identifier[@name=='${componentName}'] &&
@@ -189,6 +189,22 @@ function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingRe
         exportType = ExportType.named;
       }
       propTypes = getPropTypesFromAssignment(ast, componentName, instanceOfResolver);
+    }
+    if (!exportType) {
+      const astq = new ASTQ();
+      const commonJsExports = astq.query(ast, `
+        // AssignmentExpression[
+          /:left MemberExpression[
+            /:object Identifier[@name == 'exports'] &&
+            /:property Identifier[@name == 'default']
+          ] &&
+          /:right Identifier[@name == '${componentName}']
+        ]
+      `);
+      if (commonJsExports.length > 0) {
+        classname = componentName;
+        exportType = ExportType.default;
+      }
     }
   }
 
