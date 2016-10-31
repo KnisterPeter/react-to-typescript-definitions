@@ -3,10 +3,13 @@ import * as dom from 'dts-dom';
 import { IParsingResult, IPropTypes, ExportType } from './index';
 
 export function generateTypings(moduleName: string|null, parsingResult: IParsingResult): string {
-  const {exportType, classname, propTypes} = parsingResult;
+  const {exportType, classname, functionname, propTypes} = parsingResult;
+  const componentName = classname || functionname || 'Anonymous';
 
   const m = dom.create.module(moduleName || 'moduleName');
-  m.members.push(dom.create.importAll('React', 'react'));
+  if (classname) {
+    m.members.push(dom.create.importAll('React', 'react'));
+  }
   if (propTypes) {
     Object.keys(propTypes).forEach(propName => {
       const prop = propTypes[propName];
@@ -15,11 +18,14 @@ export function generateTypings(moduleName: string|null, parsingResult: IParsing
       }
     });
   }
-  const interf = createReactPropInterface(classname, propTypes);
+  const interf = createReactPropInterface(componentName, propTypes);
   m.members.push(interf);
 
-  const classDecl = createReactClassDeclaration(classname, exportType, propTypes, interf);
-  m.members.push(classDecl);
+  if (classname) {
+    m.members.push(createReactClassDeclaration(componentName, exportType, propTypes, interf));
+  } else if (functionname) {
+    m.members.push(createReactFunctionDeclaration(componentName, exportType, interf));
+  }
 
   if (moduleName === null) {
     return m.members
@@ -30,8 +36,8 @@ export function generateTypings(moduleName: string|null, parsingResult: IParsing
   }
 }
 
-function createReactPropInterface(classname: string, propTypes: IPropTypes): dom.InterfaceDeclaration {
-  const interf = dom.create.interface(`${classname}Props`);
+function createReactPropInterface(componentName: string, propTypes: IPropTypes): dom.InterfaceDeclaration {
+  const interf = dom.create.interface(`${componentName}Props`);
   interf.flags = dom.DeclarationFlags.Export;
   Object.keys(propTypes).forEach(propName => {
     const prop = propTypes[propName];
@@ -60,12 +66,22 @@ function trimLines(): (line: string) => boolean {
   return (line: string) => (characterFound = Boolean(line)) && Boolean(line);
 }
 
-function createReactClassDeclaration(classname: string, exportType: ExportType, propTypes: IPropTypes,
+function createReactClassDeclaration(componentName: string, exportType: ExportType, propTypes: IPropTypes,
     interf: dom.InterfaceDeclaration): dom.ClassDeclaration {
-  const classDecl = dom.create.class(classname);
+  const classDecl = dom.create.class(componentName);
   classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
   classDecl.flags = exportType === ExportType.default ?
     dom.DeclarationFlags.ExportDefault :
     dom.DeclarationFlags.Export;
   return classDecl;
+}
+
+function createReactFunctionDeclaration(componentName: string, exportType: ExportType,
+    interf: dom.InterfaceDeclaration): dom.FunctionDeclaration {
+  const funcDelc = dom.create.function(componentName, [dom.create.parameter('props', interf)],
+    dom.create.namedTypeReference('JSX.Element'));
+  funcDelc.flags = exportType === ExportType.default ?
+    dom.DeclarationFlags.ExportDefault :
+    dom.DeclarationFlags.Export;
+  return funcDelc;
 }
