@@ -1,6 +1,7 @@
 import { assert } from 'chai';
 import * as dom from 'dts-dom';
-import { getTypeFromPropType, IProp } from '../src/index';
+import { IProp } from '../src/index';
+import { getTypeFromPropType } from '../src/analyzer';
 
 describe('The PropType parser', () => {
   const instanceOfResolver = (): any => undefined;

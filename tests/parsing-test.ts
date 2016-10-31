@@ -58,4 +58,10 @@ describe('Parsing', () => {
       fs.readFileSync(path.join(basedir, 'es7-class.d.ts')).toString()
     );
   });
+  it('should create definition from stateless function component', () => {
+    textDiff(
+      react2dts.generateFromFile('component', path.join(basedir, 'stateless.jsx')),
+      fs.readFileSync(path.join(basedir, 'stateless.d.ts')).toString()
+    );
+  });
 });
