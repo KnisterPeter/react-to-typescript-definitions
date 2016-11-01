@@ -22,9 +22,9 @@ export function generateTypings(moduleName: string|null, parsingResult: IParsing
   m.members.push(interf);
 
   if (classname) {
-    m.members.push(createReactClassDeclaration(componentName, exportType, propTypes, interf));
+    m.members.push(createReactClassDeclaration(componentName, exportType as ExportType, propTypes, interf));
   } else if (functionname) {
-    m.members.push(createReactFunctionDeclaration(componentName, exportType, interf));
+    m.members.push(createReactFunctionDeclaration(componentName, exportType as ExportType, interf));
   }
 
   if (moduleName === null) {
