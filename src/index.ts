@@ -7,6 +7,7 @@ const ASTQ: typeof astqts.ASTQ = astqts as any;
 import { Generator } from './generator';
 import { generateTypings } from './generate-typigns';
 import { parsePropTypes } from './analyzer';
+import { createTypings } from './typings';
 
 export interface InstanceOfResolver {
   (name: string): string|undefined;
@@ -109,41 +110,44 @@ export function generateFromSource(moduleName: string|null, code: string, option
 }
 
 export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {}): string {
-  const parsingResult = parseAst(ast, options.instanceOfResolver);
-  if (options.generator) {
-    return deprecatedGenerator(options.generator, moduleName, parsingResult);
+  if (1 === 1 && true && true) {
+    return createTypings(moduleName, ast, options.instanceOfResolver);
   }
+  const parsingResult = parseAst(ast, options.instanceOfResolver);
+  // if (options.generator) {
+  //   return deprecatedGenerator(options.generator, moduleName, parsingResult);
+  // }
   return generateTypings(moduleName, parsingResult);
 }
 
-function deprecatedGenerator(generator: Generator, moduleName: string|null,
-    {exportType, classname, propTypes}: IParsingResult): string {
-  const componentName = classname || 'Anonymous';
-  const generateTypings = () => {
-    generator.import('* as React', 'react');
-    if (propTypes) {
-      Object.keys(propTypes).forEach(propName => {
-        const prop = propTypes[propName];
-        if (prop.importType && prop.importPath) {
-          generator.import(prop.importType, prop.importPath);
-        }
-      });
-    }
-    generator.nl();
-    generator.props(componentName, propTypes);
-    generator.nl();
-    generator.exportDeclaration(exportType, () => {
-      generator.class(componentName, !!propTypes);
-    });
-  };
+// function deprecatedGenerator(generator: Generator, moduleName: string|null,
+//     {exportType, classname, propTypes}: IParsingResult): string {
+//   const componentName = classname || 'Anonymous';
+//   const generateTypings = () => {
+//     generator.import('* as React', 'react');
+//     if (propTypes) {
+//       Object.keys(propTypes).forEach(propName => {
+//         const prop = propTypes[propName];
+//         if (prop.importType && prop.importPath) {
+//           generator.import(prop.importType, prop.importPath);
+//         }
+//       });
+//     }
+//     generator.nl();
+//     generator.props(componentName, propTypes);
+//     generator.nl();
+//     generator.exportDeclaration(exportType, () => {
+//       generator.class(componentName, !!propTypes);
+//     });
+//   };
 
-  if (moduleName === null) {
-    generateTypings();
-  } else {
-    generator.declareModule(moduleName, generateTypings);
-  }
-  return generator.toString();
-}
+//   if (moduleName === null) {
+//     generateTypings();
+//   } else {
+//     generator.declareModule(moduleName, generateTypings);
+//   }
+//   return generator.toString();
+// }
 
 export enum ExportType {
   default,

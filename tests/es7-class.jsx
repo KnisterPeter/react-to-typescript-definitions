@@ -1,39 +1,40 @@
-import * as React from 'react';
+import {Component, PropTypes} from 'react';
+import Message from './path/to/Message';
 
-export default class Component extends React.Component {
+export default class Component extends Component {
 
 	static propTypes = {
 		/**
 		 * This is a jsdoc comment for optionalAny.
 		 */
-		optionalAny: React.PropTypes.any,
-		optionalArray: React.PropTypes.array,
-		optionalBool: React.PropTypes.bool,
-		optionalFunc: React.PropTypes.func,
-		optionalNumber: React.PropTypes.number,
-		optionalObject: React.PropTypes.object,
-		optionalString: React.PropTypes.string,
-		optionalNode: React.PropTypes.node,
-		optionalElement: React.PropTypes.element,
-		optionalMessage: React.PropTypes.instanceOf(Message),
-		//optionalEnum: React.PropTypes.oneOf(['News', 'Photos']),
-		optionalUnion: React.PropTypes.oneOfType([
-			React.PropTypes.string,
-			React.PropTypes.number
+		optionalAny: PropTypes.any,
+		optionalArray: PropTypes.array,
+		optionalBool: PropTypes.bool,
+		optionalFunc: PropTypes.func,
+		optionalNumber: PropTypes.number,
+		optionalObject: PropTypes.object,
+		optionalString: PropTypes.string,
+		optionalNode: PropTypes.node,
+		optionalElement: PropTypes.element,
+		optionalMessage: PropTypes.instanceOf(Message),
+		//optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+		optionalUnion: PropTypes.oneOfType([
+			PropTypes.string,
+			PropTypes.number
 		]),
-		optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
-		//optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
-		//optionalObjectWithShape: React.PropTypes.shape({
-		//	color: React.PropTypes.string,
-		//	fontSize: React.PropTypes.number
+		optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+		//optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+		//optionalObjectWithShape: PropTypes.shape({
+		//	color: PropTypes.string,
+		//	fontSize: PropTypes.number
 		//}),
-		requiredFunc: React.PropTypes.func.isRequired,
-		requiredAny: React.PropTypes.any.isRequired,
-		requiredUnion: React.PropTypes.oneOfType([
-			React.PropTypes.array,
-			React.PropTypes.bool
+		requiredFunc: PropTypes.func.isRequired,
+		requiredAny: PropTypes.any.isRequired,
+		requiredUnion: PropTypes.oneOfType([
+			PropTypes.array,
+			PropTypes.bool
 		]).isRequired,
-		requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+		requiredArrayOf: PropTypes.arrayOf(PropTypes.string).isRequired,
 	};
 
 	render() {
