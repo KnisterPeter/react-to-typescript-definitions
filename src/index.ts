@@ -110,6 +110,9 @@ export function generateFromSource(moduleName: string|null, code: string, option
 
 export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {}): string {
   const parsingResult = parseAst(ast, options.instanceOfResolver);
+  if (parsingResult.exportType === undefined) {
+    return '';
+  }
   if (options.generator) {
     return deprecatedGenerator(options.generator, moduleName, parsingResult);
   }
@@ -132,7 +135,7 @@ function deprecatedGenerator(generator: Generator, moduleName: string|null,
     generator.nl();
     generator.props(componentName, propTypes);
     generator.nl();
-    generator.exportDeclaration(exportType, () => {
+    generator.exportDeclaration(exportType as ExportType, () => {
       generator.class(componentName, !!propTypes);
     });
   };
@@ -154,7 +157,7 @@ export enum ExportType {
  * @internal
  */
 export interface IParsingResult {
-  exportType: ExportType;
+  exportType: ExportType|undefined;
   classname: string|undefined;
   functionname: string|undefined;
   propTypes: IPropTypes;
@@ -208,9 +211,6 @@ function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingRe
     }
   }
 
-  if (exportType === undefined) {
-    throw new Error('No exported component found');
-  }
   return {
     exportType,
     classname,
