@@ -20,8 +20,6 @@
     "index.d.ts",
     "dist",
     "node_modules",
-    "tests/es6-class.d.ts",
-    "tests/es7-class.d.ts",
-    "tests/es7-class-top-level-module.d.ts"
+    "tests/*.d.ts"
   ]
 }
