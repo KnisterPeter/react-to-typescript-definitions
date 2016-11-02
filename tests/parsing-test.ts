@@ -21,9 +21,9 @@ function textDiff(actual: string, expected: string): void {
   }
 }
 
-function compare(file1: string, file2: string, opts: react2dts.IOptions = {}): void {
+function compare(moduleName: string|null, file1: string, file2: string, opts: react2dts.IOptions = {}): void {
   textDiff(
-    react2dts.generateFromFile('component', path.join(basedir, file1), opts),
+    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts),
     fs.readFileSync(path.join(basedir, file2)).toString()
   );
 }
@@ -33,33 +33,33 @@ describe('Parsing', () => {
     const opts: react2dts.IOptions = {
       instanceOfResolver: (): string => './path/to/Message'
     };
-    compare('es6-class.jsx', 'es6-class.d.ts', opts);
+    compare('component', 'es6-class.jsx', 'es6-class.d.ts', opts);
   });
   it('should create definition from es7 class component', () => {
     const opts: react2dts.IOptions = {
       instanceOfResolver: (): string => './path/to/Message'
     };
-    compare('es7-class.jsx', 'es7-class.d.ts', opts);
+    compare('component', 'es7-class.jsx', 'es7-class.d.ts', opts);
   });
   it('should create top-level module definition from es7 class component', () => {
     const opts: react2dts.IOptions = {
       instanceOfResolver: (): string => './path/to/Message'
     };
-    compare('es7-class.jsx', 'es7-class-top-level-module.d.ts', opts);
+    compare(null, 'es7-class.jsx', 'es7-class-top-level-module.d.ts', opts);
   });
   it('should create definition from babeled es7 class component', () => {
     const opts: react2dts.IOptions = {
       instanceOfResolver: (): string => './path/to/Message'
     };
-    compare('es7-class-babeled.js', 'es7-class.d.ts', opts);
+    compare('component', 'es7-class-babeled.js', 'es7-class.d.ts', opts);
   });
   it('should create definition from stateless function component', () => {
-    compare('stateless.jsx', 'stateless.d.ts');
+    compare('component', 'stateless.jsx', 'stateless.d.ts');
   });
   it('should create definition from class extending Component', () => {
-    compare('import-react-component.jsx', 'import-react-component.d.ts');
+    compare('component', 'import-react-component.jsx', 'import-react-component.d.ts');
   });
   it('should create definition from class import PropTypes and instanceOf dependency', () => {
-    compare('instance-of-proptype-names.jsx', 'instance-of-proptype-names.d.ts');
+    compare('component', 'instance-of-proptype-names.jsx', 'instance-of-proptype-names.d.ts');
   });
 });

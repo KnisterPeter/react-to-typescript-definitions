@@ -2,6 +2,7 @@ import * as astqts from 'astq';
 const ASTQ: typeof astqts.ASTQ = astqts as any;
 import * as dom from 'dts-dom';
 import { InstanceOfResolver } from './index';
+import * as types from './types';
 
 export function createTypings(moduleName: string|null, ast: any,
     instanceOfResolver: InstanceOfResolver | undefined): string {
@@ -10,7 +11,10 @@ export function createTypings(moduleName: string|null, ast: any,
   const propTypesName = getPropTypesName(astq, ast);
   const importedTypes = getInstanceOfPropTypes(astq, ast, propTypesName);
   const importStatements = getImportStatements(astq, ast, importedTypes, instanceOfResolver);
-  const componentNames = getComponentNamesByPropTypeAssignment(astq, ast);
+  const componentNames = [
+    ...getComponentNamesByPropTypeAssignment(astq, ast),
+    ...getComponentNamesByStaticPropTypeAttribute(astq, ast)
+  ];
 
   const m = dom.create.module(moduleName || 'moduleName');
   if (hasReactClass(astq, ast, reactComponentName)) {
@@ -26,17 +30,21 @@ export function createTypings(moduleName: string|null, ast: any,
     });
   }
   componentNames.forEach(componentName => {
-    const interf = dom.create.interface(`${componentName}Props`);
-    interf.flags = dom.DeclarationFlags.Export;
-    m.members.push(interf);
+    const exportType = getComponentExportType(astq, ast, componentName);
+    const propTypes = getPropTypesFromAssignment(astq, ast, componentName) ||
+      getPropTypesFromStaticAttribute(astq, ast, componentName);
+    if (exportType && propTypes) {
+      const interf = dom.create.interface(`${componentName}Props`);
+      interf.flags = dom.DeclarationFlags.Export;
+      createPropTypeTypings(interf, astq, propTypes, propTypesName);
+      m.members.push(interf);
 
-    const propTypes = getPropTypesFromAssignment(astq, ast, componentName);
-    createPropTypeTypings(interf, astq, propTypes, propTypesName, importStatements);
+      const classDecl = dom.create.class(componentName);
+      classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
+      classDecl.flags = exportType;
+      m.members.push(classDecl);
+    }
   });
-
-  // const res = astq.query(ast, `
-  // `);
-  // console.log('res', res);
 
   if (moduleName === null) {
     return m.members
@@ -48,12 +56,12 @@ export function createTypings(moduleName: string|null, ast: any,
 };
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: astqts.ASTQ, propTypes: any,
-    propTypesName: string|undefined, importStatements: ImportStatement[]): void {
+    propTypesName: string|undefined): void {
   const res = astq.query(propTypes, `
     // ObjectProperty
   `);
   res.forEach(propertyAst => {
-    const typeDecl = getType(astq, propertyAst, propTypesName, importStatements);
+    const typeDecl = types.get(astq, propertyAst.value, propTypesName);
     const property = dom.create.property(propertyAst.key.name, typeDecl.type,
       typeDecl.optional ? dom.DeclarationFlags.Optional : 0);
     if (propertyAst.leadingComments && propertyAst.leadingComments[0].type === 'CommentBlock') {
@@ -76,7 +84,7 @@ function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: astqts.AS
   });
 }
 
-function propTypeQueryExpression(propTypesName: string|undefined): string {
+export function propTypeQueryExpression(propTypesName: string|undefined): string {
   return `
     '${propTypesName}' == 'undefined'
     ?
@@ -200,6 +208,18 @@ function getComponentNamesByPropTypeAssignment(astq: astqts.ASTQ, ast: any): str
   return [];
 }
 
+function getComponentNamesByStaticPropTypeAttribute(astq: astqts.ASTQ, ast: any): string[] {
+  const res = astq.query(ast, `
+    //ClassDeclaration[
+      /:body * //ClassProperty /:key Identifier[@name == 'propTypes']
+    ]
+  `);
+  if (res.length > 0) {
+    return res.map(match => match.id.name);
+  }
+  return [];
+}
+
 function getPropTypesFromAssignment(astq: astqts.ASTQ, ast: any, componentName: string): any|undefined {
   const res = astq.query(ast, `
     //AssignmentExpression[
@@ -215,121 +235,40 @@ function getPropTypesFromAssignment(astq: astqts.ASTQ, ast: any, componentName: 
   return undefined;
 }
 
-interface TypeDeclaration {
-  type: any;
-  optional: boolean;
-}
-function getType(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined,
-    _importStatements: ImportStatement[]): TypeDeclaration {
-  let type = getAny(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getArray(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getBool(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getFunc(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getNumber(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getObject(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getString(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getNode(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-  type = getElement(astq, propertyAst, propTypesName);
-  if (type) {
-    return type;
-  }
-
-  return {
-    type: 'any',
-    optional: true
-  };
-}
-
-function isRequired(astq: astqts.ASTQ, propertyAst: any): [boolean, any] {
-  const required = astq.query(propertyAst, `
-    /:value MemberExpression /:property Identifier[@name == 'isRequired']
-  `);
-  if (required.length > 0) {
-    return [true, propertyAst.value.object];
-  }
-  return [false, propertyAst.value];
-}
-
-function getSimpleType(astq: astqts.ASTQ, propertyAst: any,
-    propTypesName: string|undefined, name: string, typeCreator: () => any): TypeDeclaration|undefined {
-  const [required, typeAst] = isRequired(astq, propertyAst);
-  const res = astq.query(typeAst, `
-    MemberExpression[
-      (${propTypeQueryExpression(propTypesName)})
-      &&
-        /:property Identifier[@name == '${name}']
+function getPropTypesFromStaticAttribute(astq: astqts.ASTQ, ast: any, componentName: string): any|undefined {
+  const res = astq.query(ast, `
+    //ClassDeclaration[
+      /:id Identifier[@name == '${componentName}']
     ]
+    /:body *
+    //ClassProperty /:value*
   `);
   if (res.length > 0) {
-    return {
-      type: typeCreator(),
-      optional: !required
-    };
+    return res[0];
   }
   return undefined;
 }
 
-function getAny(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'any', () => 'any');
-}
-
-function getArray(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'array', () => dom.create.array('any'));
-}
-
-function getBool(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'bool', () => 'boolean');
-}
-
-function getFunc(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'func',
-    () => dom.create.functionType([
-      dom.create.parameter('args', dom.create.array('any'), dom.ParameterFlags.Rest)], 'any'));
-}
-
-function getNumber(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'number', () => 'number');
-}
-
-function getObject(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'object',
-    () => dom.create.namedTypeReference('Object'));
-}
-
-function getString(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'string', () => 'string');
-}
-
-function getNode(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'node',
-    () => dom.create.namedTypeReference('React.ReactNode'));
-}
-
-function getElement(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  return getSimpleType(astq, propertyAst, propTypesName, 'element',
-    () => dom.create.namedTypeReference('React.ReactElement<any>'));
+function getComponentExportType(astq: astqts.ASTQ, ast: any, componentName: string): dom.DeclarationFlags|undefined {
+  let res = astq.query(ast, `
+    // ExportDefaultDeclaration[
+      //ClassDeclaration[
+        /:id Identifier[@name == '${componentName}']
+      ]
+    ]
+  `);
+  if (res.length > 0) {
+    return dom.DeclarationFlags.ExportDefault;
+  }
+  res = astq.query(ast, `
+    // ExportNamedDeclaration[
+      //ClassDeclaration[
+        /:id Identifier[@name == '${componentName}']
+      ]
+    ]
+  `);
+  if (res.length > 0) {
+    return dom.DeclarationFlags.Export;
+  }
+  return undefined;
 }
