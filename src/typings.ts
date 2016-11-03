@@ -39,10 +39,17 @@ export function createTypings(moduleName: string|null, ast: any,
       createPropTypeTypings(interf, astq, propTypes, propTypesName);
       m.members.push(interf);
 
-      const classDecl = dom.create.class(componentName);
-      classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
-      classDecl.flags = exportType;
-      m.members.push(classDecl);
+      if (isClassComponent(astq, ast, componentName, reactComponentName)) {
+        const classDecl = dom.create.class(componentName);
+        classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
+        classDecl.flags = exportType;
+        m.members.push(classDecl);
+      } else {
+        const funcDelc = dom.create.function(componentName, [dom.create.parameter('props', interf)],
+          dom.create.namedTypeReference('JSX.Element'));
+        funcDelc.flags = exportType;
+        m.members.push(funcDelc);
+      }
     }
   });
 
@@ -128,18 +135,32 @@ function getPropTypesName(astq: astqts.ASTQ, ast: any): string|undefined {
   return undefined;
 }
 
-function hasReactClass(astq: astqts.ASTQ, ast: any, componentName: string|undefined): boolean {
+function hasReactClass(astq: astqts.ASTQ, ast: any, reactComponentName: string|undefined): boolean {
   const res = astq.query(ast, `
-    // ClassDeclaration[
-      '${componentName}' == 'undefined'
-      ?
-        /:superClass MemberExpression[
-          /:object Identifier[@name == 'React'] &&
-          /:property Identifier[@name == 'Component']
+      // ClassDeclaration[
+        '${reactComponentName}' == 'undefined'
+        ?
+          /:superClass MemberExpression[
+            /:object Identifier[@name == 'React'] &&
+            /:property Identifier[@name == 'Component']
+          ]
+        :
+          /:superClass Identifier[@name == '${reactComponentName}']
+      ]
+    ,
+      // VariableDeclaration
+      / VariableDeclarator[
+        /:init CallExpression[
+          '${reactComponentName}' == 'undefined'
+          ?
+            /:arguments MemberExpression[
+              /:object Identifier[@name == 'React'] &&
+              /:property Identifier[@name == 'Component']
+            ]
+          :
+            /:arguments Identifier[@name == '${reactComponentName}']
         ]
-      :
-        /:superClass Identifier[@name == '${componentName}']
-    ]
+      ]
   `);
   return res.length > 0;
 }
@@ -171,27 +192,26 @@ function getImportStatements(astq: astqts.ASTQ, ast: any, typeNames: string[],
         /:specifiers * /:local Identifier[@name == '${name}']
       ]
     `);
-    if (res.length === 0) {
-      return undefined as any;
-    }
     return {
-      name: res[0].specifiers[0].imported ?
+      name: res.length > 0 && res[0].specifiers[0].imported ?
         res[0].specifiers[0].imported.name :
         undefined,
       local: name,
-      path: res[0].source.value
+      path: res.length > 0 ? res[0].source.value : undefined
     };
   })
-  .map((importStatement: ImportStatement) => {
+  .map(importStatement => {
     if (importStatement && instanceOfResolver) {
-      const resolvedPath = importStatement.name ? instanceOfResolver(importStatement.name) : undefined;
+      const resolvedPath = importStatement.name ?
+        instanceOfResolver(importStatement.name) :
+        instanceOfResolver(importStatement.local);
       if (resolvedPath) {
         importStatement.path = resolvedPath;
       }
     }
     return importStatement;
   })
-  .filter(importStatement => Boolean(importStatement));
+  .filter(importStatement => Boolean(importStatement.path));
 }
 
 function getComponentNamesByPropTypeAssignment(astq: astqts.ASTQ, ast: any): string[] {
@@ -251,24 +271,68 @@ function getPropTypesFromStaticAttribute(astq: astqts.ASTQ, ast: any, componentN
 
 function getComponentExportType(astq: astqts.ASTQ, ast: any, componentName: string): dom.DeclarationFlags|undefined {
   let res = astq.query(ast, `
-    // ExportDefaultDeclaration[
-      //ClassDeclaration[
-        /:id Identifier[@name == '${componentName}']
+      // ExportDefaultDeclaration[
+          // ClassDeclaration
+          /:id Identifier[@name == '${componentName}']
+        ||
+          // VariableDeclaration
+          / VariableDeclarator
+          /:id Identifier[@name == '${componentName}']
       ]
-    ]
+    ,
+      // AssignmentExpression[
+          /:left MemberExpression[
+              /:object Identifier[@name == 'exports']
+            &&
+              /:property Identifier[@name == 'default']
+          ]
+        &&
+          /:right Identifier[@name == '${componentName}']
+      ]
   `);
   if (res.length > 0) {
     return dom.DeclarationFlags.ExportDefault;
   }
   res = astq.query(ast, `
     // ExportNamedDeclaration[
-      //ClassDeclaration[
+        //ClassDeclaration
         /:id Identifier[@name == '${componentName}']
-      ]
+      ||
+        //VariableDeclaration
+        / VariableDeclarator
+        /:id Identifier[@name == '${componentName}']
     ]
   `);
   if (res.length > 0) {
     return dom.DeclarationFlags.Export;
   }
   return undefined;
+}
+
+function isClassComponent(astq: astqts.ASTQ, ast: any, componentName: string,
+    reactComponentName: string|undefined): boolean {
+  const res = astq.query(ast, `
+      // ClassDeclaration
+      /:id Identifier[@name == '${componentName}']
+    ,
+      // VariableDeclaration
+      / VariableDeclarator[
+          /:id Identifier[@name == '${componentName}']
+        &&
+          /:init CallExpression[
+            '${reactComponentName}' == 'undefined'
+            ?
+              /:arguments MemberExpression[
+                /:object Identifier[@name == 'React'] &&
+                /:property Identifier[@name == 'Component']
+              ]
+            :
+              /:arguments Identifier[@name == '${reactComponentName}']
+          ]
+      ]
+  `);
+  if (res.length > 0) {
+    return true;
+  }
+  return false;
 }

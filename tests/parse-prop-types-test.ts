@@ -1,6 +1,5 @@
 import { assert } from 'chai';
-import * as dom from 'dts-dom';
-import { IProp } from '../src/index';
+import { IProp } from '../src/deprecated';
 import { getTypeFromPropType } from '../src/analyzer';
 
 describe('The PropType parser', () => {
@@ -21,7 +20,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'any',
-      type2: 'any',
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -37,7 +35,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'any[]',
-      type2: dom.create.array('any'),
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -53,7 +50,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'boolean',
-      type2: 'boolean',
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -69,8 +65,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: '(...args: any[]) => any',
-      type2: dom.create.functionType([
-        dom.create.parameter('args', dom.create.array('any'), dom.ParameterFlags.Rest)], 'any'),
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -92,8 +86,6 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, '(...args: any[]) => any');
-    assert.deepEqual(result.type2,
-      dom.create.functionType([dom.create.parameter('args', dom.create.array('any'), dom.ParameterFlags.Rest)], 'any'));
     assert.equal(result.optional, false);
   });
   it('should return number for number prop types', () => {
@@ -107,7 +99,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'number',
-      type2: 'number',
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -123,7 +114,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'Object',
-      type2: dom.create.namedTypeReference('Object'),
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -139,7 +129,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'string',
-      type2: 'string',
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -155,7 +144,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'React.ReactNode',
-      type2: dom.create.namedTypeReference('React.ReactNode'),
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -171,7 +159,6 @@ describe('The PropType parser', () => {
     };
     const expected = {
       type: 'React.ReactElement<any>',
-      type2: dom.create.namedTypeReference('React.ReactElement<any>'),
       optional: true
     };
     assert.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -201,7 +188,6 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, 'number[]');
-    assert.deepEqual(result.type2, dom.create.array('number'));
     assert.equal(result.optional, true);
   });
   it('should return number|string for oneOfType([React.PropTypes.number, React.PropTypes.string]) prop types', () => {
@@ -243,7 +229,6 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     assert.equal(result.type, 'number|string');
-    assert.deepEqual(result.type2, dom.create.union(['number', 'string']));
     assert.equal(result.optional, true);
   });
   it('should return typeof Message for instanceOf(Message) prop types', () => {
@@ -268,7 +253,6 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast, (): string => './some/path');
     assert.equal(result.type, 'typeof Message');
-    assert.deepEqual(result.type2, dom.create.typeof(dom.create.namedTypeReference('Message')));
     assert.equal(result.optional, true);
     assert.equal(result.importType, 'Message');
     assert.equal(result.importPath, './some/path');
@@ -295,7 +279,6 @@ describe('The PropType parser', () => {
     };
     const result: IProp = getTypeFromPropType(ast);
     assert.equal(result.type, 'any');
-    assert.equal(result.type2, 'any');
     assert.equal(result.optional, true);
     assert.isUndefined(result.importType);
     assert.isUndefined(result.importPath);
