@@ -62,4 +62,7 @@ describe('Parsing', () => {
   it('should create definition from class import PropTypes and instanceOf dependency', () => {
     compare('component', 'instance-of-proptype-names.jsx', 'instance-of-proptype-names.d.ts');
   });
+  it('should create definition from file without propTypes', () => {
+    compare('component', 'component-without-proptyes.jsx', 'component-without-proptyes.d.ts');
+  });
 });

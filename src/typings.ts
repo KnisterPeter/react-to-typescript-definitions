@@ -11,10 +11,11 @@ export function createTypings(moduleName: string|null, ast: any,
   const propTypesName = getPropTypesName(astq, ast);
   const importedTypes = getInstanceOfPropTypes(astq, ast, propTypesName);
   const importStatements = getImportStatements(astq, ast, importedTypes, instanceOfResolver);
-  const componentNames = [
+  const componentNames = getUniqueNames([
     ...getComponentNamesByPropTypeAssignment(astq, ast),
-    ...getComponentNamesByStaticPropTypeAttribute(astq, ast)
-  ];
+    ...getComponentNamesByStaticPropTypeAttribute(astq, ast),
+    ...getComponentNamesByJsxInBody(astq, ast)
+  ]);
 
   const m = dom.create.module(moduleName || 'moduleName');
   if (hasReactClass(astq, ast, reactComponentName)) {
@@ -33,19 +34,25 @@ export function createTypings(moduleName: string|null, ast: any,
     const exportType = getComponentExportType(astq, ast, componentName);
     const propTypes = getPropTypesFromAssignment(astq, ast, componentName) ||
       getPropTypesFromStaticAttribute(astq, ast, componentName);
-    if (exportType && propTypes) {
+    if (exportType) {
+      const classComponent = isClassComponent(astq, ast, componentName, reactComponentName);
+
       const interf = dom.create.interface(`${componentName}Props`);
       interf.flags = dom.DeclarationFlags.Export;
-      createPropTypeTypings(interf, astq, propTypes, propTypesName);
-      m.members.push(interf);
+      if (propTypes) {
+        createPropTypeTypings(interf, astq, propTypes, propTypesName);
+      }
+      if (propTypes || classComponent) {
+        m.members.push(interf);
+      }
 
-      if (isClassComponent(astq, ast, componentName, reactComponentName)) {
+      if (classComponent) {
         const classDecl = dom.create.class(componentName);
-        classDecl.baseType = dom.create.interface(`React.Component<${propTypes ? interf.name : 'any'}, any>`);
+        classDecl.baseType = dom.create.interface(`React.Component<${interf.name}, any>`);
         classDecl.flags = exportType;
         m.members.push(classDecl);
       } else {
-        const funcDelc = dom.create.function(componentName, [dom.create.parameter('props', interf)],
+        const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
           dom.create.namedTypeReference('JSX.Element'));
         funcDelc.flags = exportType;
         m.members.push(funcDelc);
@@ -65,11 +72,11 @@ export function createTypings(moduleName: string|null, ast: any,
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: astqts.ASTQ, propTypes: any,
     propTypesName: string|undefined): void {
   const res = astq.query(propTypes, `
-    // ObjectProperty
+    / ObjectProperty
   `);
   res.forEach(propertyAst => {
     const typeDecl = types.get(astq, propertyAst.value, propTypesName);
-    const property = dom.create.property(propertyAst.key.name, typeDecl.type,
+    const property = dom.create.property(propertyAst.key.name || propertyAst.key.value, typeDecl.type,
       typeDecl.optional ? dom.DeclarationFlags.Optional : 0);
     if (propertyAst.leadingComments && propertyAst.leadingComments[0].type === 'CommentBlock') {
       const trimLines = (): (line: string) => boolean => {
@@ -89,6 +96,13 @@ function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: astqts.AS
     }
     interf.members.push(property);
   });
+}
+
+function getUniqueNames(input: string[]): string[] {
+  return Object.keys(input.reduce((all: any, name: string) => {
+      all[name] = true;
+      return all;
+    }, {}));
 }
 
 export function propTypeQueryExpression(propTypesName: string|undefined): string {
@@ -240,6 +254,25 @@ function getComponentNamesByStaticPropTypeAttribute(astq: astqts.ASTQ, ast: any)
   return [];
 }
 
+function getComponentNamesByJsxInBody(astq: astqts.ASTQ, ast: any): string[] {
+  const res = astq.query(ast, `
+    // ClassDeclaration[
+      /:body * //JSXElement
+    ],
+    // FunctionDeclaration[
+      /:body * //JSXElement
+    ],
+    // VariableDeclarator[
+      /:init ArrowFunctionExpression
+      // JSXElement
+    ]
+  `);
+  if (res.length > 0) {
+    return res.map(match => match.id.name);
+  }
+  return [];
+}
+
 function getPropTypesFromAssignment(astq: astqts.ASTQ, ast: any, componentName: string): any|undefined {
   const res = astq.query(ast, `
     //AssignmentExpression[
@@ -261,7 +294,10 @@ function getPropTypesFromStaticAttribute(astq: astqts.ASTQ, ast: any, componentN
       /:id Identifier[@name == '${componentName}']
     ]
     /:body *
-    //ClassProperty /:value*
+    //ClassProperty[
+      /:key Identifier[@name == 'propTypes']
+    ]
+    /:value*
   `);
   if (res.length > 0) {
     return res[0];
@@ -273,6 +309,9 @@ function getComponentExportType(astq: astqts.ASTQ, ast: any, componentName: stri
   let res = astq.query(ast, `
       // ExportDefaultDeclaration[
           // ClassDeclaration
+          /:id Identifier[@name == '${componentName}']
+        ||
+          // FunctionDeclaration
           /:id Identifier[@name == '${componentName}']
         ||
           // VariableDeclaration
@@ -295,10 +334,13 @@ function getComponentExportType(astq: astqts.ASTQ, ast: any, componentName: stri
   }
   res = astq.query(ast, `
     // ExportNamedDeclaration[
-        //ClassDeclaration
+        // ClassDeclaration
         /:id Identifier[@name == '${componentName}']
       ||
-        //VariableDeclaration
+        // FunctionDeclaration
+        /:id Identifier[@name == '${componentName}']
+      ||
+        // VariableDeclaration
         / VariableDeclarator
         /:id Identifier[@name == '${componentName}']
     ]
