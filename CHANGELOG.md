@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.15.0"></a>
+# [0.15.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.14.1...v0.15.0) (2016-11-03)
+
+
+### Features
+
+* write multiple outputs per file (#211) ([f6f63ae](https://github.com/knisterpeter/react-to-typescript-definitions/commit/f6f63ae))
+
+
+
 <a name="0.14.1"></a>
 ## [0.14.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.14.0...v0.14.1) (2016-11-01)
 
