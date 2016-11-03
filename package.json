@@ -61,7 +61,7 @@
     "astq": "1.8.0",
     "babylon": "6.13.1",
     "dts-dom": "0.1.11",
-    "minimist": "1.2.0"
+    "meow": "3.7.0"
   },
   "config": {
     "commitizen": {

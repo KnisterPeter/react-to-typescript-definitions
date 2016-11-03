@@ -40,13 +40,10 @@ export function cli(options: any): void {
     }
   });
   process.stdin.on('end', () => {
-    if (options['top-level-module']) {
+    if (options.topLevelModule) {
       process.stdout.write(generateFromSource(null, stdinCode.join('')));
-    } else if (options['module-name']) {
-      process.stdout.write(generateFromSource(options['module-name'], stdinCode.join('')));
-    } else {
-      console.error('Failed to specify --module-name or --top-level-module parameter');
-      process.exit(1);
+    } else if (options.moduleName) {
+      process.stdout.write(generateFromSource(options.moduleName, stdinCode.join('')));
     }
   });
 }
