@@ -1,5 +1,7 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
+import * as getStdinTs from 'get-stdin';
+const getStdin: typeof getStdinTs.getStdin = getStdinTs as any;
 
 import { generateTypings } from './deprecated';
 import { Generator } from './generator';
@@ -29,21 +31,11 @@ export interface IOptions {
 }
 
 export function cli(options: any): void {
-  const stdinCode: string[] = [];
-  process.stdin.on('readable', () => {
-    const chunk = process.stdin.read();
-    if (chunk !== null) {
-      stdinCode.push(chunk.toString());
-    } else {
-      // No stdin -> let node terminate
-      process.stdin.pause();
-    }
-  });
-  process.stdin.on('end', () => {
+  getStdin().then(stdinCode => {
     if (options.topLevelModule) {
-      process.stdout.write(generateFromSource(null, stdinCode.join('')));
+      process.stdout.write(generateFromSource(null, stdinCode));
     } else if (options.moduleName) {
-      process.stdout.write(generateFromSource(options.moduleName, stdinCode.join('')));
+      process.stdout.write(generateFromSource(options.moduleName, stdinCode));
     }
   });
 }
