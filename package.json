@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "start": "npm test",
-    "clean": "rm -f index.js index.js.map tests/*-test.js tests/*-test.js.map",
+    "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsc --sourceMap",
     "build:inline": "tsc --inlineSourceMap",
@@ -72,7 +72,9 @@
       "node_modules",
       "coverage",
       "dist/tests",
-      "tests"
+      "tests",
+      "dist/src/deprecated.js",
+      "dist/src/analyzer.js"
     ]
   }
 }
