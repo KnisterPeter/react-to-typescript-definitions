@@ -1,4 +1,4 @@
-import { IPropTypes, ExportType } from './index';
+import { IPropTypes, ExportType } from './deprecated';
 
 export class Generator {
 

@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "start": "npm test",
-    "clean": "rm -f index.js index.js.map tests/*-test.js tests/*-test.js.map",
+    "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsc --sourceMap",
     "build:inline": "tsc --inlineSourceMap",
@@ -51,6 +51,7 @@
     "mocha": "3.1.2",
     "nyc": "8.4.0",
     "react": "15.3.2",
+    "rimraf": "2.5.4",
     "source-map-support": "0.4.6",
     "standard-version": "3.0.0",
     "tslint": "3.15.1",
@@ -60,7 +61,8 @@
     "astq": "1.8.0",
     "babylon": "6.13.1",
     "dts-dom": "0.1.11",
-    "minimist": "1.2.0"
+    "get-stdin": "5.0.1",
+    "meow": "3.7.0"
   },
   "config": {
     "commitizen": {
@@ -72,7 +74,9 @@
       "node_modules",
       "coverage",
       "dist/tests",
-      "tests"
+      "tests",
+      "dist/src/deprecated.js",
+      "dist/src/analyzer.js"
     ]
   }
 }

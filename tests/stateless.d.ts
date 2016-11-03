@@ -3,4 +3,5 @@ declare module 'component' {
         optionalAny?: any;
     }
     export function Component(props: ComponentProps): JSX.Element;
+    export function Component2(): JSX.Element;
 }
