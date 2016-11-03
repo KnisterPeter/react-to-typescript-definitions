@@ -1,6 +1,6 @@
 {
   "name": "react-to-typescript-definitions",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "description": "Create typescript definitions files (d.ts) from react components",
   "main": "dist/src/index.js",
   "bin": {
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@types/chalk": "0.4.31",
     "@types/diff": "0.0.31",
-    "babel-core": "6.18.0",
+    "babel-core": "6.18.2",
     "babel-preset-es2015": "6.18.0",
     "babel-register": "6.18.0",
     "chai": "3.5.0",
@@ -49,7 +49,7 @@
     "diff": "3.0.1",
     "in-publish": "2.0.0",
     "mocha": "3.1.2",
-    "nyc": "8.3.2",
+    "nyc": "8.4.0",
     "react": "15.3.2",
     "source-map-support": "0.4.6",
     "standard-version": "3.0.0",
