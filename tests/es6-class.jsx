@@ -41,4 +41,5 @@ Component.propTypes = {
 		React.PropTypes.bool
 	]).isRequired,
 	requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  requiredSymbol: React.PropTypes.symbol.isRequired,
 };

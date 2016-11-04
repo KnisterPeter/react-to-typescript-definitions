@@ -39,6 +39,8 @@ export function get(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|u
       return getTypeDeclaration(dom.create.namedTypeReference('React.ReactNode'), !required);
     case 'element':
       return getTypeDeclaration(dom.create.namedTypeReference('React.ReactElement<any>'), !required);
+    case 'symbol':
+      return getTypeDeclaration(dom.create.typeof(dom.create.namedTypeReference('Symbol')), !required);
   }
 
   const [, complexTypeName, typeAst] = getComplexTypeName(astq, propertyAst, propTypesName);

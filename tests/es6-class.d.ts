@@ -21,6 +21,7 @@ declare module 'component' {
         requiredAny: any;
         requiredUnion: any[] | boolean;
         requiredArrayOf: string[];
+        requiredSymbol: typeof Symbol;
     }
     export class Component extends React.Component<ComponentProps, any>{
     }

@@ -15,7 +15,7 @@ Create typescript definitions files (d.ts) from react components.
 
 * ES6 and ES7 class syntax
 * Most PropTypes
-  * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf
+  * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf, symbol
 * required PropTypes
 * instanceOf PropTypes (when using API and giving a resolve function)
 * jsdoc
@@ -39,11 +39,19 @@ npm install -g react-to-typescript-definitions
 ### CLI
 
 ```sh
-# Create a definition which exports a module named 'module-name'
-cat <some/react/component.jsx> |react2dts --name module-name
+Usage
+  $ react2dts [--module-name <name> | --top-level-module]
 
-# Create a definition which exports top level definitions
-cat <some/react/component.jsx> |react2dts --top-level-module
+react2dts reads from stdin to process a file.
+
+Options
+  --module-name, --name  name of the module to create
+  --top-level-module     if the created module should live in top-level
+
+Examples
+  $ cat <some/react/component.jsx> |react2dts --module-name module-name
+
+  $ cat <some/react/component.jsx> |react2dts --top-level-module
 ```
 
 ### API
