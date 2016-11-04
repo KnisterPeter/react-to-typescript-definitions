@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as babylon from 'babylon';
-import * as getStdinTs from 'get-stdin';
-const getStdin: typeof getStdinTs.getStdin = getStdinTs as any;
+import * as getStdin from 'get-stdin';
 
 import { generateTypings } from './deprecated';
 import { Generator } from './generator';
