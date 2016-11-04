@@ -23,7 +23,7 @@ Component.propTypes = {
 	optionalNode: React.PropTypes.node,
 	optionalElement: React.PropTypes.element,
 	optionalMessage: React.PropTypes.instanceOf(Message),
-	//optionalEnum: React.PropTypes.oneOf(['News', 'Photos']),
+	optionalEnum: React.PropTypes.oneOf(['News', 'Photos', 1, 2]),
 	optionalUnion: React.PropTypes.oneOfType([
 		React.PropTypes.string,
 		React.PropTypes.number

@@ -55,6 +55,10 @@ export function get(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|u
     case 'arrayOf':
       const typeDecl = get(astq, typeAst.arguments[0], propTypesName);
       return getTypeDeclaration(dom.create.array(typeDecl.type), !required);
+    case 'oneOf':
+      // FIXME: This should better be a real enum
+      const enumEntries = getEnumValues(typeAst.arguments[0].elements);
+      return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
   }
 
   return {
@@ -94,4 +98,14 @@ function getComplexTypeName(astq: astqts.ASTQ, propertyAst: any,
     return [required, simpleTypeName, typeAst];
   }
   return [required, undefined, typeAst];
+}
+
+function getEnumValues(oneOfTypes: any[]): any[] {
+  return oneOfTypes.map((element: any) => {
+    // FIXME: This are not named references!
+    if (element.type === 'StringLiteral') {
+      return dom.create.namedTypeReference(`'${element.value}'`);
+    }
+    return dom.create.namedTypeReference(element.value);
+  });
 }
