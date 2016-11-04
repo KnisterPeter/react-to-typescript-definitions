@@ -59,6 +59,13 @@ export function get(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|u
       // FIXME: This should better be a real enum
       const enumEntries = getEnumValues(typeAst.arguments[0].elements);
       return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
+    case 'shape':
+      const entries = typeAst.arguments[0].properties.map((entry: any) => {
+        const typeDecl = get(astq, entry.value, propTypesName);
+        return dom.create.property(entry.key.name, typeDecl.type,
+          typeDecl.optional ? dom.DeclarationFlags.Optional : dom.DeclarationFlags.None);
+      });
+      return getTypeDeclaration(dom.create.objectType(entries), !required);
   }
 
   return {

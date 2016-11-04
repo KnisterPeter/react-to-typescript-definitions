@@ -18,6 +18,10 @@ declare module 'component' {
         optionalEnum?: 'News' | 'Photos' | 1 | 2;
         optionalUnion?: string | number;
         optionalArrayOf?: number[];
+        optionalObjectWithShape?: {
+            color?: string;
+            fontSize?: number;
+        };
         requiredFunc: (...args: any[])=>any;
         requiredAny: any;
         requiredUnion: any[] | boolean;
