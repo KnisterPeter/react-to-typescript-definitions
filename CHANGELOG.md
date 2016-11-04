@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.16.0"></a>
+# [0.16.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.15.0...v0.16.0) (2016-11-04)
+
+
+### Features
+
+* add partial support for onOf propType (#218) ([d6d7d1e](https://github.com/knisterpeter/react-to-typescript-definitions/commit/d6d7d1e))
+* add support for symbol propType ([c2a2542](https://github.com/knisterpeter/react-to-typescript-definitions/commit/c2a2542))
+* implement shape propType (#219) ([6876062](https://github.com/knisterpeter/react-to-typescript-definitions/commit/6876062))
+
+
+
 <a name="0.15.0"></a>
 # [0.15.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.14.1...v0.15.0) (2016-11-03)
 
