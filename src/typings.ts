@@ -1,5 +1,4 @@
-import * as astqts from 'astq';
-const ASTQ: typeof astqts.ASTQ = astqts as any;
+import * as ASTQ from 'astq';
 import * as dom from 'dts-dom';
 import { InstanceOfResolver } from './index';
 import * as types from './types';
@@ -69,7 +68,7 @@ export function createTypings(moduleName: string|null, ast: any,
   }
 };
 
-function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: astqts.ASTQ, propTypes: any,
+function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: ASTQ, propTypes: any,
     propTypesName: string|undefined): void {
   const res = astq.query(propTypes, `
     / ObjectProperty
@@ -117,7 +116,7 @@ export function propTypeQueryExpression(propTypesName: string|undefined): string
   `;
 }
 
-function getReactComponentName(astq: astqts.ASTQ, ast: any): string|undefined {
+function getReactComponentName(astq: ASTQ, ast: any): string|undefined {
   const res = astq.query(ast, `
     // ImportDeclaration[
       /:source StringLiteral[@value == 'react']
@@ -133,7 +132,7 @@ function getReactComponentName(astq: astqts.ASTQ, ast: any): string|undefined {
   return undefined;
 }
 
-function getPropTypesName(astq: astqts.ASTQ, ast: any): string|undefined {
+function getPropTypesName(astq: ASTQ, ast: any): string|undefined {
   const res = astq.query(ast, `
     // ImportDeclaration[
       /:source StringLiteral[@value == 'react']
@@ -149,7 +148,7 @@ function getPropTypesName(astq: astqts.ASTQ, ast: any): string|undefined {
   return undefined;
 }
 
-function hasReactClass(astq: astqts.ASTQ, ast: any, reactComponentName: string|undefined): boolean {
+function hasReactClass(astq: ASTQ, ast: any, reactComponentName: string|undefined): boolean {
   const res = astq.query(ast, `
       // ClassDeclaration[
         '${reactComponentName}' == 'undefined'
@@ -179,7 +178,7 @@ function hasReactClass(astq: astqts.ASTQ, ast: any, reactComponentName: string|u
   return res.length > 0;
 }
 
-function getInstanceOfPropTypes(astq: astqts.ASTQ, ast: any, propTypesName: string|undefined): string[] {
+function getInstanceOfPropTypes(astq: ASTQ, ast: any, propTypesName: string|undefined): string[] {
   const res = astq.query(ast, `
     // CallExpression[
       /:callee MemberExpression[
@@ -198,7 +197,7 @@ interface ImportStatement {
       local: string;
       path: string;
 }
-function getImportStatements(astq: astqts.ASTQ, ast: any, typeNames: string[],
+function getImportStatements(astq: ASTQ, ast: any, typeNames: string[],
     instanceOfResolver: InstanceOfResolver | undefined): ImportStatement[] {
   return typeNames.map(name => {
     const res = astq.query(ast, `
@@ -228,7 +227,7 @@ function getImportStatements(astq: astqts.ASTQ, ast: any, typeNames: string[],
   .filter(importStatement => Boolean(importStatement.path));
 }
 
-function getComponentNamesByPropTypeAssignment(astq: astqts.ASTQ, ast: any): string[] {
+function getComponentNamesByPropTypeAssignment(astq: ASTQ, ast: any): string[] {
   const res = astq.query(ast, `
     //AssignmentExpression
       /:left MemberExpression[
@@ -242,7 +241,7 @@ function getComponentNamesByPropTypeAssignment(astq: astqts.ASTQ, ast: any): str
   return [];
 }
 
-function getComponentNamesByStaticPropTypeAttribute(astq: astqts.ASTQ, ast: any): string[] {
+function getComponentNamesByStaticPropTypeAttribute(astq: ASTQ, ast: any): string[] {
   const res = astq.query(ast, `
     //ClassDeclaration[
       /:body * //ClassProperty /:key Identifier[@name == 'propTypes']
@@ -254,7 +253,7 @@ function getComponentNamesByStaticPropTypeAttribute(astq: astqts.ASTQ, ast: any)
   return [];
 }
 
-function getComponentNamesByJsxInBody(astq: astqts.ASTQ, ast: any): string[] {
+function getComponentNamesByJsxInBody(astq: ASTQ, ast: any): string[] {
   const res = astq.query(ast, `
     // ClassDeclaration[
       /:body * //JSXElement
@@ -273,7 +272,7 @@ function getComponentNamesByJsxInBody(astq: astqts.ASTQ, ast: any): string[] {
   return [];
 }
 
-function getPropTypesFromAssignment(astq: astqts.ASTQ, ast: any, componentName: string): any|undefined {
+function getPropTypesFromAssignment(astq: ASTQ, ast: any, componentName: string): any|undefined {
   const res = astq.query(ast, `
     //AssignmentExpression[
       /:left MemberExpression[
@@ -288,7 +287,7 @@ function getPropTypesFromAssignment(astq: astqts.ASTQ, ast: any, componentName: 
   return undefined;
 }
 
-function getPropTypesFromStaticAttribute(astq: astqts.ASTQ, ast: any, componentName: string): any|undefined {
+function getPropTypesFromStaticAttribute(astq: ASTQ, ast: any, componentName: string): any|undefined {
   const res = astq.query(ast, `
     //ClassDeclaration[
       /:id Identifier[@name == '${componentName}']
@@ -305,7 +304,7 @@ function getPropTypesFromStaticAttribute(astq: astqts.ASTQ, ast: any, componentN
   return undefined;
 }
 
-function getComponentExportType(astq: astqts.ASTQ, ast: any, componentName: string): dom.DeclarationFlags|undefined {
+function getComponentExportType(astq: ASTQ, ast: any, componentName: string): dom.DeclarationFlags|undefined {
   let res = astq.query(ast, `
       // ExportDefaultDeclaration[
           // ClassDeclaration
@@ -351,7 +350,7 @@ function getComponentExportType(astq: astqts.ASTQ, ast: any, componentName: stri
   return undefined;
 }
 
-function isClassComponent(astq: astqts.ASTQ, ast: any, componentName: string,
+function isClassComponent(astq: ASTQ, ast: any, componentName: string,
     reactComponentName: string|undefined): boolean {
   const res = astq.query(ast, `
       // ClassDeclaration

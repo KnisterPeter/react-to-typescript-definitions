@@ -1,5 +1,4 @@
-import * as astqts from 'astq';
-const ASTQ: typeof astqts.ASTQ = astqts as any;
+import * as ASTQ from 'astq';
 
 import { InstanceOfResolver } from './index';
 import { IPropTypes, IProp } from './deprecated';
