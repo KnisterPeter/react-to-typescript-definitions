@@ -1,3 +1,5 @@
 declare module 'get-stdin' {
-  export function getStdin(): PromiseLike<string>;
+  function getStdin(): PromiseLike<string>;
+  namespace getStdin {}
+  export = getStdin;
 }
