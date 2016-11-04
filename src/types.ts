@@ -1,4 +1,4 @@
-import * as astqts from 'astq';
+import * as ASTQ from 'astq';
 import * as dom from 'dts-dom';
 import { propTypeQueryExpression } from './typings';
 
@@ -14,7 +14,7 @@ function getTypeDeclaration(type: any, optional: boolean): TypeDeclaration {
   };
 }
 
-export function get(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration {
+export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration {
   const [required, simpleTypeName] = getSimpleTypeName(astq, propertyAst, propTypesName);
   switch (simpleTypeName) {
     case 'any':
@@ -74,7 +74,7 @@ export function get(astq: astqts.ASTQ, propertyAst: any, propTypesName: string|u
   };
 }
 
-function isRequired(astq: astqts.ASTQ, propertyAst: any): [boolean, any] {
+function isRequired(astq: ASTQ, propertyAst: any): [boolean, any] {
   const required = astq.query(propertyAst, `
     MemberExpression /:property Identifier[@name == 'isRequired']
   `);
@@ -84,7 +84,7 @@ function isRequired(astq: astqts.ASTQ, propertyAst: any): [boolean, any] {
   return [false, propertyAst];
 }
 
-function getSimpleTypeName(astq: astqts.ASTQ, propertyAst: any,
+function getSimpleTypeName(astq: ASTQ, propertyAst: any,
     propTypesName: string|undefined): [boolean, string|undefined] {
   const [required, typeAst] = isRequired(astq, propertyAst);
   const res = astq.query(typeAst, `
@@ -97,7 +97,7 @@ function getSimpleTypeName(astq: astqts.ASTQ, propertyAst: any,
   return [required, res.length > 0 ? res[0].property.name : undefined];
 }
 
-function getComplexTypeName(astq: astqts.ASTQ, propertyAst: any,
+function getComplexTypeName(astq: ASTQ, propertyAst: any,
     propTypesName: string|undefined): [boolean, string|undefined, any] {
   const [required, typeAst] = isRequired(astq, propertyAst);
   if (typeAst.type === 'CallExpression') {
