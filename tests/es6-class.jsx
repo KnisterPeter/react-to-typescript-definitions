@@ -30,10 +30,10 @@ Component.propTypes = {
 	]),
 	optionalArrayOf: React.PropTypes.arrayOf(React.PropTypes.number),
 	//optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
-	//optionalObjectWithShape: React.PropTypes.shape({
-	//	color: React.PropTypes.string,
-	//	fontSize: React.PropTypes.number
-	//}),
+	optionalObjectWithShape: React.PropTypes.shape({
+		color: React.PropTypes.string,
+		fontSize: React.PropTypes.number
+	}),
 	requiredFunc: React.PropTypes.func.isRequired,
 	requiredAny: React.PropTypes.any.isRequired,
 	requiredUnion: React.PropTypes.oneOfType([
