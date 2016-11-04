@@ -15,6 +15,7 @@ declare module 'component' {
         optionalNode?: React.ReactNode;
         optionalElement?: React.ReactElement<any>;
         optionalMessage?: typeof Message;
+        optionalEnum?: 'News' | 'Photos' | 1 | 2;
         optionalUnion?: string | number;
         optionalArrayOf?: number[];
         requiredFunc: (...args: any[])=>any;
