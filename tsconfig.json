@@ -14,7 +14,13 @@
     "strictNullChecks": true,
     "stripInternal": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5"
+    "target": "es5",
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.iterable",
+      "es2015.promise"
+    ]
   },
   "exclude": [
     "index.d.ts",

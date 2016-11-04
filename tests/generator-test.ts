@@ -1,91 +1,94 @@
-import { assert } from 'chai';
+import test from 'ava';
+
 import { Generator } from '../src/generator';
 import { generateFromSource } from '../src/index';
 
-describe('The Generator', () => {
-  let generator: Generator;
-  beforeEach(() => {
-    generator = new Generator();
+function setup(): Generator {
+  return new Generator();
+}
+
+test('The Generator should write a module declaration', t => {
+  const generator = setup();
+  generator.declareModule('name', () => {
+    //
   });
-  it('should write a module declaration', () => {
-    generator.declareModule('name', () => {
-      //
-    });
-    assert.equal(generator.toString(), "declare module 'name' {\n}\n");
-  });
-  it('should write an import statement', () => {
-    generator.import('decls', 'from');
-    assert.equal(generator.toString(), "import decls from 'from';\n");
-  });
-  it('should write a required property', () => {
-    generator.prop('name', 'type', false);
-    assert.equal(generator.toString(), 'name: type;\n');
-  });
-  it('should write an optional property', () => {
-    generator.prop('name', 'type', true);
-    assert.equal(generator.toString(), 'name?: type;\n');
-  });
-  it('should write a property interface', () => {
-    generator.props('Name', {prop: {type: 'type', optional: true}});
-    assert.equal(generator.toString(), 'export interface NameProps {\n\tprop?: type;\n}\n');
-  });
-  it('should write a class with props declaration', () => {
-    generator.class('Name', true);
-    assert.equal(generator.toString(), 'class Name extends React.Component<NameProps, any> {\n}\n');
-  });
-  it('should write a class without props declaration', () => {
-    generator.class('Name', false);
-    assert.equal(generator.toString(), 'class Name extends React.Component<any, any> {\n}\n');
-  });
-  it('should write an indented block comment', () => {
-    generator.comment('* yada\n\t\t\t\tyada\n ');
-    assert.equal(generator.toString(), '/** yada\nyada\n */\n');
-  });
-  it('should write an export default declaration', () => {
-    generator.exportDeclaration(0, () => undefined);
-    assert.equal(generator.toString(), 'export default ');
-  });
-  it('should write a named export declaration', () => {
-    generator.exportDeclaration(1, () => undefined);
-    assert.equal(generator.toString(), 'export ');
-  });
+  t.is(generator.toString(), "declare module 'name' {\n}\n");
+});
+test('The Generator should write an import statement', t => {
+  const generator = setup();
+  generator.import('decls', 'from');
+  t.is(generator.toString(), "import decls from 'from';\n");
+});
+test('The Generator should write a required property', t => {
+  const generator = setup();
+  generator.prop('name', 'type', false);
+  t.is(generator.toString(), 'name: type;\n');
+});
+test('The Generator should write an optional property', t => {
+  const generator = setup();
+  generator.prop('name', 'type', true);
+  t.is(generator.toString(), 'name?: type;\n');
+});
+test('The Generator should write a property interface', t => {
+  const generator = setup();
+  generator.props('Name', {prop: {type: 'type', optional: true}});
+  t.is(generator.toString(), 'export interface NameProps {\n\tprop?: type;\n}\n');
+});
+test('The Generator should write a class with props declaration', t => {
+  const generator = setup();
+  generator.class('Name', true);
+  t.is(generator.toString(), 'class Name extends React.Component<NameProps, any> {\n}\n');
+});
+test('The Generator should write a class without props declaration', t => {
+  const generator = setup();
+  generator.class('Name', false);
+  t.is(generator.toString(), 'class Name extends React.Component<any, any> {\n}\n');
+});
+test('The Generator should write an indented block comment', t => {
+  const generator = setup();
+  generator.comment('* yada\n\t\t\t\tyada\n ');
+  t.is(generator.toString(), '/** yada\nyada\n */\n');
+});
+test('The Generator should write an export default declaration', t => {
+  const generator = setup();
+  generator.exportDeclaration(0, () => undefined);
+  t.is(generator.toString(), 'export default ');
+});
+test('The Generator should write a named export declaration', t => {
+  const generator = setup();
+  generator.exportDeclaration(1, () => undefined);
+  t.is(generator.toString(), 'export ');
 });
 
-describe('Generating typings with given custom generator', () => {
-  let generator: Generator;
+test('Generating typings with given custom generator should delare a module if name given', t => {
+  const generator = setup();
+  let name: string|undefined;
+  generator.declareModule = moduleName => {
+    name = moduleName;
+  };
 
-  beforeEach(() => {
-    generator = new Generator();
-  });
+  const source = `
+    export class Test {}
+  `;
+  generateFromSource('module', source, {generator});
 
-  it('should delare a module if name given', () => {
-    let name: string|undefined;
-    generator.declareModule = moduleName => {
-      name = moduleName;
-    };
+  t.is(name, 'module');
+});
 
-    const source = `
-      export class Test {}
-    `;
-    generateFromSource('module', source, {generator});
+test('Generating typings with given custom generator should import react', t => {
+  const generator = setup();
+  let decl: string|undefined;
+  let from: string|undefined;
+  generator.import = (_decl, _from) => {
+    decl = _decl;
+    from = _from;
+  };
 
-    assert.equal(name, 'module');
-  });
+  const source = `
+    export class Test {}
+  `;
+  generateFromSource(null, source, {generator});
 
-  it('should import react', () => {
-    let decl: string|undefined;
-    let from: string|undefined;
-    generator.import = (_decl, _from) => {
-      decl = _decl;
-      from = _from;
-    };
-
-    const source = `
-      export class Test {}
-    `;
-    generateFromSource(null, source, {generator});
-
-    assert.equal(decl, '* as React');
-    assert.equal(from, 'react');
-  });
+  t.is(decl, '* as React');
+  t.is(from, 'react');
 });
