@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.16.1"></a>
+## [0.16.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.16.0...v0.16.1) (2016-11-07)
+
+
+### Bug Fixes
+
+* do not fail in case of inference errors (#223) ([078b97d](https://github.com/knisterpeter/react-to-typescript-definitions/commit/078b97d))
+
+
+
 <a name="0.16.0"></a>
 # [0.16.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.15.0...v0.16.0) (2016-11-04)
 
