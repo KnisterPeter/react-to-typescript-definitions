@@ -15,6 +15,26 @@ function getTypeDeclaration(type: any, optional: boolean): TypeDeclaration {
 }
 
 export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration {
+  try {
+    const simpleType = getSimpleType(astq, propertyAst, propTypesName);
+    if (simpleType) {
+      return simpleType;
+    }
+    const complexType = getComplexType(astq, propertyAst, propTypesName);
+    if (complexType) {
+      return complexType;
+    }
+  } catch (e) {
+    console.error('Failed to infer PropType; Fallback to any');
+    console.error(e.stack);
+  }
+  return {
+    type: 'any',
+    optional: true
+  };
+}
+
+function getSimpleType(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
   const [required, simpleTypeName] = getSimpleTypeName(astq, propertyAst, propTypesName);
   switch (simpleTypeName) {
     case 'any':
@@ -42,8 +62,11 @@ export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefine
     case 'symbol':
       return getTypeDeclaration(dom.create.typeof(dom.create.namedTypeReference('Symbol')), !required);
   }
+  return undefined;
+}
 
-  const [, complexTypeName, typeAst] = getComplexTypeName(astq, propertyAst, propTypesName);
+function getComplexType(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
+  const [required, complexTypeName, typeAst] = getComplexTypeName(astq, propertyAst, propTypesName);
   switch (complexTypeName) {
     case 'instanceOf':
       return getTypeDeclaration(dom.create.typeof(
@@ -67,11 +90,7 @@ export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefine
       });
       return getTypeDeclaration(dom.create.objectType(entries), !required);
   }
-
-  return {
-    type: 'any',
-    optional: true
-  };
+return undefined;
 }
 
 function isRequired(astq: ASTQ, propertyAst: any): [boolean, any] {
