@@ -132,6 +132,9 @@ function getEnumValues(oneOfTypes: any[]): any[] {
     if (element.type === 'StringLiteral') {
       return dom.create.namedTypeReference(`'${element.value}'`);
     }
-    return dom.create.namedTypeReference(element.value);
+    if (element.value) {
+      return dom.create.namedTypeReference(element.value);
+    }
+    return 'any';
   });
 }
