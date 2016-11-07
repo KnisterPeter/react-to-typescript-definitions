@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.16.2"></a>
+## [0.16.2](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.16.1...v0.16.2) (2016-11-07)
+
+
+### Bug Fixes
+
+* enum-types should fallback to any ([0fa1fa7](https://github.com/knisterpeter/react-to-typescript-definitions/commit/0fa1fa7))
+
+
+
 <a name="0.16.1"></a>
 ## [0.16.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.16.0...v0.16.1) (2016-11-07)
 
