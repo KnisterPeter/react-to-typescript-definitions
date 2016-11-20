@@ -92,7 +92,7 @@ export class Generator {
   public exportDeclaration(exportType: ExportType, fn: () => void): void {
     this.indent();
     this.code += 'export ';
-    if (exportType == ExportType.default) {
+    if (exportType === ExportType.default) {
       this.code += 'default ';
     }
     fn();

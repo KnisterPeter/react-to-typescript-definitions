@@ -1,13 +1,15 @@
 import * as ASTQ from 'astq';
-import { IOptions, InstanceOfResolver } from './index';
-import { Generator } from './generator';
+
 import { parsePropTypes } from './analyzer';
+import { Generator } from './generator';
+import { IOptions, InstanceOfResolver } from './index';
 
 export enum ExportType {
   default,
   named
 }
 
+// tslint:disable:next-line interface-name
 export interface IProp {
   type: string;
   optional: boolean;
@@ -16,6 +18,7 @@ export interface IProp {
   documentation?: string;
 }
 
+// tslint:disable:next-line interface-name
 export interface IPropTypes {
   [name: string]: IProp;
 }
@@ -64,6 +67,7 @@ export interface IParsingResult {
   propTypes: IPropTypes;
 }
 
+// tslint:disable:next-line cyclomatic-complexity
 function parseAst(ast: any, instanceOfResolver?: InstanceOfResolver): IParsingResult {
   let exportType: ExportType|undefined;
   let functionname: string|undefined;

@@ -1,9 +1,10 @@
 import * as ASTQ from 'astq';
 
-import { InstanceOfResolver } from './index';
 import { IPropTypes, IProp } from './deprecated';
+import { InstanceOfResolver } from './index';
 
-interface IASTNode {
+type IASTNode = ASTNode;
+interface ASTNode {
   type: string;
   loc: Object;
   [name: string]: any;
@@ -30,13 +31,14 @@ export function parsePropTypes(node: any, instanceOfResolver?: InstanceOfResolve
 
 function getOptionalDocumentation(propertyNode: any): string {
   return (((propertyNode.leadingComments || []) as any[])
-    .filter(comment => comment.type == 'CommentBlock')[0] || {})
+    .filter(comment => comment.type === 'CommentBlock')[0] || {})
     .value;
 }
 
 /**
  * @internal
  */
+// tslint:disable:next-line cyclomatic-complexity
 export function getTypeFromPropType(node: IASTNode, instanceOfResolver = defaultInstanceOfResolver): IProp {
   const result: IProp = {
     type: 'any',
@@ -91,14 +93,14 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
 }
 
 function isNode(obj: IASTNode): boolean {
-  return obj && typeof obj.type != 'undefined' && typeof obj.loc != 'undefined';
+  return obj && typeof obj.type !== 'undefined' && typeof obj.loc !== 'undefined';
 }
 
 function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceOfResolver): any {
-  if (node.type == 'MemberExpression' && node.object.type == 'MemberExpression'
-      && node.object.object.name == 'React' && node.object.property.name == 'PropTypes') {
+  if (node.type === 'MemberExpression' && node.object.type === 'MemberExpression'
+      && node.object.object.name === 'React' && node.object.property.name === 'PropTypes') {
     return node.property;
-  } else if (node.type == 'CallExpression') {
+  } else if (node.type === 'CallExpression') {
     const callType = getReactPropTypeFromExpression(node.callee, instanceOfResolver);
     switch (callType.name) {
       case 'instanceOf':
@@ -111,7 +113,7 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
         const arrayType = getTypeFromPropType(node.arguments[0], instanceOfResolver);
         return {
           name: 'array',
-          arrayType: arrayType.type,
+          arrayType: arrayType.type
         };
       case 'oneOfType':
         const unionTypes = node.arguments[0].elements.map((element: IASTNode) =>
@@ -126,7 +128,7 @@ function getReactPropTypeFromExpression(node: any, instanceOfResolver: InstanceO
 }
 
 function isRequiredPropType(node: any, instanceOfResolver: InstanceOfResolver): any {
-  const isRequired = node.type == 'MemberExpression' && node.property.name == 'isRequired';
+  const isRequired = node.type === 'MemberExpression' && node.property.name === 'isRequired';
   return {
     isRequired,
     type: getReactPropTypeFromExpression(isRequired ? node.object : node, instanceOfResolver)

@@ -1,7 +1,7 @@
 import test from 'ava';
 
-import { IProp } from '../src/deprecated';
 import { getTypeFromPropType } from '../src/analyzer';
+import { IProp } from '../src/deprecated';
 
 const instanceOfResolver = (): any => undefined;
 const reactPropTypesMemberExpression: any = {

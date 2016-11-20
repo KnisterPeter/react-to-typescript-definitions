@@ -1,9 +1,9 @@
 import test, { ContextualTestContext } from 'ava';
 
-import * as fs from 'fs';
-import * as path from 'path';
 import * as chalk from 'chalk';
 import * as diff from 'diff';
+import * as fs from 'fs';
+import * as path from 'path';
 
 import * as react2dts from '../src/index';
 

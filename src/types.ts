@@ -34,6 +34,7 @@ export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefine
   };
 }
 
+// tslint:disable:next-line cyclomatic-complexity
 function getSimpleType(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
   const [required, simpleTypeName] = getSimpleTypeName(astq, propertyAst, propTypesName);
   switch (simpleTypeName) {
@@ -79,6 +80,7 @@ function getComplexType(astq: ASTQ, propertyAst: any, propTypesName: string|unde
       const typeDecl = get(astq, typeAst.arguments[0], propTypesName);
       return getTypeDeclaration(dom.create.array(typeDecl.type), !required);
     case 'oneOf':
+      // tslint:disable:next-line comment-format
       // FIXME: This should better be a real enum
       const enumEntries = getEnumValues(typeAst.arguments[0].elements);
       return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
@@ -90,7 +92,7 @@ function getComplexType(astq: ASTQ, propertyAst: any, propTypesName: string|unde
       });
       return getTypeDeclaration(dom.create.objectType(entries), !required);
   }
-return undefined;
+  return undefined;
 }
 
 function isRequired(astq: ASTQ, propertyAst: any): [boolean, any] {
@@ -128,6 +130,7 @@ function getComplexTypeName(astq: ASTQ, propertyAst: any,
 
 function getEnumValues(oneOfTypes: any[]): any[] {
   return oneOfTypes.map((element: any) => {
+    // tslint:disable:next-line comment-format
     // FIXME: This are not named references!
     if (element.type === 'StringLiteral') {
       return dom.create.namedTypeReference(`'${element.value}'`);
