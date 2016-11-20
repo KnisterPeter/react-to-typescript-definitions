@@ -1,5 +1,5 @@
-import * as fs from 'fs';
 import * as babylon from 'babylon';
+import * as fs from 'fs';
 import * as getStdin from 'get-stdin';
 
 import { generateTypings } from './deprecated';
@@ -10,7 +10,9 @@ export interface InstanceOfResolver {
   (name: string): string|undefined;
 };
 
-export interface IOptions {
+// the IOptions is for backward compatibility
+export type IOptions  = Options;
+export interface Options {
 
   /**
    * Resolves type names to import paths.

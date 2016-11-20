@@ -22,7 +22,7 @@ export function createTypings(moduleName: string|null, ast: any,
   }
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
-      if (importStatement.name == undefined) {
+      if (importStatement.name === undefined) {
         m.members.push(dom.create.importDefault(importStatement.local, importStatement.path));
       } else {
         throw new Error('Named imports are currently unsupported');
@@ -34,28 +34,7 @@ export function createTypings(moduleName: string|null, ast: any,
     const propTypes = getPropTypesFromAssignment(astq, ast, componentName) ||
       getPropTypesFromStaticAttribute(astq, ast, componentName);
     if (exportType) {
-      const classComponent = isClassComponent(astq, ast, componentName, reactComponentName);
-
-      const interf = dom.create.interface(`${componentName}Props`);
-      interf.flags = dom.DeclarationFlags.Export;
-      if (propTypes) {
-        createPropTypeTypings(interf, astq, propTypes, propTypesName);
-      }
-      if (propTypes || classComponent) {
-        m.members.push(interf);
-      }
-
-      if (classComponent) {
-        const classDecl = dom.create.class(componentName);
-        classDecl.baseType = dom.create.interface(`React.Component<${interf.name}, any>`);
-        classDecl.flags = exportType;
-        m.members.push(classDecl);
-      } else {
-        const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
-          dom.create.namedTypeReference('JSX.Element'));
-        funcDelc.flags = exportType;
-        m.members.push(funcDelc);
-      }
+      createExportedTypes(m, astq, ast, componentName, reactComponentName, propTypes, propTypesName, exportType);
     }
   });
 
@@ -67,6 +46,33 @@ export function createTypings(moduleName: string|null, ast: any,
     return dom.emit(m, dom.ContextFlags.Module);
   }
 };
+
+function createExportedTypes(m: dom.ModuleDeclaration, astq: ASTQ, ast: any, componentName: string,
+    reactComponentName: string|undefined, propTypes: any, propTypesName: string|undefined,
+      exportType: dom.DeclarationFlags): void {
+  const classComponent = isClassComponent(astq, ast, componentName, reactComponentName);
+
+  const interf = dom.create.interface(`${componentName}Props`);
+  interf.flags = dom.DeclarationFlags.Export;
+  if (propTypes) {
+    createPropTypeTypings(interf, astq, propTypes, propTypesName);
+  }
+  if (propTypes || classComponent) {
+    m.members.push(interf);
+  }
+
+  if (classComponent) {
+    const classDecl = dom.create.class(componentName);
+    classDecl.baseType = dom.create.interface(`React.Component<${interf.name}, any>`);
+    classDecl.flags = exportType;
+    m.members.push(classDecl);
+  } else {
+    const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
+      dom.create.namedTypeReference('JSX.Element'));
+    funcDelc.flags = exportType;
+    m.members.push(funcDelc);
+  }
+}
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, astq: ASTQ, propTypes: any,
     propTypesName: string|undefined): void {
