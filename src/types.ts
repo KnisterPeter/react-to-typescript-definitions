@@ -1,6 +1,5 @@
-import * as ASTQ from 'astq';
 import * as dom from 'dts-dom';
-import { propTypeQueryExpression } from './typings';
+import { propTypeQueryExpression, AstQuery } from './typings';
 
 export interface TypeDeclaration {
   type: any;
@@ -14,13 +13,13 @@ function getTypeDeclaration(type: any, optional: boolean): TypeDeclaration {
   };
 }
 
-export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration {
+export function get(ast: AstQuery, propertyAst: any, propTypesName: string|undefined): TypeDeclaration {
   try {
-    const simpleType = getSimpleType(astq, propertyAst, propTypesName);
+    const simpleType = getSimpleType(ast, propertyAst, propTypesName);
     if (simpleType) {
       return simpleType;
     }
-    const complexType = getComplexType(astq, propertyAst, propTypesName);
+    const complexType = getComplexType(ast, propertyAst, propTypesName);
     if (complexType) {
       return complexType;
     }
@@ -35,8 +34,9 @@ export function get(astq: ASTQ, propertyAst: any, propTypesName: string|undefine
 }
 
 // tslint:disable:next-line cyclomatic-complexity
-function getSimpleType(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  const [required, simpleTypeName] = getSimpleTypeName(astq, propertyAst, propTypesName);
+function getSimpleType(ast: AstQuery, propertyAst: any,
+    propTypesName: string|undefined): TypeDeclaration|undefined {
+  const [required, simpleTypeName] = getSimpleTypeName(ast, propertyAst, propTypesName);
   switch (simpleTypeName) {
     case 'any':
       return getTypeDeclaration('any', !required);
@@ -66,27 +66,28 @@ function getSimpleType(astq: ASTQ, propertyAst: any, propTypesName: string|undef
   return undefined;
 }
 
-function getComplexType(astq: ASTQ, propertyAst: any, propTypesName: string|undefined): TypeDeclaration|undefined {
-  const [required, complexTypeName, typeAst] = getComplexTypeName(astq, propertyAst, propTypesName);
+function getComplexType(ast: AstQuery, propertyAst: any,
+    propTypesName: string|undefined): TypeDeclaration|undefined {
+  const [required, complexTypeName, typeAst] = getComplexTypeName(ast, propertyAst, propTypesName);
   switch (complexTypeName) {
     case 'instanceOf':
       return getTypeDeclaration(dom.create.typeof(
         dom.create.namedTypeReference(typeAst.arguments[0].name)), !required);
     case 'oneOfType':
       const typeDecls = typeAst.arguments[0].elements
-        .map((ast: any) => get(astq, ast, propTypesName)) as TypeDeclaration[];
+        .map((subtree: any) => get(ast, subtree, propTypesName)) as TypeDeclaration[];
       return getTypeDeclaration(dom.create.union(typeDecls.map(type => type.type)), !required);
     case 'arrayOf':
-      const typeDecl = get(astq, typeAst.arguments[0], propTypesName);
+      const typeDecl = get(ast, typeAst.arguments[0], propTypesName);
       return getTypeDeclaration(dom.create.array(typeDecl.type), !required);
     case 'oneOf':
       // tslint:disable:next-line comment-format
       // FIXME: This should better be a real enum
-      const enumEntries = getEnumValues(typeAst.arguments[0].elements);
+      const enumEntries = getEnumValues(ast, typeAst.arguments[0]);
       return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
     case 'shape':
       const entries = typeAst.arguments[0].properties.map((entry: any) => {
-        const typeDecl = get(astq, entry.value, propTypesName);
+        const typeDecl = get(ast, entry.value, propTypesName);
         return dom.create.property(entry.key.name, typeDecl.type,
           typeDecl.optional ? dom.DeclarationFlags.Optional : dom.DeclarationFlags.None);
       });
@@ -95,8 +96,8 @@ function getComplexType(astq: ASTQ, propertyAst: any, propTypesName: string|unde
   return undefined;
 }
 
-function isRequired(astq: ASTQ, propertyAst: any): [boolean, any] {
-  const required = astq.query(propertyAst, `
+function isRequired(ast: AstQuery, propertyAst: any): [boolean, any] {
+  const required = ast.querySubtree(propertyAst, `
     MemberExpression /:property Identifier[@name == 'isRequired']
   `);
   if (required.length > 0) {
@@ -105,10 +106,10 @@ function isRequired(astq: ASTQ, propertyAst: any): [boolean, any] {
   return [false, propertyAst];
 }
 
-function getSimpleTypeName(astq: ASTQ, propertyAst: any,
+function getSimpleTypeName(ast: AstQuery, propertyAst: any,
     propTypesName: string|undefined): [boolean, string|undefined] {
-  const [required, typeAst] = isRequired(astq, propertyAst);
-  const res = astq.query(typeAst, `
+  const [required, typeAst] = isRequired(ast, propertyAst);
+  const res = ast.querySubtree(typeAst, `
     MemberExpression[
       (${propTypeQueryExpression(propTypesName)})
       &&
@@ -118,18 +119,27 @@ function getSimpleTypeName(astq: ASTQ, propertyAst: any,
   return [required, res.length > 0 ? res[0].property.name : undefined];
 }
 
-function getComplexTypeName(astq: ASTQ, propertyAst: any,
+function getComplexTypeName(ast: AstQuery, propertyAst: any,
     propTypesName: string|undefined): [boolean, string|undefined, any] {
-  const [required, typeAst] = isRequired(astq, propertyAst);
+  const [required, typeAst] = isRequired(ast, propertyAst);
   if (typeAst.type === 'CallExpression') {
-    const [, simpleTypeName] = getSimpleTypeName(astq, typeAst.callee, propTypesName);
+    const [, simpleTypeName] = getSimpleTypeName(ast, typeAst.callee, propTypesName);
     return [required, simpleTypeName, typeAst];
   }
   return [required, undefined, typeAst];
 }
 
-function getEnumValues(oneOfTypes: any[]): any[] {
-  return oneOfTypes.map((element: any) => {
+function getEnumValues(ast: AstQuery, oneOfTypes: any): any[] {
+  if (oneOfTypes.type === 'Identifier') {
+    const res = ast.query(`
+      //VariableDeclarator[
+        /:id Identifier[@name == '${oneOfTypes.name}']
+      ]
+      /:init *
+    `);
+    oneOfTypes = res[0];
+  }
+  return (oneOfTypes.elements as any[]).map((element: any) => {
     // tslint:disable:next-line comment-format
     // FIXME: This are not named references!
     if (element.type === 'StringLiteral') {
