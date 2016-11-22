@@ -12,7 +12,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "linter": "tslint --project ./tsconfig.json --type-check",
+    "linter": "tslint --project ./tsconfig.json",
     "start": "npm test",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
@@ -36,7 +36,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@knisterpeter/standard-tslint": "1.0.2",
+    "@knisterpeter/standard-tslint": "1.0.3",
     "@types/chalk": "0.4.31",
     "@types/diff": "0.0.31",
     "@types/node": "6.0.46",
