@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.17.0"></a>
+# [0.17.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.16.2...v0.17.0) (2016-11-22)
+
+
+### Features
+
+* resolve references in oneOf propTypes (#236) ([4e85be2](https://github.com/knisterpeter/react-to-typescript-definitions/commit/4e85be2)), closes [#236](https://github.com/knisterpeter/react-to-typescript-definitions/issues/236)
+
+
+
 <a name="0.16.2"></a>
 ## [0.16.2](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.16.1...v0.16.2) (2016-11-07)
 
