@@ -41,5 +41,9 @@ Component.propTypes = {
 		React.PropTypes.bool
 	]).isRequired,
 	requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-  requiredSymbol: React.PropTypes.symbol.isRequired,
+	requiredArrayOfObjectsWithShape: React.PropTypes.arrayOf(React.PropTypes.shape({
+		color: React.PropTypes.string,
+		fontSize: React.PropTypes.number
+	})).isRequired,
+	requiredSymbol: React.PropTypes.symbol.isRequired,
 };
