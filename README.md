@@ -1,13 +1,11 @@
 # react-to-typescript-definitions
 
-[![GitHub license](https://img.shields.io/github/license/KnisterPeter/react-to-typescript-definitions.svg)](https://github.com/KnisterPeter/react-to-typescript-definitions)
-[![Travis](https://img.shields.io/travis/KnisterPeter/react-to-typescript-definitions.svg)](https://travis-ci.org/KnisterPeter/react-to-typescript-definitions)
-[![Coveralls branch](https://img.shields.io/coveralls/KnisterPeter/react-to-typescript-definitions/master.svg)](https://coveralls.io/github/KnisterPeter/react-to-typescript-definitions)
-[![David](https://img.shields.io/david/KnisterPeter/react-to-typescript-definitions.svg)](https://david-dm.org/KnisterPeter/react-to-typescript-definitions)
-[![David](https://img.shields.io/david/dev/KnisterPeter/react-to-typescript-definitions.svg)](https://david-dm.org/KnisterPeter/react-to-typescript-definitions#info=devDependencies&view=table)
-[![npm](https://img.shields.io/npm/v/react-to-typescript-definitions.svg)](https://www.npmjs.com/package/react-to-typescript-definitions)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![Standard Version](https://img.shields.io/badge/release-standard%20version-brightgreen.svg)](https://github.com/conventional-changelog/standard-version)
+[![GitHub license][license-image]][license-link]
+[![npm][npm-image]][npm-link]
+[![Travis][ci-image]][ci-link]
+[![codecov][coverage-image]][coverage-link]
+[![Commitizen friendly][commitizen-image]][commitizen-link]
+[![Standard Version][standard-version-image]][standard-version-link]
 
 Create typescript definitions files (d.ts) from react components.
 
@@ -101,3 +99,16 @@ Options:
   A function which gets a type name (as string) and should return the path
   to the file defining the type or undefined if the type is not resolvable.
   This function is required to generate instanceOf PropTypes.
+
+[license-image]: https://img.shields.io/github/license/KnisterPeter/react-to-typescript-definitions.svg
+[license-link]: https://github.com/KnisterPeter/react-to-typescript-definitions
+[npm-image]: https://img.shields.io/npm/v/react-to-typescript-definitions.svg
+[npm-link]: https://www.npmjs.com/package/react-to-typescript-definitions
+[ci-image]: https://img.shields.io/travis/KnisterPeter/react-to-typescript-definitions.svg
+[ci-link]: https://travis-ci.org/KnisterPeter/react-to-typescript-definitions
+[coverage-image]: https://codecov.io/gh/KnisterPeter/react-to-typescript-definitions/branch/master/graph/badge.svg
+[coverage-link]: https://codecov.io/gh/KnisterPeter/react-to-typescript-definitions
+[commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
+[commitizen-link]: http://commitizen.github.io/cz-cli/
+[standard-version-image]: https://img.shields.io/badge/release-standard%20version-brightgreen.svg
+[standard-version-link]: https://github.com/conventional-changelog/standard-version
