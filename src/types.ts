@@ -86,7 +86,7 @@ function getComplexType(ast: AstQuery, propertyAst: any,
       const enumEntries = getEnumValues(ast, typeAst.arguments[0]);
       return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
     case 'shape':
-      const entries = typeAst.arguments[0].properties.map((entry: any) => {
+      const entries = getShapeProperties(ast, typeAst.arguments[0]).map((entry: any) => {
         const typeDecl = get(ast, entry.value, propTypesName);
         return dom.create.property(entry.key.name, typeDecl.type,
           typeDecl.optional ? dom.DeclarationFlags.Optional : dom.DeclarationFlags.None);
@@ -150,4 +150,17 @@ function getEnumValues(ast: AstQuery, oneOfTypes: any): any[] {
     }
     return 'any';
   });
+}
+
+function getShapeProperties(ast: AstQuery, input: any): any[] {
+  if (input.type === 'Identifier') {
+    const res = ast.query(`
+      //VariableDeclarator[
+        /:id Identifier[@name == '${input.name}']
+      ]
+      /:init *
+    `);
+    return res[0].properties;
+  }
+  return input.properties;
 }
