@@ -1,5 +1,6 @@
 import * as ASTQ from 'astq';
 import * as dom from 'dts-dom';
+import pascalCase = require('pascal-case');
 import { InstanceOfResolver } from './index';
 import * as types from './types';
 
@@ -69,7 +70,9 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
   interf.flags = dom.DeclarationFlags.Export;
   if (propTypes) {
     createPropTypeTypings(interf, ast, propTypes, propTypesName);
+    extractComplexTypes(m, interf, componentName);
   }
+
   if (propTypes || classComponent) {
     m.members.push(interf);
   }
@@ -114,6 +117,40 @@ function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, 
     }
     interf.members.push(property);
   });
+}
+
+function extractComplexTypes(m: dom.ModuleDeclaration, interf: dom.InterfaceDeclaration,
+    componentName: string): void {
+  interf.members.forEach((member) => {
+    if (member.kind === 'property' && isExtractableType(member.type)) {
+      const name = `${componentName}${pascalCase(member.name)}`;
+      const extractedMember = createModuleMember(name, member.type);
+      extractedMember.flags = dom.DeclarationFlags.Export;
+      m.members.push(extractedMember);
+      member.type = dom.create.namedTypeReference(name);
+    }
+  });
+}
+
+type ExtractableType = dom.UnionType | dom.IntersectionType | dom.ObjectType;
+
+function isExtractableType(type: dom.Type): type is ExtractableType {
+  if (typeof type === 'object') {
+    return ['union', 'intersection', 'object'].indexOf(type.kind) > -1;
+  }
+  return false;
+}
+
+function createModuleMember(name: string, type: ExtractableType): dom.ModuleMember {
+  switch (type.kind) {
+    case 'intersection':
+    case 'union':
+      return dom.create.alias(name, type);
+    case 'object':
+      const interf = dom.create.interface(name);
+      interf.members = type.members;
+      return interf;
+  }
 }
 
 function getUniqueNames(input: string[]): string[] {

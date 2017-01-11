@@ -1,5 +1,7 @@
 import * as React from 'react';
 import Message from './path/to/Message';
+export type ComponentOptionalUnion = string | number;
+export type ComponentRequiredUnion = any[] | boolean;
 export interface ComponentProps {
     /**
      * This is a jsdoc comment for optionalAny.
@@ -14,11 +16,11 @@ export interface ComponentProps {
     optionalNode?: React.ReactNode;
     optionalElement?: React.ReactElement<any>;
     optionalMessage?: typeof Message;
-    optionalUnion?: string | number;
+    optionalUnion?: ComponentOptionalUnion;
     optionalArrayOf?: number[];
     requiredFunc: (...args: any[])=>any;
     requiredAny: any;
-    requiredUnion: any[] | boolean;
+    requiredUnion: ComponentRequiredUnion;
     requiredArrayOf: string[];
 }
 export default class Component extends React.Component<ComponentProps, any>{
