@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.18.0"></a>
+# [0.18.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.17.1...v0.18.0) (2017-01-11)
+
+
+### Bug Fixes
+
+* **package:** update babylon to version 6.15.0 (#269) ([8bb7da2](https://github.com/knisterpeter/react-to-typescript-definitions/commit/8bb7da2))
+
+
+### Features
+
+* export complex types as type aliases or interfaces (#272) ([95215cd](https://github.com/knisterpeter/react-to-typescript-definitions/commit/95215cd))
+
+
+
 <a name="0.17.1"></a>
 ## [0.17.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.17.0...v0.17.1) (2017-01-09)
 
