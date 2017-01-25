@@ -39,7 +39,7 @@
     "@knisterpeter/standard-tslint": "1.0.3",
     "@types/chalk": "0.4.31",
     "@types/diff": "0.0.31",
-    "@types/node": "7.0.0",
+    "@types/node": "7.0.4",
     "@types/react": "15.0.3",
     "ava": "0.17.0",
     "babel-core": "6.21.0",
