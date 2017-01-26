@@ -2,11 +2,11 @@ import { IPropTypes, ExportType } from './deprecated';
 
 export class Generator {
 
-  private static NL: string = '\n';
+  private static NL = '\n';
 
-  private indentLevel: number = 0;
+  private indentLevel = 0;
 
-  private code: string = '';
+  private code = '';
 
   private indent(): void {
     let result = '';
