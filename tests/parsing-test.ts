@@ -26,8 +26,8 @@ function compare(t: ContextualTestContext, moduleName: string|null, file1: strin
     opts: react2dts.IOptions = {}): void {
   textDiff(
     t,
-    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts),
-    fs.readFileSync(path.join(basedir, file2)).toString()
+    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts).replace('\r\n', '\n'),
+    fs.readFileSync(path.join(basedir, file2)).toString().replace('\r\n', '\n')
   );
 }
 
