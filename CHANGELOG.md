@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.18.1"></a>
+## [0.18.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.18.0...v0.18.1) (2017-01-27)
+
+
+### Bug Fixes
+
+* replace all newlines ([7a7153b](https://github.com/knisterpeter/react-to-typescript-definitions/commit/7a7153b))
+* **typings:** handle one more type of es6 exports (#287) ([3d3cfad](https://github.com/knisterpeter/react-to-typescript-definitions/commit/3d3cfad))
+
+
+
 <a name="0.18.0"></a>
 # [0.18.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.17.1...v0.18.0) (2017-01-11)
 
