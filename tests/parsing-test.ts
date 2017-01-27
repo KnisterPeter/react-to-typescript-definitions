@@ -55,6 +55,9 @@ test('Parsing should create definition from babeled es7 class component', t => {
   };
   compare(t, 'component', 'es7-class-babeled.js', 'es7-class.d.ts', opts);
 });
+test('Parsing should create definition from es7 class component with separate default export', t => {
+  compare(t, 'component', 'es7-class-separate-export.jsx', 'es7-class-separate-export.d.ts');
+});
 test('Parsing should create definition from stateless function component', t => {
   compare(t, 'component', 'stateless.jsx', 'stateless.d.ts');
 });

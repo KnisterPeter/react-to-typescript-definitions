@@ -372,6 +372,8 @@ function getComponentExportType(ast: AstQuery, componentName: string): dom.Decla
           // VariableDeclaration
           / VariableDeclarator
           /:id Identifier[@name == '${componentName}']
+        ||
+          /Identifier[@name == '${componentName}']
       ]
     ,
       // AssignmentExpression[
