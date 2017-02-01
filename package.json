@@ -20,7 +20,7 @@
     "build:inline": "tsc --inlineSourceMap",
     "pretest": "npm run clean && npm run build:inline",
     "test": "nyc ava",
-    "coverage": "nyc report --reporter=json && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
+    "coverage": "nyc report --reporter=lcov && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
     "prerelease": "npm test && npm run build",
     "release": "standard-version",
