@@ -3,7 +3,7 @@
 [![GitHub license][license-image]][license-link]
 [![npm][npm-image]][npm-link]
 [![Travis][ci-image]][ci-link]
-[![codecov][coverage-image]][coverage-link]
+[![Coverage Status][coverage-image]][coverage-link]
 [![Commitizen friendly][commitizen-image]][commitizen-link]
 [![Standard Version][standard-version-image]][standard-version-link]
 
@@ -106,8 +106,8 @@ Options:
 [npm-link]: https://www.npmjs.com/package/react-to-typescript-definitions
 [ci-image]: https://img.shields.io/travis/KnisterPeter/react-to-typescript-definitions.svg
 [ci-link]: https://travis-ci.org/KnisterPeter/react-to-typescript-definitions
-[coverage-image]: https://codecov.io/gh/KnisterPeter/react-to-typescript-definitions/branch/master/graph/badge.svg
-[coverage-link]: https://codecov.io/gh/KnisterPeter/react-to-typescript-definitions
+[coverage-image]: https://coveralls.io/repos/github/KnisterPeter/react-to-typescript-definitions/badge.svg?branch=master
+[coverage-link]: https://coveralls.io/github/KnisterPeter/react-to-typescript-definitions?branch=master
 [commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
 [commitizen-link]: http://commitizen.github.io/cz-cli/
 [standard-version-image]: https://img.shields.io/badge/release-standard%20version-brightgreen.svg
