@@ -1,13 +1,19 @@
 declare module 'component' {
     import * as React from 'react';
+
     import Message from './path/to/Message';
+
     export type ComponentOptionalEnum = 'News' | 'Photos' | 1 | 2;
+
     export type ComponentOptionalUnion = string | number;
+
     export interface ComponentOptionalObjectWithShape {
         color?: string;
         fontSize?: number;
     }
+
     export type ComponentRequiredUnion = any[] | boolean;
+
     export interface ComponentProps {
         /**
          * This is a jsdoc comment for optionalAny.
@@ -36,6 +42,9 @@ declare module 'component' {
         }[];
         requiredSymbol: typeof Symbol;
     }
-    export class Component extends React.Component<ComponentProps, any>{
+
+    export class Component extends React.Component<ComponentProps, any> {
     }
+
 }
+
