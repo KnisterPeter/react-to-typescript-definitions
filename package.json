@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "astq": "2.0.0",
-    "babylon": "6.15.0",
+    "babylon": "6.16.0",
     "dts-dom": "0.1.15",
     "get-stdin": "5.0.1",
     "meow": "3.7.0",
