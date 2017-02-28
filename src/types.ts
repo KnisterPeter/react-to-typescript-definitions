@@ -140,8 +140,7 @@ function getEnumValues(ast: AstQuery, oneOfTypes: any): any[] {
     oneOfTypes = res[0];
   }
   return (oneOfTypes.elements as any[]).map((element: any) => {
-    // tslint:disable:next-line comment-format
-    // FIXME: This are not named references!
+    // fixme: This are not named references!
     if (element.type === 'StringLiteral') {
       return dom.create.namedTypeReference(`'${element.value}'`);
     }
