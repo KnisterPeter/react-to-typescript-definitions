@@ -9,9 +9,15 @@ import * as react2dts from '../src/index';
 
 const basedir = path.join(__dirname, '..', '..', 'tests');
 
+function normalize(input: string): string {
+  return input
+    .replace(/\s+/g, ' ')
+    .replace(/ => /g, '=>');
+}
+
 function textDiff(t: ContextualTestContext, actual: string, expected: string): void {
-  const differences = diff.diffChars(expected, actual);
-  if (differences.length > 1) {
+  if (diff.diffChars(normalize(expected), normalize(actual)).length > 1) {
+    const differences = diff.diffChars(expected, actual);
     const result = differences
       .map(part => {
         const value = part.value.trim() ? part.value : (part.added ? '+' : '-') + part.value;
@@ -26,8 +32,8 @@ function compare(t: ContextualTestContext, moduleName: string|null, file1: strin
     opts: react2dts.IOptions = {}): void {
   textDiff(
     t,
-    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts).replace(/\r\n/g, '\n'),
-    fs.readFileSync(path.join(basedir, file2)).toString().replace(/\r\n/g, '\n')
+    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts),
+    fs.readFileSync(path.join(basedir, file2)).toString()
   );
 }
 
