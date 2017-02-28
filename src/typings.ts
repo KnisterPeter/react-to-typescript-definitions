@@ -5,6 +5,7 @@ import { InstanceOfResolver } from './index';
 import * as types from './types';
 
 export interface AstQuery {
+  ast: any;
   query(query: string): any[];
   querySubtree(subtree: any, query: string): any[];
 }
@@ -13,6 +14,7 @@ export function createTypings(moduleName: string|null, programAst: any,
     instanceOfResolver: InstanceOfResolver | undefined): string {
   const astq = new ASTQ();
   const ast = {
+    ast: programAst,
     query(query: string): any[] {
       return astq.query(programAst, query);
     },
