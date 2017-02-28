@@ -10,7 +10,8 @@ export class Generator {
 
   private indent(): void {
     let result = '';
-    for (let i = 0, n = this.indentLevel; i < n; i++) {
+    const n = this.indentLevel;
+    for (let i = 0; i < n; i++) {
       result += '\t';
     }
     this.code += result;
