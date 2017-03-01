@@ -3,8 +3,8 @@ module.exports = function(wallaby) {
   return {
     files: [
       'src/**/*.ts',
-      {pattern: 'tests/**/*.jsx', instrument: false, load: false, ignore: false},
-      {pattern: 'tests/**/*.d.ts', instrument: false, load: false, ignore: false}
+      {pattern: 'tests/**/*.js*', instrument: false},
+      {pattern: 'tests/**/*.d.ts', instrument: false}
     ],
     tests: [
       'tests/**/*-test.ts'
