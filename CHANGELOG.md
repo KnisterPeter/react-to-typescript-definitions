@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.19.0"></a>
+# [0.19.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.18.1...v0.19.0) (2017-03-01)
+
+
+### Bug Fixes
+
+* **package:** update babylon to version 6.16.0 ([24e3da1](https://github.com/knisterpeter/react-to-typescript-definitions/commit/24e3da1))
+* **package:** update babylon to version 6.16.1 ([c2064f0](https://github.com/knisterpeter/react-to-typescript-definitions/commit/c2064f0))
+* **package:** update dts-dom to version 0.1.13 ([2630ab8](https://github.com/knisterpeter/react-to-typescript-definitions/commit/2630ab8))
+* **package:** update dts-dom to version 0.1.14 (#295) ([859c134](https://github.com/knisterpeter/react-to-typescript-definitions/commit/859c134))
+* **package:** update dts-dom to version 0.1.15 ([75d5775](https://github.com/knisterpeter/react-to-typescript-definitions/commit/75d5775))
+
+
+### Features
+
+* report error context and source excerpt ([251a46a](https://github.com/knisterpeter/react-to-typescript-definitions/commit/251a46a))
+* retain error information ([e24f500](https://github.com/knisterpeter/react-to-typescript-definitions/commit/e24f500))
+
+
+
 <a name="0.18.1"></a>
 ## [0.18.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.18.0...v0.18.1) (2017-01-27)
 
