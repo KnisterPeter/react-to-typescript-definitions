@@ -7,7 +7,10 @@ import * as path from 'path';
 
 import * as react2dts from '../src/index';
 
-const basedir = path.join(__dirname, '..', '..', 'tests');
+let basedir = path.join(__dirname, '..', '..', 'tests');
+if (process.env.WALLABY) {
+  basedir = path.join(__dirname);
+}
 
 function normalize(input: string): string {
   return input

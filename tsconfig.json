@@ -1,6 +1,13 @@
 {
   "compilerOptions": {
+    "alwaysStrict": true,
     "declaration": true,
+    "lib": [
+      "dom",
+      "es5",
+      "es2015.iterable",
+      "es2015.promise"
+    ],
     "listFiles": false,
     "module": "commonjs",
     "noFallthroughCasesInSwitch": true,
@@ -14,13 +21,7 @@
     "strictNullChecks": true,
     "stripInternal": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "es5",
-    "lib": [
-      "dom",
-      "es5",
-      "es2015.iterable",
-      "es2015.promise"
-    ]
+    "target": "es5"
   },
   "exclude": [
     "index.d.ts",
