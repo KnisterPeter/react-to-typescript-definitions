@@ -1,3 +1,4 @@
+import astToCode from 'babel-generator';
 import * as dom from 'dts-dom';
 import { propTypeQueryExpression, AstQuery } from './typings';
 
@@ -25,7 +26,12 @@ export function get(ast: AstQuery, propertyAst: any, propTypesName: string|undef
     }
   } catch (e) {
     console.error('Failed to infer PropType; Fallback to any');
-    console.error(e.stack);
+    if (e.loc) {
+      const src = astToCode(ast.ast).code;
+      console.error(`Line ${e.loc.start.line}: ${src.split('\n')[e.loc.start.line - 1]}`);
+    } else {
+      console.error(e.stack);
+    }
   }
   return {
     type: 'any',
@@ -137,7 +143,17 @@ function getEnumValues(ast: AstQuery, oneOfTypes: any): any[] {
       ]
       /:init *
     `);
+    if (!res[0]) {
+      const error = new Error('Failed to lookup enum values');
+      (error as any).loc = oneOfTypes.loc;
+      throw error;
+    }
     oneOfTypes = res[0];
+  }
+  if (!oneOfTypes.elements) {
+    const error = new Error('Failed to lookup enum values');
+    (error as any).loc = oneOfTypes.loc;
+    throw error;
   }
   return (oneOfTypes.elements as any[]).map((element: any) => {
     // fixme: This are not named references!
@@ -159,7 +175,17 @@ function getShapeProperties(ast: AstQuery, input: any): any[] {
       ]
       /:init *
     `);
-    return res[0].properties;
+    if (res[0]) {
+      return res[0].properties;
+    }
+    const error = new Error('Failed to lookup shape properties');
+    (error as any).loc = input.loc;
+    throw error;
+  }
+  if (!input.properties) {
+    const error = new Error('Failed to lookup shape properties');
+    (error as any).loc = input.loc;
+    throw error;
   }
   return input.properties;
 }
