@@ -1,4 +1,5 @@
 import test from 'ava';
+import * as stripAnsi from 'strip-ansi';
 
 import * as react2dts from '../src/index';
 
@@ -29,8 +30,7 @@ test('In case of error during shape type inference the error information should 
     }
   `);
   const args = t.context.args.reduce((akku: any[], args: any[]) => [...akku, ...args], []);
-  const idx = args.indexOf('Line 6:     someShape: React.PropTypes.shape(shape)');
-  t.is(idx, 1);
+  t.is(stripAnsi(args[2]), 'Line 6:         someShape: React.PropTypes.shape(shape)');
 });
 
 test('In case of error during enum type inference the error information should be retained', t => {
@@ -44,8 +44,7 @@ test('In case of error during enum type inference the error information should b
     }
   `);
   const args = t.context.args.reduce((akku: any[], args: any[]) => [...akku, ...args], []);
-  const idx = args.indexOf('Line 6:     list: React.PropTypes.oneOf(list)');
-  t.is(idx, 1);
+  t.is(stripAnsi(args[2]), 'Line 6:         list: React.PropTypes.oneOf(list)');
 });
 
 test('In case of error during enum value creation inference the error information should be retained', t => {
@@ -59,8 +58,7 @@ test('In case of error during enum value creation inference the error informatio
     }
   `);
   const args = t.context.args.reduce((akku: any[], args: any[]) => [...akku, ...args], []);
-  const idx = args.indexOf('Line 6:     list: React.PropTypes.oneOf(Object.keys(object))');
-  t.is(idx, 1);
+  t.is(stripAnsi(args[2]), 'Line 6:         list: React.PropTypes.oneOf(Object.keys(object))');
 });
 
 test('In case of error during shape type inference the error information should be retained', t => {
@@ -74,6 +72,5 @@ test('In case of error during shape type inference the error information should 
     }
   `);
   const args = t.context.args.reduce((akku: any[], args: any[]) => [...akku, ...args], []);
-  const idx = args.indexOf('Line 6:     shape: React.PropTypes.shape(some.shape)');
-  t.is(idx, 1);
+  t.is(stripAnsi(args[2]), 'Line 6:         shape: React.PropTypes.shape(some.shape)');
 });

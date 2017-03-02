@@ -29,6 +29,24 @@ export interface Options {
    * @deprecated
    */
   generator?: Generator;
+
+  /**
+   * Could be given if the generator is started with an AST.
+   *
+   * This is helpful to create better messages in case of errors/warnings.
+   *
+   * @type {string}
+   * @memberOf Options
+   */
+  source?: string;
+
+  /**
+   * Could be given to show filename in error/warning messages.
+   *
+   * @type {string}
+   * @memberOf Options
+   */
+  filename?: string;
 }
 
 export function cli(options: any): void {
@@ -41,7 +59,10 @@ export function cli(options: any): void {
   });
 }
 
-export function generateFromFile(moduleName: string|null, path: string, options?: IOptions): string {
+export function generateFromFile(moduleName: string|null, path: string, options: IOptions = {}): string {
+  if (!options.filename) {
+    options.filename = path;
+  }
   return generateFromSource(moduleName, fs.readFileSync(path).toString(), options);
 }
 
@@ -68,6 +89,9 @@ export function generateFromSource(moduleName: string|null, code: string, option
       'functionSent'
     ]
   });
+  if (!options.source) {
+    options.source = code;
+  }
   return generateFromAst(moduleName, ast, options);
 }
 
@@ -75,5 +99,5 @@ export function generateFromAst(moduleName: string|null, ast: any, options: IOpt
   if (options.generator) {
     return generateTypings(moduleName, ast, options);
   }
-  return createTypings(moduleName, ast, options.instanceOfResolver);
+  return createTypings(moduleName, ast, options);
 }

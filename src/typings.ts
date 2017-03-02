@@ -1,7 +1,7 @@
 import * as ASTQ from 'astq';
 import * as dom from 'dts-dom';
 import pascalCase = require('pascal-case');
-import { InstanceOfResolver } from './index';
+import { InstanceOfResolver, IOptions } from './index';
 import * as types from './types';
 
 export interface AstQuery {
@@ -10,8 +10,7 @@ export interface AstQuery {
   querySubtree(subtree: any, query: string): any[];
 }
 
-export function createTypings(moduleName: string|null, programAst: any,
-    instanceOfResolver: InstanceOfResolver | undefined): string {
+export function createTypings(moduleName: string|null, programAst: any, options: IOptions): string {
   const astq = new ASTQ();
   const ast = {
     ast: programAst,
@@ -25,7 +24,7 @@ export function createTypings(moduleName: string|null, programAst: any,
   const reactComponentName = getReactComponentName(ast);
   const propTypesName = getPropTypesName(ast);
   const importedTypes = getInstanceOfPropTypes(ast, propTypesName);
-  const importStatements = getImportStatements(ast, importedTypes, instanceOfResolver);
+  const importStatements = getImportStatements(ast, importedTypes, options.instanceOfResolver);
   const componentNames = getUniqueNames([
     ...getComponentNamesByPropTypeAssignment(ast),
     ...getComponentNamesByStaticPropTypeAttribute(ast),
@@ -50,7 +49,7 @@ export function createTypings(moduleName: string|null, programAst: any,
     const propTypes = getPropTypesFromAssignment(ast, componentName) ||
       getPropTypesFromStaticAttribute(ast, componentName);
     if (exportType) {
-      createExportedTypes(m, ast, componentName, reactComponentName, propTypes, propTypesName, exportType);
+      createExportedTypes(m, ast, componentName, reactComponentName, propTypes, propTypesName, exportType, options);
     }
   });
 
@@ -65,13 +64,13 @@ export function createTypings(moduleName: string|null, programAst: any,
 
 function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentName: string,
     reactComponentName: string|undefined, propTypes: any, propTypesName: string|undefined,
-      exportType: dom.DeclarationFlags): void {
+      exportType: dom.DeclarationFlags, options: IOptions): void {
   const classComponent = isClassComponent(ast, componentName, reactComponentName);
 
   const interf = dom.create.interface(`${componentName}Props`);
   interf.flags = dom.DeclarationFlags.Export;
   if (propTypes) {
-    createPropTypeTypings(interf, ast, propTypes, propTypesName);
+    createPropTypeTypings(interf, ast, propTypes, propTypesName, options);
     extractComplexTypes(m, interf, componentName);
   }
 
@@ -93,12 +92,12 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
 }
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
-    propTypesName: string|undefined): void {
+    propTypesName: string|undefined, options: IOptions): void {
   const res = ast.querySubtree(propTypes, `
     / ObjectProperty
   `);
   res.forEach(propertyAst => {
-    const typeDecl = types.get(ast, propertyAst.value, propTypesName);
+    const typeDecl = types.get(ast, propertyAst.value, propTypesName, options);
     const property = dom.create.property(propertyAst.key.name || propertyAst.key.value, typeDecl.type,
       typeDecl.optional ? dom.DeclarationFlags.Optional : 0);
     if (propertyAst.leadingComments && propertyAst.leadingComments[0].type === 'CommentBlock') {

@@ -1,5 +1,7 @@
 import astToCode from 'babel-generator';
+import * as chalk from 'chalk';
 import * as dom from 'dts-dom';
+import { IOptions } from './index';
 import { propTypeQueryExpression, AstQuery } from './typings';
 
 export interface TypeDeclaration {
@@ -14,22 +16,22 @@ function getTypeDeclaration(type: any, optional: boolean): TypeDeclaration {
   };
 }
 
-export function get(ast: AstQuery, propertyAst: any, propTypesName: string|undefined): TypeDeclaration {
+export function get(ast: AstQuery, propertyAst: any, propTypesName: string|undefined,
+    options: IOptions): TypeDeclaration {
   try {
     const simpleType = getSimpleType(ast, propertyAst, propTypesName);
     if (simpleType) {
       return simpleType;
     }
-    const complexType = getComplexType(ast, propertyAst, propTypesName);
+    const complexType = getComplexType(ast, propertyAst, propTypesName, options);
     if (complexType) {
       return complexType;
     }
   } catch (e) {
-    console.error('Failed to infer PropType; Fallback to any');
     if (e.loc) {
-      const src = astToCode(ast.ast).code;
-      console.error(`Line ${e.loc.start.line}: ${src.split('\n')[e.loc.start.line - 1]}`);
+      printErrorWithContext(e, ast.ast, options);
     } else {
+      console.error('Failed to infer PropType; Fallback to any');
       console.error(e.stack);
     }
   }
@@ -73,7 +75,7 @@ function getSimpleType(ast: AstQuery, propertyAst: any,
 }
 
 function getComplexType(ast: AstQuery, propertyAst: any,
-    propTypesName: string|undefined): TypeDeclaration|undefined {
+    propTypesName: string|undefined, options: IOptions): TypeDeclaration|undefined {
   const [required, complexTypeName, typeAst] = getComplexTypeName(ast, propertyAst, propTypesName);
   switch (complexTypeName) {
     case 'instanceOf':
@@ -81,10 +83,10 @@ function getComplexType(ast: AstQuery, propertyAst: any,
         dom.create.namedTypeReference(typeAst.arguments[0].name)), !required);
     case 'oneOfType':
       const typeDecls = typeAst.arguments[0].elements
-        .map((subtree: any) => get(ast, subtree, propTypesName)) as TypeDeclaration[];
+        .map((subtree: any) => get(ast, subtree, propTypesName, options)) as TypeDeclaration[];
       return getTypeDeclaration(dom.create.union(typeDecls.map(type => type.type)), !required);
     case 'arrayOf':
-      const typeDecl = get(ast, typeAst.arguments[0], propTypesName);
+      const typeDecl = get(ast, typeAst.arguments[0], propTypesName, options);
       return getTypeDeclaration(dom.create.array(typeDecl.type), !required);
     case 'oneOf':
       // tslint:disable:next-line comment-format
@@ -93,7 +95,7 @@ function getComplexType(ast: AstQuery, propertyAst: any,
       return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
     case 'shape':
       const entries = getShapeProperties(ast, typeAst.arguments[0]).map((entry: any) => {
-        const typeDecl = get(ast, entry.value, propTypesName);
+        const typeDecl = get(ast, entry.value, propTypesName, options);
         return dom.create.property(entry.key.name, typeDecl.type,
           typeDecl.optional ? dom.DeclarationFlags.Optional : dom.DeclarationFlags.None);
       });
@@ -144,16 +146,12 @@ function getEnumValues(ast: AstQuery, oneOfTypes: any): any[] {
       /:init *
     `);
     if (!res[0]) {
-      const error = new Error('Failed to lookup enum values');
-      (error as any).loc = oneOfTypes.loc;
-      throw error;
+      throwWithLocation('Failed to lookup enum values', oneOfTypes);
     }
     oneOfTypes = res[0];
   }
   if (!oneOfTypes.elements) {
-    const error = new Error('Failed to lookup enum values');
-    (error as any).loc = oneOfTypes.loc;
-    throw error;
+    throwWithLocation('Failed to lookup enum values', oneOfTypes);
   }
   return (oneOfTypes.elements as any[]).map((element: any) => {
     // fixme: This are not named references!
@@ -178,14 +176,33 @@ function getShapeProperties(ast: AstQuery, input: any): any[] {
     if (res[0]) {
       return res[0].properties;
     }
-    const error = new Error('Failed to lookup shape properties');
-    (error as any).loc = input.loc;
-    throw error;
+    throwWithLocation('Failed to lookup shape properties', input);
   }
   if (!input.properties) {
-    const error = new Error('Failed to lookup shape properties');
-    (error as any).loc = input.loc;
-    throw error;
+    throwWithLocation('Failed to lookup shape properties', input);
   }
   return input.properties;
+}
+
+function throwWithLocation(message: string, ast: any): never {
+  const error = new Error(message);
+  (error as any).loc = ast.loc;
+  (error as any).start = ast.start;
+  (error as any).end = ast.end;
+  throw error;
+}
+
+function printErrorWithContext(e: any, ast: any, options: IOptions): void {
+  console.error(`${(options.filename || '')} ${e.message}`);
+  const src = options.source || astToCode(ast.ast).code;
+  // console.log(src.substring(e.start, e.end));
+  const lines = src.split('\n');
+  const errorLine = lines[e.loc.start.line - 1];
+
+  console.error(`Line ${e.loc.start.line - 1}: ${lines[e.loc.start.line - 2]}`);
+  console.error(`Line ${e.loc.start.line}: ` + errorLine.substring(0, e.loc.start.column)
+    + chalk.red(errorLine.substring(e.loc.start.column, e.loc.end.column))
+    + errorLine.substring(e.loc.end.column));
+  console.error(`Line ${e.loc.start.line + 1}: ${lines[e.loc.start.line]}`);
+  console.error();
 }
