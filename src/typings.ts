@@ -126,23 +126,25 @@ function extractComplexTypes(m: dom.ModuleDeclaration, interf: dom.InterfaceDecl
     if (member.kind === 'property' && isExtractableType(member.type)) {
       const name = `${componentName}${pascalCase(member.name)}`;
       const extractedMember = createModuleMember(name, member.type);
-      extractedMember.flags = dom.DeclarationFlags.Export;
-      m.members.push(extractedMember);
-      member.type = dom.create.namedTypeReference(name);
+      if (extractedMember) {
+        extractedMember.flags = dom.DeclarationFlags.Export;
+        m.members.push(extractedMember);
+        member.type = createTypeReference(name, member.type);
+      }
     }
   });
 }
 
-type ExtractableType = dom.UnionType | dom.IntersectionType | dom.ObjectType;
+type ExtractableType = dom.UnionType | dom.IntersectionType | dom.ObjectType | dom.ArrayTypeReference;
 
 function isExtractableType(type: dom.Type): type is ExtractableType {
   if (typeof type === 'object') {
-    return ['union', 'intersection', 'object'].indexOf(type.kind) > -1;
+    return ['union', 'intersection', 'object', 'array'].indexOf(type.kind) > -1;
   }
   return false;
 }
 
-function createModuleMember(name: string, type: ExtractableType): dom.ModuleMember {
+function createModuleMember(name: string, type: ExtractableType): dom.ModuleMember | undefined {
   switch (type.kind) {
     case 'intersection':
     case 'union':
@@ -151,6 +153,17 @@ function createModuleMember(name: string, type: ExtractableType): dom.ModuleMemb
       const interf = dom.create.interface(name);
       interf.members = type.members;
       return interf;
+    case 'array':
+      return isExtractableType(type.type) ? createModuleMember(name, type.type) : undefined;
+  }
+}
+
+function createTypeReference(name: string, type: ExtractableType): dom.TypeReference {
+  const namedTypeReference = dom.create.namedTypeReference(name);
+  if (type.kind === 'array') {
+    return dom.create.array(namedTypeReference);
+  } else {
+    return namedTypeReference;
   }
 }
 
