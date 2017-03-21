@@ -45,5 +45,10 @@ Component.propTypes = {
 		color: React.PropTypes.string,
 		fontSize: React.PropTypes.number
 	})).isRequired,
+	deeplyNested: React.PropTypes.arrayOf(React.PropTypes.shape({
+		arrayInDeeplyNested: React.PropTypes.arrayOf(React.PropTypes.shape({
+			foo: React.PropTypes.number
+		}))
+	})).isRequired,
 	requiredSymbol: React.PropTypes.symbol.isRequired,
 };

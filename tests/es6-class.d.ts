@@ -14,6 +14,17 @@ declare module 'component' {
 
   export type ComponentRequiredUnion = any[] | boolean;
 
+  export interface ComponentRequiredArrayOfObjectsWithShape {
+    color?: string;
+    fontSize?: number;
+  }
+
+  export interface ComponentDeeplyNested {
+    arrayInDeeplyNested?: {
+      foo?: number;
+    }[];
+  }
+
   export interface ComponentProps {
     /**
      * This is a jsdoc comment for optionalAny.
@@ -36,10 +47,8 @@ declare module 'component' {
     requiredAny: any;
     requiredUnion: ComponentRequiredUnion;
     requiredArrayOf: string[];
-    requiredArrayOfObjectsWithShape: {
-      color?: string;
-      fontSize?: number;
-    }[];
+    requiredArrayOfObjectsWithShape: ComponentRequiredArrayOfObjectsWithShape[];
+    deeplyNested: ComponentDeeplyNested[];
     requiredSymbol: typeof Symbol;
   }
 

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.20.0"></a>
+# [0.20.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.19.1...v0.20.0) (2017-03-21)
+
+
+### Bug Fixes
+
+* **package:** update babel-generator to version 6.24.0 ([20b8840](https://github.com/knisterpeter/react-to-typescript-definitions/commit/20b8840))
+* **package:** update dts-dom to version 0.1.16 ([2b0cf25](https://github.com/knisterpeter/react-to-typescript-definitions/commit/2b0cf25))
+* **package:** update pascal-case to version 2.0.1 ([fe8ad84](https://github.com/knisterpeter/react-to-typescript-definitions/commit/fe8ad84))
+
+
+### Features
+
+* handle array props with shapes in extractComplexTypes ([efb0fa8](https://github.com/knisterpeter/react-to-typescript-definitions/commit/efb0fa8))
+
+
+
 <a name="0.19.1"></a>
 ## [0.19.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.19.0...v0.19.1) (2017-03-02)
 
