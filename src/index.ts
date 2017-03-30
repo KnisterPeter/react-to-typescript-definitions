@@ -8,7 +8,7 @@ import { createTypings } from './typings';
 
 export interface InstanceOfResolver {
   (name: string): string|undefined;
-};
+}
 
 // the IOptions is for backward compatibility
 export type IOptions  = Options;

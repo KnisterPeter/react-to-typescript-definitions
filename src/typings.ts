@@ -60,7 +60,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   } else {
     return dom.emit(m, dom.ContextFlags.Module);
   }
-};
+}
 
 function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentName: string,
     reactComponentName: string|undefined, propTypes: any, propTypesName: string|undefined,
