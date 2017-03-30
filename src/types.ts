@@ -200,6 +200,7 @@ function printErrorWithContext(e: any, ast: any, options: IOptions): void {
   const errorLine = lines[e.loc.start.line - 1];
 
   console.error(`Line ${e.loc.start.line - 1}: ${lines[e.loc.start.line - 2]}`);
+  // tslint:disable-next-line prefer-template
   console.error(`Line ${e.loc.start.line}: ` + errorLine.substring(0, e.loc.start.column)
     + chalk.red(errorLine.substring(e.loc.start.column, e.loc.end.column))
     + errorLine.substring(e.loc.end.column));
