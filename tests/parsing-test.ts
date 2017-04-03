@@ -32,10 +32,10 @@ function textDiff(t: ContextualTestContext, actual: string, expected: string): v
 }
 
 function compare(t: ContextualTestContext, moduleName: string|null, file1: string, file2: string,
-    opts: react2dts.IOptions = {}): void {
+    opts: react2dts.IOptions = {}, reactImport = 'react'): void {
   textDiff(
     t,
-    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts),
+    react2dts.generateFromFile(moduleName, path.join(basedir, file1), opts, reactImport),
     fs.readFileSync(path.join(basedir, file2)).toString()
   );
 }
@@ -84,4 +84,7 @@ test('Parsing should create definition from file with references in propTypes', 
 });
 test('Parsing should create definition from file with unnamed default export', t => {
   compare(t, 'path', 'unnamed-default-export.jsx', 'unnamed-default-export.d.ts');
+});
+test('Parsing should create preact definition', t => {
+  compare(t, 'path', 'preact-definition.jsx', 'preact-definition.d.ts', {}, 'preact');
 });

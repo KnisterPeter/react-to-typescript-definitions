@@ -52,21 +52,23 @@ export interface Options {
 export function cli(options: any): void {
   getStdin().then(stdinCode => {
     if (options.topLevelModule) {
-      process.stdout.write(generateFromSource(null, stdinCode));
+      process.stdout.write(generateFromSource(null, stdinCode, {}, options.reactImport || 'react'));
     } else if (options.moduleName) {
-      process.stdout.write(generateFromSource(options.moduleName, stdinCode));
+      process.stdout.write(generateFromSource(options.moduleName, stdinCode, {}, options.reactImport || 'react'));
     }
   });
 }
 
-export function generateFromFile(moduleName: string|null, path: string, options: IOptions = {}): string {
+export function generateFromFile(moduleName: string|null, path: string, options: IOptions = {},
+    reactImport = 'react'): string {
   if (!options.filename) {
     options.filename = path;
   }
-  return generateFromSource(moduleName, fs.readFileSync(path).toString(), options);
+  return generateFromSource(moduleName, fs.readFileSync(path).toString(), options, reactImport);
 }
 
-export function generateFromSource(moduleName: string|null, code: string, options: IOptions = {}): string {
+export function generateFromSource(moduleName: string|null, code: string, options: IOptions = {},
+    reactImport = 'react'): string {
   const ast = babylon.parse(code, {
     sourceType: 'module',
     allowReturnOutsideFunction: true,
@@ -92,12 +94,13 @@ export function generateFromSource(moduleName: string|null, code: string, option
   if (!options.source) {
     options.source = code;
   }
-  return generateFromAst(moduleName, ast, options);
+  return generateFromAst(moduleName, ast, options, reactImport);
 }
 
-export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {}): string {
+export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {},
+    reactImport = 'react'): string {
   if (options.generator) {
     return generateTypings(moduleName, ast, options);
   }
-  return createTypings(moduleName, ast, options);
+  return createTypings(moduleName, ast, options, reactImport);
 }

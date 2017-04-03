@@ -4,13 +4,14 @@ var meow = require('meow');
 
 const cli = meow(`
   Usage
-    $ react2dts [--module-name <name> | --top-level-module]
+    $ react2dts [--module-name <name> | --top-level-module] [--react-import <name>]
 
   react2dts reads from stdin to process a file.
 
   Options
     --module-name, --name  name of the module to create
     --top-level-module     if the created module should live in top-level
+    --react-import         name of the react-like library to import (default to react)
 
   Examples
     $ cat <some/react/component.jsx> |react2dts --module-name module-name
