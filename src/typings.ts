@@ -82,6 +82,7 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
     const classDecl = dom.create.class(componentName);
     classDecl.baseType = dom.create.interface(`Component<${interf.name}, any>`);
     classDecl.flags = exportType;
+    classDecl.members.push(dom.create.method('render', [], dom.create.namedTypeReference('JSX.Element')));
     m.members.push(classDecl);
   } else {
     const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
@@ -318,7 +319,7 @@ function getComponentNamesByStaticPropTypeAttribute(ast: AstQuery): string[] {
     ]
   `);
   if (res.length > 0) {
-    return res.map(match => match.id.name);
+    return res.map(match => match.id ? match.id.name : '');
   }
   return [];
 }
@@ -337,7 +338,7 @@ function getComponentNamesByJsxInBody(ast: AstQuery): string[] {
     ]
   `);
   if (res.length > 0) {
-    return res.map(match => match.id.name);
+    return res.map(match => match.id ? match.id.name : '');
   }
   return [];
 }
@@ -358,6 +359,19 @@ function getPropTypesFromAssignment(ast: AstQuery, componentName: string): any|u
 }
 
 function getPropTypesFromStaticAttribute(ast: AstQuery, componentName: string): any|undefined {
+  if (componentName === '') {
+    const res = ast.query(`
+      //ClassDeclaration
+      /:body *
+      //ClassProperty[
+        /:key Identifier[@name == 'propTypes']
+      ]
+      /:value*
+    `);
+    if (res.length > 0 && !res[0].id) {
+      return res[0];
+    }
+  }
   const res = ast.query(`
     //ClassDeclaration[
       /:id Identifier[@name == '${componentName}']
@@ -375,6 +389,19 @@ function getPropTypesFromStaticAttribute(ast: AstQuery, componentName: string): 
 }
 
 function getComponentExportType(ast: AstQuery, componentName: string): dom.DeclarationFlags|undefined {
+  if (componentName === '') {
+    // case: unnamed default export
+    const res = ast.query(`
+      // ExportDefaultDeclaration[
+          // ClassDeclaration
+        ||
+          // FunctionDeclaration
+      ]
+    `);
+    if (res.length > 0 && !res[0].id) {
+      return dom.DeclarationFlags.ExportDefault;
+    }
+  }
   let res = ast.query(`
       // ExportDefaultDeclaration[
           // ClassDeclaration
@@ -424,6 +451,14 @@ function getComponentExportType(ast: AstQuery, componentName: string): dom.Decla
 
 function isClassComponent(ast: AstQuery, componentName: string,
     reactComponentName: string|undefined): boolean {
+  if (componentName === '') {
+    const res = ast.query(`
+        // ClassDeclaration
+    `);
+    if (res.length > 0 && !res[0].id) {
+      return true;
+    }
+  }
   const res = ast.query(`
       // ClassDeclaration
       /:id Identifier[@name == '${componentName}']

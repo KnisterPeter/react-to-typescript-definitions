@@ -13,5 +13,6 @@ declare module 'component' {
   }
 
   export default class SomeComponent extends Component<SomeComponentProps, any> {
+    render(): JSX.Element;
   }
 }
