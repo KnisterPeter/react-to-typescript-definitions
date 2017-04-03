@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.21.0"></a>
+# [0.21.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.20.0...v0.21.0) (2017-04-03)
+
+
+### Bug Fixes
+
+* **package:** update dts-dom to version 0.1.17 ([03e7ef6](https://github.com/knisterpeter/react-to-typescript-definitions/commit/03e7ef6))
+* handle unnamed default export ([a0be64e](https://github.com/knisterpeter/react-to-typescript-definitions/commit/a0be64e)), closes [#350](https://github.com/knisterpeter/react-to-typescript-definitions/issues/350)
+* **package:** update dts-dom to version 0.1.18 ([1405400](https://github.com/knisterpeter/react-to-typescript-definitions/commit/1405400))
+
+
+### Features
+
+* support output for react-like libraries ([0ed6ffc](https://github.com/knisterpeter/react-to-typescript-definitions/commit/0ed6ffc)), closes [#351](https://github.com/knisterpeter/react-to-typescript-definitions/issues/351)
+
+
+
 <a name="0.20.0"></a>
 # [0.20.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.19.1...v0.20.0) (2017-03-21)
 
