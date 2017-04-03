@@ -29,5 +29,6 @@ declare module 'component' {
   }
 
   export default class Component extends React.Component<ComponentProps, any> {
+    render(): JSX.Element;
   }
 }

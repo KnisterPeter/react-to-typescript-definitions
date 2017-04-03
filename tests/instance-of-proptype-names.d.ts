@@ -7,5 +7,6 @@ declare module 'component' {
   }
 
   export class Test extends React.Component<TestProps, any> {
+    render(): JSX.Element;
   }
 }

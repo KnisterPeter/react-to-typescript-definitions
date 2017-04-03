@@ -6,5 +6,6 @@ declare module 'path' {
   }
 
   export default class extends React.Component<Props, any> {
+    render(): JSX.Element;
   }
 }
