@@ -1,5 +1,5 @@
 declare module 'component' {
-  import * as React from 'react';
+  import {Component} from 'react';
   import Message from './path/to/Message';
 
   export type ComponentOptionalUnion = string | number;
@@ -28,7 +28,7 @@ declare module 'component' {
     requiredArrayOf: string[];
   }
 
-  export default class Component extends React.Component<ComponentProps, any> {
+  export default class Component extends Component<ComponentProps, any> {
     render(): JSX.Element;
   }
 }

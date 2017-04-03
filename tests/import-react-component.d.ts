@@ -1,3 +1,3 @@
 declare module 'component' {
-  import * as React from 'react';
+  import {Component} from 'react';
 }

@@ -1,5 +1,5 @@
 declare module 'component' {
-  import * as React from 'react';
+  import {Component} from 'react';
 
   export type SomeComponentSomeOneOf = 'foo' | 'bar';
 
@@ -12,7 +12,7 @@ declare module 'component' {
     someShape?: SomeComponentSomeShape;
   }
 
-  export default class SomeComponent extends React.Component<SomeComponentProps, any> {
+  export default class SomeComponent extends Component<SomeComponentProps, any> {
     render(): JSX.Element;
   }
 }
