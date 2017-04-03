@@ -82,3 +82,6 @@ test('Parsing should create definition from file without propTypes', t => {
 test('Parsing should create definition from file with references in propTypes', t => {
   compare(t, 'component', 'references-in-proptypes.jsx', 'references-in-proptypes.d.ts');
 });
+test('Parsing should create definition from file with unnamed default export', t => {
+  compare(t, 'path', 'unnamed-default-export.jsx', 'unnamed-default-export.d.ts');
+});
