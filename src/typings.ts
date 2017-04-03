@@ -82,6 +82,7 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
     const classDecl = dom.create.class(componentName);
     classDecl.baseType = dom.create.interface(`React.Component<${interf.name}, any>`);
     classDecl.flags = exportType;
+    classDecl.members.push(dom.create.method('render', [], dom.create.namedTypeReference('JSX.Element')));
     m.members.push(classDecl);
   } else {
     const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],

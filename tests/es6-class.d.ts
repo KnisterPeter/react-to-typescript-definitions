@@ -53,5 +53,6 @@ declare module 'component' {
   }
 
   export class Component extends React.Component<ComponentProps, any> {
+    render(): JSX.Element;
   }
 }
