@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {Component} from 'react';
 import Message from './path/to/Message';
 
 export type ComponentOptionalUnion = string | number;
@@ -27,5 +27,5 @@ export interface ComponentProps {
   requiredArrayOf: string[];
 }
 
-export default class Component extends React.Component<ComponentProps, any> {
+export default class Component extends Component<ComponentProps, any> {
 }

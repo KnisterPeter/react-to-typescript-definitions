@@ -33,7 +33,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
 
   const m = dom.create.module(moduleName || 'moduleName');
   if (hasReactClass(ast, reactComponentName)) {
-    m.members.push(dom.create.importAll('React', 'react'));
+    m.members.push(dom.create.importNamed('Component', 'react'));
   }
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
@@ -80,7 +80,7 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
 
   if (classComponent) {
     const classDecl = dom.create.class(componentName);
-    classDecl.baseType = dom.create.interface(`React.Component<${interf.name}, any>`);
+    classDecl.baseType = dom.create.interface(`Component<${interf.name}, any>`);
     classDecl.flags = exportType;
     m.members.push(classDecl);
   } else {
