@@ -10,7 +10,8 @@ export interface AstQuery {
   querySubtree(subtree: any, query: string): any[];
 }
 
-export function createTypings(moduleName: string|null, programAst: any, options: IOptions): string {
+export function createTypings(moduleName: string|null, programAst: any, options: IOptions,
+    reactImport: string): string {
   const astq = new ASTQ();
   const ast = {
     ast: programAst,
@@ -33,7 +34,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
 
   const m = dom.create.module(moduleName || 'moduleName');
   if (hasReactClass(ast, reactComponentName)) {
-    m.members.push(dom.create.importNamed('Component', 'react'));
+    m.members.push(dom.create.importNamed('Component', reactImport));
   }
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
