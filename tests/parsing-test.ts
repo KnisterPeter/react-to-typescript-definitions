@@ -1,4 +1,4 @@
-import test, { ContextualTestContext } from 'ava';
+import test, { TestContext } from 'ava';
 
 import * as chalk from 'chalk';
 import * as diff from 'diff';
@@ -18,7 +18,7 @@ function normalize(input: string): string {
     .replace(/ => /g, '=>');
 }
 
-function textDiff(t: ContextualTestContext, actual: string, expected: string): void {
+function textDiff(t: TestContext, actual: string, expected: string): void {
   if (diff.diffChars(normalize(expected), normalize(actual)).length > 1) {
     const differences = diff.diffChars(expected, actual);
     const result = differences
@@ -28,10 +28,12 @@ function textDiff(t: ContextualTestContext, actual: string, expected: string): v
       })
       .join('');
     t.fail(`\n${result}`);
+  } else {
+    t.pass();
   }
 }
 
-function compare(t: ContextualTestContext, moduleName: string|null, file1: string, file2: string,
+function compare(t: TestContext, moduleName: string|null, file1: string, file2: string,
     opts: react2dts.IOptions = {}, reactImport = 'react'): void {
   textDiff(
     t,
