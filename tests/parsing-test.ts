@@ -87,6 +87,9 @@ test('Parsing should create definition from file with references in propTypes', 
 test('Parsing should create definition from file with unnamed default export', t => {
   compare(t, 'path', 'unnamed-default-export.jsx', 'unnamed-default-export.d.ts');
 });
+test('Parsing should create definition from file with named export specifiers', t => {
+  compare(t, 'component', 'named-export-specifiers.jsx', 'named-export-specifiers.d.ts');
+});
 test('Parsing should create preact definition', t => {
   compare(t, 'path', 'preact-definition.jsx', 'preact-definition.d.ts', {}, 'preact');
 });
