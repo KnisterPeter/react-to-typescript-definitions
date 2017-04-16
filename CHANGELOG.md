@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.21.1"></a>
+## [0.21.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.21.0...v0.21.1) (2017-04-16)
+
+
+### Bug Fixes
+
+* **package:** update astq to version 2.0.1 ([fa1178b](https://github.com/knisterpeter/react-to-typescript-definitions/commit/fa1178b))
+* **package:** update babel-generator to version 6.24.1 ([8887bb5](https://github.com/knisterpeter/react-to-typescript-definitions/commit/8887bb5))
+* handle named export specifiers ([beced3b](https://github.com/knisterpeter/react-to-typescript-definitions/commit/beced3b)), closes [#368](https://github.com/knisterpeter/react-to-typescript-definitions/issues/368)
+
+
+
 <a name="0.21.0"></a>
 # [0.21.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.20.0...v0.21.0) (2017-04-03)
 
