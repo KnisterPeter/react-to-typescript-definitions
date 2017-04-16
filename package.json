@@ -91,6 +91,7 @@
     "all": true,
     "cache": true,
     "exclude": [
+      "wallaby.conf.js",
       "node_modules",
       "coverage",
       "dist/tests",
