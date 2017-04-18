@@ -47,8 +47,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   }
   componentNames.forEach(componentName => {
     const exportType = getComponentExportType(ast, componentName);
-    const propTypes = getPropTypesFromAssignment(ast, componentName) ||
-      getPropTypesFromStaticAttribute(ast, componentName);
+    const propTypes = getPropTypes(ast, componentName);
     if (exportType) {
       createExportedTypes(m, ast, componentName, reactComponentName, propTypes, propTypesName, exportType, options);
     }
@@ -344,6 +343,18 @@ function getComponentNamesByJsxInBody(ast: AstQuery): string[] {
   return [];
 }
 
+function getPropTypes(ast: AstQuery, componentName: string): any|undefined {
+  const propTypes = getPropTypesFromAssignment(ast, componentName) ||
+    getPropTypesFromStaticAttribute(ast, componentName);
+
+  const referencedComponentName = getReferencedPropTypesComponentName(ast, propTypes);
+  if (referencedComponentName) {
+    return getPropTypes(ast, referencedComponentName);
+  }
+
+  return propTypes;
+}
+
 function getPropTypesFromAssignment(ast: AstQuery, componentName: string): any|undefined {
   const res = ast.query(`
     //AssignmentExpression[
@@ -385,6 +396,20 @@ function getPropTypesFromStaticAttribute(ast: AstQuery, componentName: string): 
   `);
   if (res.length > 0) {
     return res[0];
+  }
+  return undefined;
+}
+
+function getReferencedPropTypesComponentName(ast: AstQuery, propTypes: any|undefined): string|undefined {
+  if (propTypes) {
+    const propTypesReference = ast.querySubtree(propTypes, `
+      MemberExpression [
+        /:property Identifier[@name == 'propTypes']
+      ] /:object Identifier
+    `);
+    if (propTypesReference.length > 0) {
+      return propTypesReference[0].name;
+    }
   }
   return undefined;
 }
