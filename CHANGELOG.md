@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.22.0"></a>
+# [0.22.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.21.1...v0.22.0) (2017-04-18)
+
+
+### Features
+
+* resolve referenced propTypes ([da9863b](https://github.com/knisterpeter/react-to-typescript-definitions/commit/da9863b))
+
+
+
 <a name="0.21.1"></a>
 ## [0.21.1](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.21.0...v0.21.1) (2017-04-16)
 
