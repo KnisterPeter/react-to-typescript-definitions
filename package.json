@@ -41,7 +41,7 @@
     "@types/chalk": "0.4.31",
     "@types/diff": "0.0.31",
     "@types/node": "7.0.13",
-    "@types/react": "15.0.21",
+    "@types/react": "15.0.23",
     "ava": "0.19.1",
     "babel-core": "6.24.1",
     "babel-preset-es2015": "6.24.1",
