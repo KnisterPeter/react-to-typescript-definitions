@@ -52,7 +52,7 @@
     "cz-conventional-changelog": "2.0.0",
     "diff": "3.2.0",
     "in-publish": "2.0.0",
-    "nyc": "10.2.0",
+    "nyc": "10.3.0",
     "react": "15.5.4",
     "rimraf": "2.6.1",
     "source-map-support": "0.4.14",
