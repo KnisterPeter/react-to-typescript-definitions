@@ -55,7 +55,7 @@
     "nyc": "10.2.0",
     "react": "15.5.4",
     "rimraf": "2.6.1",
-    "source-map-support": "0.4.14",
+    "source-map-support": "0.4.15",
     "standard-version": "4.0.0",
     "tslint": "5.1.0",
     "typescript": "2.2.2"
