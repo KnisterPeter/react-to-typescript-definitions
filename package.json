@@ -36,7 +36,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@knisterpeter/standard-tslint": "^1.5.1",
+    "@knisterpeter/standard-tslint": "^1.6.0",
     "@types/babel-generator": "^6.7.14",
     "@types/chalk": "^0.4.31",
     "@types/diff": "^3.2.0",
