@@ -1,5 +1,7 @@
 # react-to-typescript-definitions
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/KnisterPeter/react-to-typescript-definitions.svg)](https://greenkeeper.io/)
+
 [![GitHub license][license-image]][license-link]
 [![npm][npm-image]][npm-link]
 [![Travis][ci-image]][ci-link]
