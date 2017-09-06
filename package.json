@@ -51,7 +51,7 @@
     "coveralls": "^2.13.1",
     "cz-conventional-changelog": "2.0.0",
     "diff": "3.3.1",
-    "nyc": "11.2.0",
+    "nyc": "11.2.1",
     "react": "^15.6.1",
     "rimraf": "2.6.1",
     "source-map-support": "0.4.17",
