@@ -1,6 +1,6 @@
 import test, { TestContext } from 'ava';
 
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as diff from 'diff';
 import * as fs from 'fs';
 import * as path from 'path';
