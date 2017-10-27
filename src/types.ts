@@ -1,5 +1,5 @@
 import astToCode from 'babel-generator';
-import * as chalk from 'chalk';
+import chalk from 'chalk';
 import * as dom from 'dts-dom';
 import { IOptions } from './index';
 import { propTypeQueryExpression, AstQuery } from './typings';
