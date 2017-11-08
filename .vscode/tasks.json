@@ -18,7 +18,8 @@
               "panel": "shared"
             },
             "problemMatcher": [
-                "$tsc-watch"
+                "$tsc-watch",
+                "$tslint5"
             ]
         }
     ]
