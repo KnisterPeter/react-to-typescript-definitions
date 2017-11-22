@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.23.0"></a>
+# [0.23.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.22.0...v0.23.0) (2017-11-22)
+
+
+### Bug Fixes
+
+* **package:** update babylon to version 6.17.0 ([17a6d25](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/17a6d25))
+* **package:** update babylon to version 6.17.1 ([d6742f9](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/d6742f9))
+* **package:** update babylon to version 7.0.0-beta.31 ([fc60b2c](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/fc60b2c))
+* **package:** update babylon to version 7.0.0-beta.32 ([6d79609](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/6d79609))
+* **package:** update babylon to version 7.0.0-beta.9 ([91bdfc3](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/91bdfc3))
+* **package:** update chalk to version 2.0.1 ([85d37ff](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/85d37ff)), closes [#408](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/408)
+* **package:** update chalk to version 2.1.0 ([e11c8d6](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/e11c8d6))
+* **package:** update strip-ansi to version 4.0.0 ([a138ce7](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/a138ce7))
+
+
+### Features
+
+* support prop-types repository ([f5f7337](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/f5f7337)), closes [#439](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/439)
+
+
+
 <a name="0.22.0"></a>
 # [0.22.0](https://github.com/knisterpeter/react-to-typescript-definitions/compare/v0.21.1...v0.22.0) (2017-04-18)
 
