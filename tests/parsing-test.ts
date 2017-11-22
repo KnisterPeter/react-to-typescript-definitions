@@ -96,3 +96,6 @@ test('Parsing should create definition from file with named export specifiers', 
 test('Parsing should create preact definition', t => {
   compare(t, 'path', 'preact-definition.jsx', 'preact-definition.d.ts', {}, 'preact');
 });
+test('Parsing should suppport props-types repo', t => {
+  compare(t, 'path', 'prop-types.jsx', 'prop-types.d.ts', {});
+});

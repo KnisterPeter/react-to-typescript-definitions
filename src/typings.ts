@@ -204,9 +204,21 @@ function getReactComponentName(ast: AstQuery): string|undefined {
 }
 
 function getPropTypesName(ast: AstQuery): string|undefined {
-  const res = ast.query(`
+  let res = ast.query(`
     // ImportDeclaration[
       /:source StringLiteral[@value == 'react']
+    ]
+    /:specifiers *[
+      / Identifier[@name == 'PropTypes']
+    ]
+    /:local Identifier
+  `);
+  if (res.length > 0) {
+    return res[0].name;
+  }
+  res = ast.query(`
+    // ImportDeclaration[
+      /:source StringLiteral[@value == 'prop-types']
     ]
     /:specifiers *[
       / Identifier[@name == 'PropTypes']
