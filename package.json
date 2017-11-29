@@ -68,7 +68,7 @@
     "chalk": "^2.3.0",
     "dts-dom": "^0.1.21",
     "get-stdin": "^5.0.1",
-    "meow": "^3.7.0",
+    "meow": "^4.0.0",
     "pascal-case": "2.0.1",
     "strip-ansi": "4.0.0"
   },
