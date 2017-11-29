@@ -52,9 +52,9 @@ export interface Options {
 export function cli(options: any): void {
   getStdin().then(stdinCode => {
     if (options.topLevelModule) {
-      process.stdout.write(generateFromSource(null, stdinCode, {}, options.reactImport || 'react'));
+      process.stdout.write(generateFromSource(null, stdinCode, {}, options.reactImport));
     } else if (options.moduleName) {
-      process.stdout.write(generateFromSource(options.moduleName, stdinCode, {}, options.reactImport || 'react'));
+      process.stdout.write(generateFromSource(options.moduleName, stdinCode, {}, options.reactImport));
     }
   });
 }

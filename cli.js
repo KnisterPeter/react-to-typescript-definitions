@@ -18,8 +18,18 @@ const cli = meow(`
 
     $ cat <some/react/component.jsx> |react2dts --top-level-module
 `, {
-  alias: {
-    'module-name': 'name'
+  flags: {
+    'module-name': {
+      type: 'string',
+      alias: 'name'
+    },
+    'top-level-module': {
+      type: 'string'
+    },
+    'react-import': {
+      type: 'string',
+      default: 'react'
+    }
   }
 });
 if (Object.keys(cli.flags).length === 0) {
