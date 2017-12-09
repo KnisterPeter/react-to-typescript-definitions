@@ -50,13 +50,25 @@ export interface Options {
 }
 
 export function cli(options: any): void {
-  getStdin().then(stdinCode => {
-    if (options.topLevelModule) {
-      process.stdout.write(generateFromSource(null, stdinCode, {}, options.reactImport));
-    } else if (options.moduleName) {
-      process.stdout.write(generateFromSource(options.moduleName, stdinCode, {}, options.reactImport));
-    }
-  });
+  const processInput = (code: string) => {
+    const result = generateFromSource(
+      options.topLevelModule ? null : options.moduleName,
+      code,
+      {},
+      options.reactImport
+    );
+    process.stdout.write(result);
+  };
+  if (options.file) {
+    fs.readFile(options.file, (err, data) => {
+      if (err) {
+        throw err;
+      }
+      processInput(data.toString());
+    });
+  } else {
+    getStdin().then(processInput);
+  }
 }
 
 export function generateFromFile(moduleName: string|null, path: string, options: IOptions = {},
