@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.24.0"></a>
+# [0.24.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.23.0...v0.24.0) (2017-12-12)
+
+
+### Bug Fixes
+
+* **package:** update babylon to version 7.0.0-beta.34 ([7d1dee1](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/7d1dee1)), closes [#448](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/448)
+* **package:** update meow to version 4.0.0 ([f7768a4](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/f7768a4))
+
+
+### Features
+
+* add file option to cli ([f7ae784](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/f7ae784)), closes [#451](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/451)
+
+
+
 <a name="0.23.0"></a>
 # [0.23.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.22.0...v0.23.0) (2017-11-22)
 
