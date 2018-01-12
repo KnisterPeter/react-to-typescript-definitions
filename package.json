@@ -3,6 +3,7 @@
   "version": "0.24.0",
   "description": "Create typescript definitions files (d.ts) from react components",
   "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
   "bin": {
     "react2dts": "cli.js"
   },
