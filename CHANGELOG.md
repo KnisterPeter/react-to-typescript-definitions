@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.24.1"></a>
+## [0.24.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.24.0...v0.24.1) (2018-01-12)
+
+
+### Bug Fixes
+
+* **npm:** add "types" entry to package.json ([b71c964](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/b71c964))
+
+
+
 <a name="0.24.0"></a>
 # [0.24.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.23.0...v0.24.0) (2017-12-12)
 
