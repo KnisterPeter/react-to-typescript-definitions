@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.25.0"></a>
+# [0.25.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.24.1...v0.25.0) (2018-01-15)
+
+
+### Features
+
+* support any name for namespace import of `prop-types` ([fe26b1e](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/fe26b1e))
+* support named imports from `prop-types` ([c7df614](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/c7df614))
+
+
+
 <a name="0.24.1"></a>
 ## [0.24.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.24.0...v0.24.1) (2018-01-12)
 
