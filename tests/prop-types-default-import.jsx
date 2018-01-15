@@ -1,10 +1,10 @@
 import {Component} from 'react';
-import * as P from 'prop-types';
+import PropTypes from 'prop-types';
 
 export default class extends Component {
 
     static propTypes = {
-      optionalString: P.string
+      optionalString: PropTypes.string
     };
 
     render() {

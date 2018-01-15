@@ -105,3 +105,6 @@ test('Parsing should create preact definition', t => {
 test('Parsing should suppport props-types repo', t => {
   compare(t, 'path', 'prop-types.jsx', 'prop-types.d.ts', {});
 });
+test('Parsing should suppport props-types repo (with a default import)', t => {
+  compare(t, 'path', 'prop-types-default-import.jsx', 'prop-types.d.ts', {});
+});
