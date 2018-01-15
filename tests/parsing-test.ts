@@ -66,6 +66,12 @@ test('Parsing should create definition from babeled es7 class component', t => {
   };
   compare(t, 'component', 'es7-class-babeled.js', 'es7-class.d.ts', opts);
 });
+test('Parsing should create definition from es7 class component babeled to es6', t => {
+  const opts: react2dts.IOptions = {
+    instanceOfResolver: (): string => './path/to/Message'
+  };
+  compare(t, 'component', 'es7-class-babeled-to-es6.js', 'es7-class-babeled-to-es6.d.ts', opts);
+});
 test('Parsing should create definition from es7 class component with separate default export', t => {
   compare(t, 'component', 'es7-class-separate-export.jsx', 'es7-class-separate-export.d.ts');
 });
