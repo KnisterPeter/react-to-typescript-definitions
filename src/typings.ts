@@ -10,6 +10,16 @@ export interface AstQuery {
   querySubtree(subtree: any, query: string): any[];
 }
 
+export interface ImportedPropType {
+  importedName: string;
+  localName: string;
+}
+
+export interface ImportedPropTypes {
+  propTypesName: string|undefined;
+  propTypes: ImportedPropType[];
+}
+
 export function createTypings(moduleName: string|null, programAst: any, options: IOptions,
     reactImport: string): string {
   const astq = new ASTQ();
@@ -23,8 +33,11 @@ export function createTypings(moduleName: string|null, programAst: any, options:
     }
   };
   const reactComponentName = getReactComponentName(ast);
-  const propTypesName = getPropTypesName(ast);
-  const importedTypes = getInstanceOfPropTypes(ast, propTypesName);
+  const importedPropTypes: ImportedPropTypes = {
+    propTypesName: getPropTypesName(ast),
+    propTypes: getImportedPropTypes(ast)
+  };
+  const importedTypes = getInstanceOfPropTypes(ast, importedPropTypes);
   const importStatements = getImportStatements(ast, importedTypes, options.instanceOfResolver);
   const componentNames = getUniqueNames([
     ...getComponentNamesByPropTypeAssignment(ast),
@@ -49,7 +62,8 @@ export function createTypings(moduleName: string|null, programAst: any, options:
     const exportType = getComponentExportType(ast, componentName);
     const propTypes = getPropTypes(ast, componentName);
     if (exportType) {
-      createExportedTypes(m, ast, componentName, reactComponentName, propTypes, propTypesName, exportType, options);
+      createExportedTypes(m, ast, componentName, reactComponentName, propTypes, importedPropTypes, exportType,
+        options);
     }
   });
 
@@ -63,14 +77,14 @@ export function createTypings(moduleName: string|null, programAst: any, options:
 }
 
 function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentName: string,
-    reactComponentName: string|undefined, propTypes: any, propTypesName: string|undefined,
+    reactComponentName: string|undefined, propTypes: any, importedPropTypes: ImportedPropTypes,
       exportType: dom.DeclarationFlags, options: IOptions): void {
   const classComponent = isClassComponent(ast, componentName, reactComponentName);
 
   const interf = dom.create.interface(`${componentName}Props`);
   interf.flags = dom.DeclarationFlags.Export;
   if (propTypes) {
-    createPropTypeTypings(interf, ast, propTypes, propTypesName, options);
+    createPropTypeTypings(interf, ast, propTypes, importedPropTypes, options);
     extractComplexTypes(m, interf, componentName);
   }
 
@@ -93,12 +107,12 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
 }
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
-    propTypesName: string|undefined, options: IOptions): void {
+    importedPropTypes: ImportedPropTypes, options: IOptions): void {
   const res = ast.querySubtree(propTypes, `
     / ObjectProperty
   `);
   res.forEach(propertyAst => {
-    const typeDecl = types.get(ast, propertyAst.value, propTypesName, options);
+    const typeDecl = types.get(ast, propertyAst.value, importedPropTypes, options);
     const property = dom.create.property(propertyAst.key.name || propertyAst.key.value, typeDecl.type,
       typeDecl.optional ? dom.DeclarationFlags.Optional : 0);
     if (propertyAst.leadingComments && propertyAst.leadingComments[0].type === 'CommentBlock') {
@@ -231,6 +245,18 @@ function getPropTypesName(ast: AstQuery): string|undefined {
   return undefined;
 }
 
+function getImportedPropTypes(ast: AstQuery): ImportedPropType[] {
+  return ast.query(`
+    // ImportDeclaration[
+      /:source StringLiteral[@value == 'prop-types']
+    ]
+    /:specifiers ImportSpecifier
+  `).map(({imported, local}) => ({
+    importedName: imported.name,
+    localName: local.name
+  }));
+}
+
 function hasReactClass(ast: AstQuery, reactComponentName: string|undefined): boolean {
   const res = ast.query(`
       // ClassDeclaration[
@@ -261,7 +287,11 @@ function hasReactClass(ast: AstQuery, reactComponentName: string|undefined): boo
   return res.length > 0;
 }
 
-function getInstanceOfPropTypes(ast: AstQuery, propTypesName: string|undefined): string[] {
+function getInstanceOfPropTypes(ast: AstQuery, importedPropTypes: ImportedPropTypes): string[] {
+  const {propTypesName, propTypes} = importedPropTypes;
+  const instanceOfPropType = propTypes.find(({importedName}) => importedName === 'instanceOf');
+  const localInstanceOfName = instanceOfPropType ? instanceOfPropType.localName : undefined;
+
   const res = ast.query(`
     // CallExpression[
       /:callee MemberExpression[
@@ -269,9 +299,12 @@ function getInstanceOfPropTypes(ast: AstQuery, propTypesName: string|undefined):
         &&
           /:property Identifier[@name == 'instanceOf']
       ]
+      ||
+      /:callee Identifier[@name == '${localInstanceOfName}']
     ]
     /:arguments *
   `);
+
   return res.map(identifer => identifer.name);
 }
 

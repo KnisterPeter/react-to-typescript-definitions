@@ -2,7 +2,7 @@ import astToCode from 'babel-generator';
 import chalk from 'chalk';
 import * as dom from 'dts-dom';
 import { IOptions } from './index';
-import { propTypeQueryExpression, AstQuery } from './typings';
+import { propTypeQueryExpression, AstQuery, ImportedPropTypes } from './typings';
 
 export interface TypeDeclaration {
   type: any;
@@ -16,14 +16,14 @@ function getTypeDeclaration(type: any, optional: boolean): TypeDeclaration {
   };
 }
 
-export function get(ast: AstQuery, propertyAst: any, propTypesName: string|undefined,
+export function get(ast: AstQuery, propertyAst: any, importedPropTypes: ImportedPropTypes,
     options: IOptions): TypeDeclaration {
   try {
-    const simpleType = getSimpleType(ast, propertyAst, propTypesName);
+    const simpleType = getSimpleType(ast, propertyAst, importedPropTypes);
     if (simpleType) {
       return simpleType;
     }
-    const complexType = getComplexType(ast, propertyAst, propTypesName, options);
+    const complexType = getComplexType(ast, propertyAst, importedPropTypes, options);
     if (complexType) {
       return complexType;
     }
@@ -43,8 +43,8 @@ export function get(ast: AstQuery, propertyAst: any, propTypesName: string|undef
 
 // tslint:disable:next-line cyclomatic-complexity
 function getSimpleType(ast: AstQuery, propertyAst: any,
-    propTypesName: string|undefined): TypeDeclaration|undefined {
-  const [required, simpleTypeName] = getSimpleTypeName(ast, propertyAst, propTypesName);
+    importedPropTypes: ImportedPropTypes): TypeDeclaration|undefined {
+  const [required, simpleTypeName] = getSimpleTypeName(ast, propertyAst, importedPropTypes);
   switch (simpleTypeName) {
     case 'any':
       return getTypeDeclaration('any', !required);
@@ -75,18 +75,18 @@ function getSimpleType(ast: AstQuery, propertyAst: any,
 }
 
 function getComplexType(ast: AstQuery, propertyAst: any,
-    propTypesName: string|undefined, options: IOptions): TypeDeclaration|undefined {
-  const [required, complexTypeName, typeAst] = getComplexTypeName(ast, propertyAst, propTypesName);
+    importedPropTypes: ImportedPropTypes, options: IOptions): TypeDeclaration|undefined {
+  const [required, complexTypeName, typeAst] = getComplexTypeName(ast, propertyAst, importedPropTypes);
   switch (complexTypeName) {
     case 'instanceOf':
       return getTypeDeclaration(dom.create.typeof(
         dom.create.namedTypeReference(typeAst.arguments[0].name)), !required);
     case 'oneOfType':
       const typeDecls = typeAst.arguments[0].elements
-        .map((subtree: any) => get(ast, subtree, propTypesName, options)) as TypeDeclaration[];
+        .map((subtree: any) => get(ast, subtree, importedPropTypes, options)) as TypeDeclaration[];
       return getTypeDeclaration(dom.create.union(typeDecls.map(type => type.type)), !required);
     case 'arrayOf':
-      const typeDecl = get(ast, typeAst.arguments[0], propTypesName, options);
+      const typeDecl = get(ast, typeAst.arguments[0], importedPropTypes, options);
       return getTypeDeclaration(dom.create.array(typeDecl.type), !required);
     case 'oneOf':
       // tslint:disable:next-line comment-format
@@ -95,7 +95,7 @@ function getComplexType(ast: AstQuery, propertyAst: any,
       return getTypeDeclaration(dom.create.union(enumEntries as dom.Type[]), !required);
     case 'shape':
       const entries = getShapeProperties(ast, typeAst.arguments[0]).map((entry: any) => {
-        const typeDecl = get(ast, entry.value, propTypesName, options);
+        const typeDecl = get(ast, entry.value, importedPropTypes, options);
         return dom.create.property(entry.key.name, typeDecl.type,
           typeDecl.optional ? dom.DeclarationFlags.Optional : dom.DeclarationFlags.None);
       });
@@ -115,23 +115,32 @@ function isRequired(ast: AstQuery, propertyAst: any): [boolean, any] {
 }
 
 function getSimpleTypeName(ast: AstQuery, propertyAst: any,
-    propTypesName: string|undefined): [boolean, string|undefined] {
+    importedPropTypes: ImportedPropTypes): [boolean, string|undefined] {
+  const {propTypesName, propTypes} = importedPropTypes;
   const [required, typeAst] = isRequired(ast, propertyAst);
+
+  if (!propTypesName && typeAst.type === 'Identifier') {
+    const propType = propTypes.find(({localName}) => localName === typeAst.name);
+    return [required, propType ? propType.importedName : undefined];
+  }
+
   const res = ast.querySubtree(typeAst, `
     MemberExpression[
       (${propTypeQueryExpression(propTypesName)})
       &&
         /:property Identifier
     ]
+    /:property Identifier
   `);
-  return [required, res.length > 0 ? res[0].property.name : undefined];
+
+  return [required, res.length > 0 ? res[0].name : undefined];
 }
 
 function getComplexTypeName(ast: AstQuery, propertyAst: any,
-    propTypesName: string|undefined): [boolean, string|undefined, any] {
+    importedPropTypes: ImportedPropTypes): [boolean, string|undefined, any] {
   const [required, typeAst] = isRequired(ast, propertyAst);
   if (typeAst.type === 'CallExpression') {
-    const [, simpleTypeName] = getSimpleTypeName(ast, typeAst.callee, propTypesName);
+    const [, simpleTypeName] = getSimpleTypeName(ast, typeAst.callee, importedPropTypes);
     return [required, simpleTypeName, typeAst];
   }
   return [required, undefined, typeAst];
