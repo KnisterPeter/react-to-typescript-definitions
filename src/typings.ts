@@ -221,7 +221,7 @@ function getPropTypesName(ast: AstQuery): string|undefined {
       /:source StringLiteral[@value == 'prop-types']
     ]
     /:specifiers *[
-      / Identifier[@name == 'PropTypes']
+      ImportNamespaceSpecifier || / Identifier[@name == 'PropTypes']
     ]
     /:local Identifier
   `);
