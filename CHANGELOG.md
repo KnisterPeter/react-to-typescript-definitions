@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.25.1"></a>
+## [0.25.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.25.0...v0.25.1) (2018-01-16)
+
+
+### Bug Fixes
+
+* remove `typeof ` from instanceOf and symbol prop types ([e3d0467](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/e3d0467))
+
+
+
 <a name="0.25.0"></a>
 # [0.25.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.24.1...v0.25.0) (2018-01-15)
 
