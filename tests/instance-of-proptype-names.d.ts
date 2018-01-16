@@ -3,7 +3,7 @@ declare module 'component' {
   import Member from './member';
 
   export interface TestProps {
-    test?: typeof Member;
+    test?: Member;
   }
 
   export class Test extends Component<TestProps, any> {

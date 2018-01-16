@@ -38,7 +38,7 @@ declare module 'component' {
     optionalString?: string;
     optionalNode?: React.ReactNode;
     optionalElement?: React.ReactElement<any>;
-    optionalMessage?: typeof Message;
+    optionalMessage?: Message;
     optionalEnum?: MyComponentOptionalEnum;
     optionalUnion?: MyComponentOptionalUnion;
     optionalArrayOf?: number[];
@@ -49,7 +49,7 @@ declare module 'component' {
     requiredArrayOf: string[];
     requiredArrayOfObjectsWithShape: MyComponentRequiredArrayOfObjectsWithShape[];
     deeplyNested: MyComponentDeeplyNested[];
-    requiredSymbol: typeof Symbol;
+    requiredSymbol: Symbol;
   }
 
   export class MyComponent extends Component<MyComponentProps, any> {
