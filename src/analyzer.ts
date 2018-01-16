@@ -80,9 +80,8 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         break;
       case 'instanceOf':
         if (type.importPath) {
-          result.type = 'typeof ' + type.type;
-          (result as any).importType = type.type;
-          (result as any).importPath = type.importPath;
+          result.type = type.type;
+          result.importPath = type.importPath;
         } else {
           result.type = 'any';
         }

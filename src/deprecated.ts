@@ -13,7 +13,6 @@ export enum ExportType {
 export interface IProp {
   type: string;
   optional: boolean;
-  importType?: string;
   importPath?: string;
   documentation?: string;
 }
@@ -36,8 +35,8 @@ function deprecatedGenerator(generator: Generator, moduleName: string|null,
     if (propTypes) {
       Object.keys(propTypes).forEach(propName => {
         const prop = propTypes[propName];
-        if (prop.importType && prop.importPath) {
-          generator.import(prop.importType, prop.importPath);
+        if (prop.importPath) {
+          generator.import(prop.type, prop.importPath);
         }
       });
     }

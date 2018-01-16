@@ -233,7 +233,7 @@ test('The PropType parser should return number|string for' +
   t.is(result.type, 'number|string');
   t.is(result.optional, true);
 });
-test('The PropType parser should return typeof Message for instanceOf(Message) prop types', t => {
+test('The PropType parser should return Message for instanceOf(Message) prop types', t => {
   const ast: any = {
     type: 'CallExpression',
     loc: {},
@@ -254,9 +254,8 @@ test('The PropType parser should return typeof Message for instanceOf(Message) p
     ]
   };
   const result: IProp = getTypeFromPropType(ast, (): string => './some/path');
-  t.is(result.type, 'typeof Message');
+  t.is(result.type, 'Message');
   t.is(result.optional, true);
-  t.is(result.importType, 'Message');
   t.is(result.importPath, './some/path');
 });
 test('The PropType parser should return any for unresolved instanceOf(Message) prop types', t => {
@@ -282,6 +281,5 @@ test('The PropType parser should return any for unresolved instanceOf(Message) p
   const result: IProp = getTypeFromPropType(ast);
   t.is(result.type, 'any');
   t.is(result.optional, true);
-  t.is(result.importType, undefined);
   t.is(result.importPath, undefined);
 });

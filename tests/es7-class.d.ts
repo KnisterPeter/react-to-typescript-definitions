@@ -19,7 +19,7 @@ declare module 'component' {
     optionalString?: string;
     optionalNode?: React.ReactNode;
     optionalElement?: React.ReactElement<any>;
-    optionalMessage?: typeof Message;
+    optionalMessage?: Message;
     optionalUnion?: ComponentOptionalUnion;
     optionalArrayOf?: number[];
     requiredFunc: (...args: any[]) => any;

@@ -69,7 +69,7 @@ function getSimpleType(ast: AstQuery, propertyAst: any,
     case 'element':
       return getTypeDeclaration(dom.create.namedTypeReference('React.ReactElement<any>'), !required);
     case 'symbol':
-      return getTypeDeclaration(dom.create.typeof(dom.create.namedTypeReference('Symbol')), !required);
+      return getTypeDeclaration(dom.create.namedTypeReference('Symbol'), !required);
   }
   return undefined;
 }
@@ -79,8 +79,7 @@ function getComplexType(ast: AstQuery, propertyAst: any,
   const [required, complexTypeName, typeAst] = getComplexTypeName(ast, propertyAst, importedPropTypes);
   switch (complexTypeName) {
     case 'instanceOf':
-      return getTypeDeclaration(dom.create.typeof(
-        dom.create.namedTypeReference(typeAst.arguments[0].name)), !required);
+      return getTypeDeclaration(dom.create.namedTypeReference(typeAst.arguments[0].name), !required);
     case 'oneOfType':
       const typeDecls = typeAst.arguments[0].elements
         .map((subtree: any) => get(ast, subtree, importedPropTypes, options)) as TypeDeclaration[];
