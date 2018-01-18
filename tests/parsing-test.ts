@@ -108,3 +108,6 @@ test('Parsing should suppport props-types repo', t => {
 test('Parsing should suppport props-types repo (with a default import)', t => {
   compare(t, 'path', 'prop-types-default-import.jsx', 'prop-types.d.ts', {});
 });
+test('Parsing should support an SFC with default export babeled to es6', t => {
+  compare(t, 'component', 'stateless-export-as-default.js', 'stateless-export-as-default.d.ts');
+});

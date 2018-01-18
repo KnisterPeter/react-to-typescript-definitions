@@ -460,49 +460,41 @@ function getReferencedPropTypesComponentName(ast: AstQuery, propTypes: any|undef
 }
 
 function getComponentExportType(ast: AstQuery, componentName: string): dom.DeclarationFlags|undefined {
-  if (componentName === '') {
-    // case: unnamed default export
-    const res = ast.query(`
-      // ExportDefaultDeclaration[
-          // ClassDeclaration
-        ||
-          // FunctionDeclaration
-      ]
-    `);
-    if (res.length > 0 && !res[0].id) {
-      return dom.DeclarationFlags.ExportDefault;
-    }
-  }
-  let res = ast.query(`
-      // ExportDefaultDeclaration[
-          // ClassDeclaration
-          /:id Identifier[@name == '${componentName}']
-        ||
-          // FunctionDeclaration
-          /:id Identifier[@name == '${componentName}']
-        ||
-          // VariableDeclaration
-          / VariableDeclarator
-          /:id Identifier[@name == '${componentName}']
-        ||
-          /Identifier[@name == '${componentName}']
-      ]
-    ,
-      // AssignmentExpression[
-          /:left MemberExpression[
-              /:object Identifier[@name == 'exports']
-            &&
-              /:property Identifier[@name == 'default']
-          ]
-        &&
-          /:right Identifier[@name == '${componentName}']
-      ]
-  `);
-  if (res.length > 0) {
+  if (isDefaultExport(ast, componentName)) {
     return dom.DeclarationFlags.ExportDefault;
   }
-  res = ast.query(`
-    // ExportNamedDeclaration[
+
+  if (isNamedExport(ast, componentName)) {
+    return dom.DeclarationFlags.Export;
+  }
+
+  return undefined;
+}
+
+function isDefaultExport(ast: AstQuery, componentName: string): boolean {
+  return isUnnamedDefaultExport(ast, componentName) || isNamedDefaultExport(ast, componentName) ||
+    isNamedExportAsDefault(ast, componentName);
+}
+
+function isUnnamedDefaultExport(ast: AstQuery, componentName: string): boolean {
+  if (componentName !== '') {
+    return false;
+  }
+
+  const res = ast.query(`
+    // ExportDefaultDeclaration[
+        // ClassDeclaration
+      ||
+        // FunctionDeclaration
+    ]
+  `);
+
+  return res.length > 0 && !res[0].id;
+}
+
+function isNamedDefaultExport(ast: AstQuery, componentName: string): boolean {
+  const res = ast.query(`
+    // ExportDefaultDeclaration[
         // ClassDeclaration
         /:id Identifier[@name == '${componentName}']
       ||
@@ -513,14 +505,55 @@ function getComponentExportType(ast: AstQuery, componentName: string): dom.Decla
         / VariableDeclarator
         /:id Identifier[@name == '${componentName}']
       ||
-        // ExportSpecifier
-        /:exported Identifier[@name == '${componentName}']
+        /Identifier[@name == '${componentName}']
+    ]
+  ,
+    // AssignmentExpression[
+        /:left MemberExpression[
+            /:object Identifier[@name == 'exports']
+          &&
+            /:property Identifier[@name == 'default']
+        ]
+      &&
+        /:right Identifier[@name == '${componentName}']
     ]
   `);
-  if (res.length > 0) {
-    return dom.DeclarationFlags.Export;
-  }
-  return undefined;
+
+  return res.length > 0;
+}
+
+function isNamedExportAsDefault(ast: AstQuery, componentName: string): boolean {
+  const res = ast.query(`
+    // ExportNamedDeclaration[
+      // ExportSpecifier [
+        /:local Identifier[@name == '${componentName}'] &&
+        /:exported Identifier[@name == 'default']
+      ]
+    ]
+  `);
+
+  return res.length > 0;
+}
+
+function isNamedExport(ast: AstQuery, componentName: string): boolean {
+  const res = ast.query(`
+    // ExportNamedDeclaration[
+      // ClassDeclaration
+      /:id Identifier[@name == '${componentName}']
+    ||
+      // FunctionDeclaration
+      /:id Identifier[@name == '${componentName}']
+    ||
+      // VariableDeclaration
+      / VariableDeclarator
+      /:id Identifier[@name == '${componentName}']
+    ||
+      // ExportSpecifier
+      /:exported Identifier[@name == '${componentName}']
+    ]
+  `);
+
+  return res.length > 0;
 }
 
 function isClassComponent(ast: AstQuery, componentName: string,
