@@ -58,7 +58,7 @@ export function getTypeFromPropType(node: IASTNode, instanceOfResolver = default
         result.type = 'boolean';
         break;
       case 'func':
-        result.type = '(...args: any[]) => any';
+        result.type = '((...args: any[]) => any)';
         break;
       case 'number':
         result.type = 'number';

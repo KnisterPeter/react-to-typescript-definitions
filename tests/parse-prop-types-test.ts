@@ -65,7 +65,7 @@ test('The PropType parser should return a generic function for func prop types',
     }
   };
   const expected = {
-    type: '(...args: any[]) => any',
+    type: '((...args: any[]) => any)',
     optional: true
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
@@ -86,7 +86,7 @@ test('The PropType parser should return a generic required function for func.isR
     }
   };
   const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
-  t.is(result.type, '(...args: any[]) => any');
+  t.is(result.type, '((...args: any[]) => any)');
   t.is(result.optional, false);
 });
 test('The PropType parser should return number for number prop types', t => {
