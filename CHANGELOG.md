@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.26.0"></a>
+# [0.26.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.25.1...v0.26.0) (2018-01-19)
+
+
+### Bug Fixes
+
+* add react import to SFC typings ([2f53d2e](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/2f53d2e))
+
+
+### Features
+
+* support named exports as default ([67064b8](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/67064b8))
+
+
+
 <a name="0.25.1"></a>
 ## [0.25.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.25.0...v0.25.1) (2018-01-16)
 
