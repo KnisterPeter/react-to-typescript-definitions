@@ -44,11 +44,10 @@ export function createTypings(moduleName: string|null, programAst: any, options:
     ...getComponentNamesByStaticPropTypeAttribute(ast),
     ...getComponentNamesByJsxInBody(ast)
   ]);
-
   const m = dom.create.module(moduleName || 'moduleName');
-  if (hasReactClass(ast, reactComponentName)) {
-    m.members.push(dom.create.importNamed('Component', reactImport));
-  }
+
+  createReactImport(m, ast, reactImport, reactComponentName);
+
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
       if (importStatement.name === undefined) {
@@ -73,6 +72,15 @@ export function createTypings(moduleName: string|null, programAst: any, options:
       .join('');
   } else {
     return dom.emit(m, dom.ContextFlags.Module);
+  }
+}
+
+function createReactImport(m: dom.ModuleDeclaration, ast: AstQuery, reactImport: string,
+    reactComponentName: string|undefined): void {
+  if (hasReactClass(ast, reactComponentName)) {
+    m.members.push(dom.create.importNamed('Component', reactImport));
+  } else {
+    m.members.push(dom.create.import(reactImport));
   }
 }
 
