@@ -9,7 +9,8 @@ module.exports = function(wallaby) {
       {pattern: 'node_modules/dts-dom/bin/index.d.ts', instrument: false}
     ],
     tests: [
-      'tests/**/*-test.ts'
+      'tests/**/*-test.ts',
+      '!tests/cli-test.ts',
     ],
     env: {
       type: 'node'
