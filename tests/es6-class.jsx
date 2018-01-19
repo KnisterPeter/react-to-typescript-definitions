@@ -37,7 +37,7 @@ Component.propTypes = {
 	requiredFunc: React.PropTypes.func.isRequired,
 	requiredAny: React.PropTypes.any.isRequired,
 	requiredUnion: React.PropTypes.oneOfType([
-		React.PropTypes.array,
+		React.PropTypes.func,
 		React.PropTypes.bool
 	]).isRequired,
 	requiredArrayOf: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,

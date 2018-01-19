@@ -12,7 +12,7 @@ declare module 'component' {
     fontSize?: number;
   }
 
-  export type ComponentRequiredUnion = any[] | boolean;
+  export type ComponentRequiredUnion = ((...args: any[])=>any) | boolean;
 
   export interface ComponentRequiredArrayOfObjectsWithShape {
     color?: string;
