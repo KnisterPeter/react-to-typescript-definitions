@@ -1,6 +1,5 @@
+/// <reference types="react" />
 declare module 'component' {
-  import 'react';
-
   export interface ComponentProps {
     optionalAny?: any;
   }
