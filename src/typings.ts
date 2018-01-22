@@ -44,9 +44,14 @@ export function createTypings(moduleName: string|null, programAst: any, options:
     ...getComponentNamesByStaticPropTypeAttribute(ast),
     ...getComponentNamesByJsxInBody(ast)
   ]);
+  const tripleSlashDirectives: dom.TripleSlashDirective[] = [];
   const m = dom.create.module(moduleName || 'moduleName');
 
-  createReactImport(m, ast, reactImport, reactComponentName);
+  if (hasReactClass(ast, reactComponentName)) {
+    m.members.push(dom.create.importNamed('Component', reactImport));
+  } else {
+    tripleSlashDirectives.push(dom.create.tripleSlashReferenceTypesDirective('react'));
+  }
 
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
@@ -67,20 +72,9 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   });
 
   if (moduleName === null) {
-    return m.members
-      .map(member => dom.emit(member, dom.ContextFlags.None))
-      .join('');
+    return m.members.map(member => dom.emit(member)).join('');
   } else {
-    return dom.emit(m, dom.ContextFlags.Module);
-  }
-}
-
-function createReactImport(m: dom.ModuleDeclaration, ast: AstQuery, reactImport: string,
-    reactComponentName: string|undefined): void {
-  if (hasReactClass(ast, reactComponentName)) {
-    m.members.push(dom.create.importNamed('Component', reactImport));
-  } else {
-    m.members.push(dom.create.import(reactImport));
+    return dom.emit(m, { rootFlags: dom.ContextFlags.Module, tripleSlashDirectives });
   }
 }
 
