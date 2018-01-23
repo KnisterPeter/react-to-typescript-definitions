@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.27.1"></a>
+## [0.27.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.27.0...v0.27.1) (2018-01-23)
+
+
+### Bug Fixes
+
+* **package:** update dts-dom to version 1.0.0 ([7a7cd1b](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/7a7cd1b))
+* for SFCs use triple slash directive instead of react import ([9b1096d](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/9b1096d)), closes [#469](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/469) [#471](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/471)
+
+
+
 <a name="0.27.0"></a>
 # [0.27.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.25.1...v0.27.0) (2018-01-20)
 
