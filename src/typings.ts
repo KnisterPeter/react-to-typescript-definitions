@@ -48,7 +48,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   const m = dom.create.module(moduleName || 'moduleName');
 
   if (hasReactClass(ast, reactComponentName)) {
-    m.members.push(dom.create.importNamed('Component', reactImport));
+    m.members.push(dom.create.importNamed(reactComponentName || 'Component', reactImport));
   } else {
     tripleSlashDirectives.push(dom.create.tripleSlashReferenceTypesDirective('react'));
   }
@@ -95,17 +95,27 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
   }
 
   if (classComponent) {
-    const classDecl = dom.create.class(componentName);
-    classDecl.baseType = dom.create.interface(`Component<${interf.name}, any>`);
-    classDecl.flags = exportType;
-    classDecl.members.push(dom.create.method('render', [], dom.create.namedTypeReference('JSX.Element')));
-    m.members.push(classDecl);
+    createExportedClassComponent(m, componentName, reactComponentName, exportType, interf);
   } else {
-    const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
-      dom.create.namedTypeReference('JSX.Element'));
-    funcDelc.flags = exportType;
-    m.members.push(funcDelc);
+    createExportedFunctionalComponent(m, componentName, propTypes, exportType, interf);
   }
+}
+
+function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: string,
+    reactComponentName: string|undefined, exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
+  const classDecl = dom.create.class(componentName);
+  classDecl.baseType = dom.create.interface(`${reactComponentName || 'Component'}<${interf.name}, any>`);
+  classDecl.flags = exportType;
+  classDecl.members.push(dom.create.method('render', [], dom.create.namedTypeReference('JSX.Element')));
+  m.members.push(classDecl);
+}
+
+function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentName: string, propTypes: any,
+  exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
+  const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
+    dom.create.namedTypeReference('JSX.Element'));
+  funcDelc.flags = exportType;
+  m.members.push(funcDelc);
 }
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
@@ -209,7 +219,7 @@ function getReactComponentName(ast: AstQuery): string|undefined {
       /:source StringLiteral[@value == 'react']
     ]
     /:specifiers *[
-      / Identifier[@name == 'Component']
+      / Identifier[@name == 'Component'] || / Identifier[@name == 'PureComponent']
     ]
     /:local Identifier
   `);
