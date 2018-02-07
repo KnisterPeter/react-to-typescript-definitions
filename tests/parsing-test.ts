@@ -111,3 +111,6 @@ test('Parsing should suppport props-types repo (with a default import)', t => {
 test('Parsing should support an SFC with default export babeled to es6', t => {
   compare(t, 'component', 'stateless-export-as-default.js', 'stateless-export-as-default.d.ts');
 });
+test('Parsing should suppport components that extend PureComponent', t => {
+  compare(t, 'component', 'pure-component.jsx', 'pure-component.d.ts');
+});
