@@ -3,7 +3,7 @@ declare module 'component' {
 
   import Message from './path/to/Message';
 
-  export type MyComponentOptionalEnum = 'News' | 'Photos' | 1 | 2;
+  export type MyComponentOptionalEnum = "News" | "Photos" | 1 | 2;
 
   export type MyComponentOptionalUnion = string | number;
 
