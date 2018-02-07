@@ -146,50 +146,49 @@ function getComplexTypeName(ast: AstQuery, propertyAst: any,
 }
 
 function getEnumValues(ast: AstQuery, oneOfTypes: any): any[] {
-  if (oneOfTypes.type === 'Identifier') {
-    const res = ast.query(`
-      //VariableDeclarator[
-        /:id Identifier[@name == '${oneOfTypes.name}']
-      ]
-      /:init *
-    `);
-    if (!res[0]) {
-      throwWithLocation('Failed to lookup enum values', oneOfTypes);
-    }
-    oneOfTypes = res[0];
-  }
+  oneOfTypes = resolveIdentifier(ast, oneOfTypes);
+
   if (!oneOfTypes.elements) {
     throwWithLocation('Failed to lookup enum values', oneOfTypes);
   }
+
   return (oneOfTypes.elements as any[]).map((element: any) => {
-    // fixme: This are not named references!
+    element = resolveIdentifier(ast, element);
     if (element.type === 'StringLiteral') {
-      return dom.create.namedTypeReference(`'${element.value}'`);
+      return dom.type.stringLiteral(element.value);
     }
-    if (element.value) {
-      return dom.create.namedTypeReference(element.value);
+    if (element.type === 'NumericLiteral') {
+      return dom.type.numberLiteral(element.value);
     }
     return 'any';
   });
 }
 
 function getShapeProperties(ast: AstQuery, input: any): any[] {
-  if (input.type === 'Identifier') {
-    const res = ast.query(`
-      //VariableDeclarator[
-        /:id Identifier[@name == '${input.name}']
-      ]
-      /:init *
-    `);
-    if (res[0]) {
-      return res[0].properties;
-    }
-    throwWithLocation('Failed to lookup shape properties', input);
-  }
+  input = resolveIdentifier(ast, input);
+
   if (!input.properties) {
     throwWithLocation('Failed to lookup shape properties', input);
   }
+
   return input.properties;
+}
+
+function resolveIdentifier(ast: AstQuery, input: any): any {
+  if (input.type !== 'Identifier') {
+    return input;
+  }
+
+  const res = ast.query(`
+    //VariableDeclarator[
+      /:id Identifier[@name == '${input.name}']
+    ]
+    /:init *
+  `);
+  if (!res[0]) {
+    throwWithLocation('Failed to lookup identifier', input);
+  }
+  return res[0];
 }
 
 function throwWithLocation(message: string, ast: any): never {
