@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.28.0"></a>
+# [0.28.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.27.1...v0.28.0) (2018-02-07)
+
+
+### Bug Fixes
+
+* avoid any for oneOf arrays with identifiers ([f947a23](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/f947a23))
+
+
+### Features
+
+* support generating types for PureComponents ([7343af1](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/7343af1))
+
+
+
 <a name="0.27.1"></a>
 ## [0.27.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.27.0...v0.27.1) (2018-01-23)
 
