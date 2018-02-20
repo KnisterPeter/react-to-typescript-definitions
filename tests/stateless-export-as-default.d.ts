@@ -5,5 +5,5 @@ declare module 'component' {
     className?: string;
   }
 
-  export default function Component(props: ComponentProps): JSX.Element;
+  export default type Component = React.SFC<ComponentProps>;
 }

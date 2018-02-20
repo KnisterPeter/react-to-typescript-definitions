@@ -112,10 +112,12 @@ function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: s
 
 function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentName: string, propTypes: any,
   exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
-  const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
-    dom.create.namedTypeReference('JSX.Element'));
-  funcDelc.flags = exportType;
-  m.members.push(funcDelc);
+
+  const typeDecl = dom.create.alias(
+    componentName,
+    dom.create.namedTypeReference(`React.SFC${ propTypes ? `<${interf.name}>` : '' }`));
+  typeDecl.flags = exportType;
+  m.members.push(typeDecl);
 }
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
