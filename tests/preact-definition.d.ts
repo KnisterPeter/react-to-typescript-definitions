@@ -1,11 +1,11 @@
 declare module 'path' {
-  import {Component} from 'preact';
+  import * as React from 'preact';
 
   export interface SomeComponentProps {
     onClick?: (...args: any[]) => any;
   }
 
-  export class SomeComponent extends Component<SomeComponentProps, any> {
+  export class SomeComponent extends React.Component<SomeComponentProps, any> {
     render(): JSX.Element;
   }
 }

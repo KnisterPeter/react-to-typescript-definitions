@@ -1,11 +1,11 @@
 declare module 'component' {
-  import {PureComponent} from 'react';
+  import * as React from 'react';
 
   export interface Props {
     optionalString?: string;
   }
 
-  export default class extends PureComponent<Props, any> {
+  export default class extends React.PureComponent<Props, any> {
     render(): JSX.Element;
   }
 }

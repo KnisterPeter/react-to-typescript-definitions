@@ -1,11 +1,11 @@
 declare module 'component' {
-  import {Component} from 'react';
+  import * as React from 'react';
 
   export interface SomeComponentProps {
     someString?: string;
   }
 
-  export default class SomeComponent extends Component<SomeComponentProps, any> {
+  export default class SomeComponent extends React.Component<SomeComponentProps, any> {
     render(): JSX.Element;
   }
 }

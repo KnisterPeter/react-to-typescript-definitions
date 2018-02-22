@@ -1,10 +1,10 @@
 declare module 'component' {
-  import {Component} from 'react';
+  import * as React from 'react';
 
   export interface TestProps {
   }
 
-  export default class Test extends Component<TestProps, any> {
+  export default class Test extends React.Component<TestProps, any> {
     render(): JSX.Element;
   }
 
