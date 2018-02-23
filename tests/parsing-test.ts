@@ -85,7 +85,7 @@ test('Parsing should create definition from class import PropTypes and instanceO
   compare(t, 'component', 'instance-of-proptype-names.jsx', 'instance-of-proptype-names.d.ts');
 });
 test('Parsing should create definition from file without propTypes', t => {
-  compare(t, 'component', 'component-without-proptyes.jsx', 'component-without-proptyes.d.ts');
+  compare(t, 'component', 'component-without-proptypes.jsx', 'component-without-proptypes.d.ts');
 });
 test('Parsing should create definition from file with references in propTypes', t => {
   compare(t, 'component', 'references-in-proptypes.jsx', 'references-in-proptypes.d.ts');

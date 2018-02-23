@@ -1,5 +1,5 @@
 declare module 'component' {
-  import {Component} from 'react';
+  import * as React from 'react';
 
   import Message from './path/to/Message';
 
@@ -52,7 +52,7 @@ declare module 'component' {
     requiredSymbol: Symbol;
   }
 
-  export class MyComponent extends Component<MyComponentProps, any> {
+  export class MyComponent extends React.Component<MyComponentProps, any> {
     render(): JSX.Element;
   }
 }

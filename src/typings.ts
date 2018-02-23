@@ -47,11 +47,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   const tripleSlashDirectives: dom.TripleSlashDirective[] = [];
   const m = dom.create.module(moduleName || 'moduleName');
 
-  if (hasReactClass(ast, reactComponentName)) {
-    m.members.push(dom.create.importNamed(reactComponentName || 'Component', reactImport));
-  } else {
-    tripleSlashDirectives.push(dom.create.tripleSlashReferenceTypesDirective('react'));
-  }
+  m.members.push(dom.create.importAll('React', reactImport));
 
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
@@ -104,7 +100,7 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
 function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: string,
     reactComponentName: string|undefined, exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
   const classDecl = dom.create.class(componentName);
-  classDecl.baseType = dom.create.interface(`${reactComponentName || 'Component'}<${interf.name}, any>`);
+  classDecl.baseType = dom.create.interface(`React.${reactComponentName || 'Component'}<${interf.name}, any>`);
   classDecl.flags = exportType;
   classDecl.members.push(dom.create.method('render', [], dom.create.namedTypeReference('JSX.Element')));
   m.members.push(classDecl);
@@ -112,10 +108,12 @@ function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: s
 
 function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentName: string, propTypes: any,
   exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
-  const funcDelc = dom.create.function(componentName, propTypes ? [dom.create.parameter('props', interf)] : [],
-    dom.create.namedTypeReference('JSX.Element'));
-  funcDelc.flags = exportType;
-  m.members.push(funcDelc);
+
+  const typeDecl = dom.create.alias(
+    componentName,
+    dom.create.namedTypeReference(`React.SFC${ propTypes ? `<${interf.name}>` : '' }`));
+  typeDecl.flags = exportType;
+  m.members.push(typeDecl);
 }
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
@@ -267,36 +265,6 @@ function getImportedPropTypes(ast: AstQuery): ImportedPropType[] {
     importedName: imported.name,
     localName: local.name
   }));
-}
-
-function hasReactClass(ast: AstQuery, reactComponentName: string|undefined): boolean {
-  const res = ast.query(`
-      // ClassDeclaration[
-        '${reactComponentName}' == 'undefined'
-        ?
-          /:superClass MemberExpression[
-            /:object Identifier[@name == 'React'] &&
-            /:property Identifier[@name == 'Component']
-          ]
-        :
-          /:superClass Identifier[@name == '${reactComponentName}']
-      ]
-    ,
-      // VariableDeclaration
-      / VariableDeclarator[
-        /:init CallExpression[
-          '${reactComponentName}' == 'undefined'
-          ?
-            /:arguments MemberExpression[
-              /:object Identifier[@name == 'React'] &&
-              /:property Identifier[@name == 'Component']
-            ]
-          :
-            /:arguments Identifier[@name == '${reactComponentName}']
-        ]
-      ]
-  `);
-  return res.length > 0;
 }
 
 function getInstanceOfPropTypes(ast: AstQuery, importedPropTypes: ImportedPropTypes): string[] {
