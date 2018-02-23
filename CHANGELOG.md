@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.28.1"></a>
+## [0.28.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.28.0...v0.28.1) (2018-02-23)
+
+
+
 <a name="0.28.0"></a>
 # [0.28.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.27.1...v0.28.0) (2018-02-07)
 
