@@ -114,3 +114,6 @@ test('Parsing should support an SFC with default export babeled to es6', t => {
 test('Parsing should suppport components that extend PureComponent', t => {
   compare(t, 'component', 'pure-component.jsx', 'pure-component.d.ts');
 });
+test('Parsing should suppport components that extend a custom react component', t => {
+  compare(t, 'component', 'custom-inheritance.jsx', 'custom-inheritance.d.ts');
+});
