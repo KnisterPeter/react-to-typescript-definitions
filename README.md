@@ -6,7 +6,7 @@
 [![Coverage Status][coverage-image]][coverage-link]
 [![Commitizen friendly][commitizen-image]][commitizen-link]
 [![Standard Version][standard-version-image]][standard-version-link]
-[![Greenkeeper badge](https://badges.greenkeeper.io/KnisterPeter/react-to-typescript-definitions.svg)](https://greenkeeper.io/)
+[![renovate badge](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovateapp.com/)
 
 Create typescript definitions files (d.ts) from react components.
 
