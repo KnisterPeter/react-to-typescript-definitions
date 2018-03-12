@@ -6,5 +6,6 @@ declare module 'component' {
     className?: string;
   }
 
-  export default type Component = React.SFC<ComponentProps>;
+  const Component: React.SFC<ComponentProps>;
+  export default Component;
 }

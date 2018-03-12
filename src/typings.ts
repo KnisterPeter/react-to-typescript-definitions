@@ -70,7 +70,7 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   if (moduleName === null) {
     return m.members.map(member => dom.emit(member)).join('');
   } else {
-    return dom.emit(m, { rootFlags: dom.ContextFlags.Module, tripleSlashDirectives });
+    return dom.emit(m, { tripleSlashDirectives });
   }
 }
 
@@ -107,13 +107,16 @@ function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: s
 }
 
 function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentName: string, propTypes: any,
-  exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
+    exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
+  const typeDecl = dom.create.namedTypeReference(`React.SFC${ propTypes ? `<${interf.name}>` : '' }`);
+  const constDecl = dom.create.const(componentName, typeDecl);
+  m.members.push(constDecl);
 
-  const typeDecl = dom.create.alias(
-    componentName,
-    dom.create.namedTypeReference(`React.SFC${ propTypes ? `<${interf.name}>` : '' }`));
-  typeDecl.flags = exportType;
-  m.members.push(typeDecl);
+  if (exportType === dom.DeclarationFlags.ExportDefault) {
+    m.members.push(dom.create.exportDefault(componentName));
+  } else {
+    constDecl.flags = exportType;
+  }
 }
 
 function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
