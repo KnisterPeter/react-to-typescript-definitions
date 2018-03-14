@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.28.2"></a>
+## [0.28.2](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.28.1...v0.28.2) (2018-03-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency babylon to v7.0.0-beta.40 ([75bd5f6](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/75bd5f6))
+* **deps:** update dependency get-stdin to ^6.0.0 ([aa579ea](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/aa579ea))
+* for SFCs export a const and not a type ([173eeb7](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/173eeb7))
+
+
+
 <a name="0.28.1"></a>
 ## [0.28.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.28.0...v0.28.1) (2018-02-23)
 
