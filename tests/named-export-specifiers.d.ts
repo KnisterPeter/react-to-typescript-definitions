@@ -5,7 +5,7 @@ declare module 'component' {
     optionalAny?: any;
   }
 
-  export type Component = React.SFC<ComponentProps>;
+  export const Component: React.SFC<ComponentProps>;
 
-  export type Component2 = React.SFC;
+  export const Component2: React.SFC;
 }

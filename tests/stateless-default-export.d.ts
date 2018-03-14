@@ -2,10 +2,11 @@ declare module 'component' {
   import * as React from 'react';
   
   export interface ComponentProps {
-    optionalAny?: any;
+    optionalString?: string;
   }
 
-  export const Component: React.SFC<ComponentProps>;
+  const Component: React.SFC<ComponentProps>;
+  export default Component;
 
   export const Component2: React.SFC;
 }
