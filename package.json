@@ -41,7 +41,7 @@
     "@knisterpeter/standard-tslint": "1.6.0",
     "@types/babel-generator": "6.25.1",
     "@types/diff": "3.2.2",
-    "@types/execa": "0.8.1",
+    "@types/execa": "0.9.0",
     "@types/node": "9.4.7",
     "@types/prop-types": "15.5.2",
     "@types/react": "16.0.40",
