@@ -69,7 +69,7 @@
     "babel-generator": "^6.26.0",
     "babylon": "7.0.0-beta.44",
     "chalk": "^2.3.0",
-    "dts-dom": "^2.1.0",
+    "dts-dom": "^3.0.0",
     "get-stdin": "^6.0.0",
     "meow": "^4.0.0",
     "pascal-case": "2.0.1",
