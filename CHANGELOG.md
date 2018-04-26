@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.28.2...v1.0.0) (2018-04-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency babylon to v7.0.0-beta.41 ([9b5736d](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/9b5736d))
+* **deps:** update dependency babylon to v7.0.0-beta.42 ([48902cc](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/48902cc))
+* **deps:** update dependency babylon to v7.0.0-beta.44 ([b77411e](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/b77411e))
+* **deps:** update dependency babylon to v7.0.0-beta.46 ([a7939dd](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/a7939dd))
+* **deps:** update dependency dts-dom to ^3.0.0 ([56b1012](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/56b1012))
+* **deps:** update dependency meow to v5 ([d48b698](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/d48b698))
+
+
+### Chores
+
+* drop test on node4 ([db3b960](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/db3b960))
+
+
+### BREAKING CHANGES
+
+* drop node4 support
+
+
+
 <a name="0.28.2"></a>
 ## [0.28.2](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.28.1...v0.28.2) (2018-03-14)
 
