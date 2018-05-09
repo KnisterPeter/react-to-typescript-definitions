@@ -1,3 +1,4 @@
+// tslint:disable:no-implicit-dependencies
 import test from 'ava';
 import * as stripAnsi from 'strip-ansi';
 

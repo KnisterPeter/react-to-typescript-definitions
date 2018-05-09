@@ -6,7 +6,7 @@ import { InstanceOfResolver } from './index';
 type IASTNode = ASTNode;
 interface ASTNode {
   type: string;
-  loc: Object;
+  loc: object;
   [name: string]: any;
   value?: any;
   key?: any;

@@ -2,7 +2,7 @@ import { IPropTypes, ExportType } from './deprecated';
 
 export class Generator {
 
-  private static NL = '\n';
+  private static readonly NL = '\n';
 
   private indentLevel = 0;
 
