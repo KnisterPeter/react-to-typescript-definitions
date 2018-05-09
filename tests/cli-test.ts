@@ -1,3 +1,4 @@
+// tslint:disable:no-implicit-dependencies
 import test from 'ava';
 import { shell } from 'execa';
 import * as fs from 'fs';

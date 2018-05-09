@@ -24,6 +24,7 @@ export interface IPropTypes {
 
 export function generateTypings(moduleName: string|null, ast: any, options: IOptions): string {
   const parsingResult = parseAst(ast, options.instanceOfResolver);
+  // tslint:disable-next-line deprecation
   return deprecatedGenerator(options.generator as Generator, moduleName, parsingResult);
 }
 

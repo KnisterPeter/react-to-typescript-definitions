@@ -1,3 +1,4 @@
+// tslint:disable:no-implicit-dependencies
 import test, { TestContext } from 'ava';
 
 import chalk from 'chalk';

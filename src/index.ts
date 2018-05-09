@@ -111,6 +111,7 @@ export function generateFromSource(moduleName: string|null, code: string, option
 
 export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {},
     reactImport = 'react'): string {
+  // tslint:disable-next-line:deprecation
   if (options.generator) {
     return generateTypings(moduleName, ast, options);
   }
