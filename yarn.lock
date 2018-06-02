@@ -1828,9 +1828,9 @@ dotgitignore@^1.0.3:
     find-up "^2.1.0"
     minimatch "^3.0.4"
 
-dts-dom@3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/dts-dom/-/dts-dom-3.0.0.tgz#6719e584ac60d337a35c801f8abebb6a3d69db23"
+dts-dom@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/dts-dom/-/dts-dom-3.1.0.tgz#7f53cf58305180bfd9475d294ea028136162626c"
 
 duplexer2@~0.1.4:
   version "0.1.4"
