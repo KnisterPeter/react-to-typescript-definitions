@@ -285,19 +285,19 @@ assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
 
-astq@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/astq/-/astq-2.0.3.tgz#fcd888166d25cdf2327baa74332214fc7ca162c1"
+astq@2.2.10:
+  version "2.2.10"
+  resolved "https://registry.yarnpkg.com/astq/-/astq-2.2.10.tgz#2ed01dee0feba86cf771246859b25bbdb16d8830"
   dependencies:
-    asty "~1.5.3"
-    cache-lru "~1.0.17"
-    pegjs "~0.10.0"
-    pegjs-otf "~1.2.4"
-    pegjs-util "~1.4.4"
+    asty "1.7.12"
+    cache-lru "1.1.3"
+    pegjs "0.10.0"
+    pegjs-otf "1.2.8"
+    pegjs-util "1.4.11"
 
-asty@~1.5.3:
-  version "1.5.8"
-  resolved "https://registry.yarnpkg.com/asty/-/asty-1.5.8.tgz#f8da1fe51b15f6090cbc8af421a954df15d114ec"
+asty@1.7.12:
+  version "1.7.12"
+  resolved "https://registry.yarnpkg.com/asty/-/asty-1.7.12.tgz#5eb3c5df179c80df2e058ef925204dd8e94e1c2b"
 
 async-each@^1.0.0:
   version "1.0.1"
@@ -1003,9 +1003,9 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
-cache-lru@~1.0.17:
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/cache-lru/-/cache-lru-1.0.19.tgz#7dbd5bcb89a4d7d4ae16c240cf4790043bb7b8db"
+cache-lru@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/cache-lru/-/cache-lru-1.1.3.tgz#b8f45d57ddf44a6bcd2b4b8bf56ea884f8259144"
 
 caching-transform@^1.0.0:
   version "1.0.1"
@@ -3732,7 +3732,7 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-pegjs-otf@~1.2.4:
+pegjs-otf@1.2.8:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/pegjs-otf/-/pegjs-otf-1.2.8.tgz#6c2b3da0cd6f0db5949c243188ce796240d5a7a3"
   dependencies:
@@ -3741,13 +3741,13 @@ pegjs-otf@~1.2.4:
     static-module "2.2.5"
     through "2.3.8"
 
-pegjs-util@~1.4.4:
+pegjs-util@1.4.11:
   version "1.4.11"
   resolved "https://registry.yarnpkg.com/pegjs-util/-/pegjs-util-1.4.11.tgz#e9a45994c34743e646cb9ad399aec679c519e6a5"
   dependencies:
     pegjs ">=0.10.0"
 
-pegjs@0.10.0, pegjs@>=0.10.0, pegjs@~0.10.0:
+pegjs@0.10.0, pegjs@>=0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/pegjs/-/pegjs-0.10.0.tgz#cf8bafae6eddff4b5a7efb185269eaaf4610ddbd"
 
