@@ -68,7 +68,7 @@
     "astq": "2.2.10",
     "babel-generator": "6.26.1",
     "babylon": "7.0.0-beta.47",
-    "chalk": "2.3.0",
+    "chalk": "2.4.1",
     "dts-dom": "3.1.0",
     "get-stdin": "6.0.0",
     "meow": "5.0.0",
