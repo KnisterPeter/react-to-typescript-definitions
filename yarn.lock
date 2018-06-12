@@ -137,9 +137,9 @@
     pretty-ms "^0.2.1"
     text-table "^0.2.0"
 
-"@types/babel-generator@6.25.1":
-  version "6.25.1"
-  resolved "https://registry.yarnpkg.com/@types/babel-generator/-/babel-generator-6.25.1.tgz#f86ab3cf132b04597fe6c431d3083aaf1b76b530"
+"@types/babel-generator@6.25.2":
+  version "6.25.2"
+  resolved "https://registry.yarnpkg.com/@types/babel-generator/-/babel-generator-6.25.2.tgz#fa13653ec2d34a4037be9c34dec32ae75bea04cc"
   dependencies:
     "@types/babel-types" "*"
 
