@@ -376,19 +376,19 @@ assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
 
-astq@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/astq/-/astq-2.3.1.tgz#5acca8ea62a5dc56fce2c519b8be842cc89e36ff"
+astq@2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/astq/-/astq-2.3.3.tgz#fdb101c903db9490ec35b849c73e8b3b467720d1"
   dependencies:
-    asty "1.7.13"
-    cache-lru "1.1.4"
+    asty "1.7.14"
+    cache-lru "1.1.5"
     pegjs "0.10.0"
     pegjs-otf "1.2.9"
     pegjs-util "1.4.12"
 
-asty@1.7.13:
-  version "1.7.13"
-  resolved "https://registry.yarnpkg.com/asty/-/asty-1.7.13.tgz#2377b09716bec4df0c40cf56025146ca321f402e"
+asty@1.7.14:
+  version "1.7.14"
+  resolved "https://registry.yarnpkg.com/asty/-/asty-1.7.14.tgz#fddb93d899475328b1c4cc2e2956a4d2946db649"
 
 async-each@^1.0.0:
   version "1.0.1"
@@ -1090,9 +1090,9 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
-cache-lru@1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/cache-lru/-/cache-lru-1.1.4.tgz#0d644a1b27e2603d83c5512c15fd183724d65557"
+cache-lru@1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/cache-lru/-/cache-lru-1.1.5.tgz#7734a477be36a4cd5f881af182f5a912d0a65e85"
 
 caching-transform@^1.0.0:
   version "1.0.1"
