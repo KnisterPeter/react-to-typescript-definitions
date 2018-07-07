@@ -376,19 +376,19 @@ assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
 
-astq@2.3.3:
-  version "2.3.3"
-  resolved "https://registry.yarnpkg.com/astq/-/astq-2.3.3.tgz#fdb101c903db9490ec35b849c73e8b3b467720d1"
+astq@2.3.4:
+  version "2.3.4"
+  resolved "https://registry.yarnpkg.com/astq/-/astq-2.3.4.tgz#d23747db65216374691e1ff2879f8a8e964fdd99"
   dependencies:
-    asty "1.7.14"
+    asty "1.7.15"
     cache-lru "1.1.5"
     pegjs "0.10.0"
-    pegjs-otf "1.2.9"
-    pegjs-util "1.4.12"
+    pegjs-otf "1.2.10"
+    pegjs-util "1.4.13"
 
-asty@1.7.14:
-  version "1.7.14"
-  resolved "https://registry.yarnpkg.com/asty/-/asty-1.7.14.tgz#fddb93d899475328b1c4cc2e2956a4d2946db649"
+asty@1.7.15:
+  version "1.7.15"
+  resolved "https://registry.yarnpkg.com/asty/-/asty-1.7.15.tgz#d50a61774ec6a6e06f57dc791597e32607c2a972"
 
 async-each@^1.0.0:
   version "1.0.1"
@@ -3879,18 +3879,18 @@ path-type@^3.0.0:
   dependencies:
     pify "^3.0.0"
 
-pegjs-otf@1.2.9:
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/pegjs-otf/-/pegjs-otf-1.2.9.tgz#767eb589a8c732b9fec4e0f33448bdc8b0e0a75d"
+pegjs-otf@1.2.10:
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/pegjs-otf/-/pegjs-otf-1.2.10.tgz#1fa0b98b9784102443b778930fdc86e202027270"
   dependencies:
     lodash "4.17.10"
     pegjs "0.10.0"
     static-module "3.0.0"
     through "2.3.8"
 
-pegjs-util@1.4.12:
-  version "1.4.12"
-  resolved "https://registry.yarnpkg.com/pegjs-util/-/pegjs-util-1.4.12.tgz#0b6e106346df692e7a81f04e34eb2cb30b0ec555"
+pegjs-util@1.4.13:
+  version "1.4.13"
+  resolved "https://registry.yarnpkg.com/pegjs-util/-/pegjs-util-1.4.13.tgz#fe3afe2d08519659ada914cea62e3e4588b60214"
   dependencies:
     pegjs ">=0.10.0"
 
