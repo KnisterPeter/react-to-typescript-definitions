@@ -1,8 +1,9 @@
 import * as ASTQ from 'astq';
 import * as dom from 'dts-dom';
-import pascalCase = require('pascal-case');
 import { InstanceOfResolver, IOptions } from './index';
 import * as types from './types';
+
+import pascalCase = require('pascal-case');
 
 export interface AstQuery {
   ast: any;
@@ -22,6 +23,9 @@ export interface ImportedPropTypes {
 
 export function createTypings(moduleName: string|null, programAst: any, options: IOptions,
     reactImport: string): string {
+  // #609: configure eol character
+  dom.config.outputEol = options.eol || '\r\n';
+
   const astq = new ASTQ();
   const ast = {
     ast: programAst,
