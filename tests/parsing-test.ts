@@ -1,11 +1,9 @@
 // tslint:disable:no-implicit-dependencies
 import test, { TestContext } from 'ava';
-
 import chalk from 'chalk';
 import * as diff from 'diff';
 import * as fs from 'fs';
 import * as path from 'path';
-
 import * as react2dts from '../src/index';
 
 let basedir = path.join(__dirname, '..', '..', 'tests');
@@ -117,4 +115,11 @@ test('Parsing should support an SFC with default export babeled to es6', t => {
 });
 test('Parsing should suppport components that extend PureComponent', t => {
   compare(t, 'component', 'pure-component.jsx', 'pure-component.d.ts');
+});
+test('Parsing should suppport custom eol style', t => {
+  textDiff(
+    t,
+    react2dts.generateFromFile('component', path.join(basedir, 'pure-component.jsx'), {eol: '\n'}, 'react'),
+    fs.readFileSync(path.join(basedir, 'pure-component.d.ts')).toString().replace('\r\n', '\n')
+  );
 });

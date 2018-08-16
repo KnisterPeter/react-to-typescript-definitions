@@ -1,7 +1,6 @@
 import * as babylon from 'babylon';
 import * as fs from 'fs';
 import * as getStdin from 'get-stdin';
-
 import { generateTypings } from './deprecated';
 import { Generator } from './generator';
 import { createTypings } from './typings';
@@ -47,6 +46,15 @@ export interface Options {
    * @memberOf Options
    */
   filename?: string;
+
+  /**
+   * EOL character. This would be changed to whatever is liked to
+   * terminate lines. Defaults to '\r\n'
+   * 
+   * @type {string}
+   * @memberOf Options
+   */
+  eol?: string;
 }
 
 export function cli(options: any): void {
