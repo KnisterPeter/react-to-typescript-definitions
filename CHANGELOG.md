@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v1.0.0...v1.1.0) (2018-08-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency astq to v2.2.10 ([a9c27c7](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/a9c27c7))
+* **deps:** update dependency astq to v2.3.1 ([e9d58aa](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/e9d58aa))
+* **deps:** update dependency astq to v2.3.3 ([c6a5f97](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/c6a5f97))
+* **deps:** update dependency astq to v2.3.4 ([3d077de](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/3d077de))
+* **deps:** update dependency astq to v2.3.6 ([0064a64](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/0064a64))
+* **deps:** update dependency babel-generator to v6.26.1 ([ff30c67](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/ff30c67))
+* **deps:** update dependency babylon to v7.0.0-beta.47 ([ab95114](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/ab95114))
+* **deps:** update dependency chalk to v2.4.1 ([e4980fc](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/e4980fc))
+* **deps:** update dependency dts-dom to v3.1.0 ([1d79303](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/1d79303))
+
+
+### Features
+
+* allow custom eol characters ([3e41b31](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/3e41b31)), closes [#609](https://github.com/KnisterPeter/react-to-typescript-definitions/issues/609)
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v0.28.2...v1.0.0) (2018-04-26)
 
