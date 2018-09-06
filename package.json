@@ -57,7 +57,7 @@
     "execa": "1.0.0",
     "nyc": "13.0.1",
     "prop-types": "15.6.2",
-    "react": "16.4.2",
+    "react": "16.5.0",
     "rimraf": "2.6.2",
     "source-map-support": "0.5.9",
     "standard-version": "4.4.0",
