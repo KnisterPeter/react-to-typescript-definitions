@@ -55,6 +55,14 @@ export interface Options {
    * @memberOf Options
    */
   eol?: string;
+
+  /**
+   * babylon plugins. Allow users to set additional plugins.
+   *
+   * @type {string[]}
+   * @memberOf Options
+   */
+  babylonPlugins?: string[];
 }
 
 export function cli(options: any): void {
@@ -89,6 +97,7 @@ export function generateFromFile(moduleName: string|null, path: string, options:
 
 export function generateFromSource(moduleName: string|null, code: string, options: IOptions = {},
     reactImport = 'react'): string {
+  const additionalBabylonPlugins = Array.isArray(options.babylonPlugins) ? options.babylonPlugins : [];
   const ast = babylon.parse(code, {
     sourceType: 'module',
     allowReturnOutsideFunction: true,
@@ -108,7 +117,8 @@ export function generateFromSource(moduleName: string|null, code: string, option
       'exponentiationOperator',
       'asyncGenerators',
       'functionBind',
-      'functionSent'
+      'functionSent',
+      ...additionalBabylonPlugins
     ]
   });
   if (!options.source) {
