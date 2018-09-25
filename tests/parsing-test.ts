@@ -123,3 +123,12 @@ test('Parsing should suppport custom eol style', t => {
     fs.readFileSync(path.join(basedir, 'pure-component.d.ts')).toString().replace('\r\n', '\n')
   );
 });
+test('Parsing should suppport users to set additional babylon plugins', t => {
+  compare(
+    t,
+    'Component',
+    'babylon-plugin.jsx',
+    'babylon-plugin.d.ts',
+    { babylonPlugins: ['dynamicImport'] }
+  );
+});
