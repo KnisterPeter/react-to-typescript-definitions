@@ -134,8 +134,7 @@ function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, 
       typeDecl.optional ? dom.DeclarationFlags.Optional : 0);
     if (propertyAst.leadingComments && propertyAst.leadingComments[0].type === 'CommentBlock') {
       const trimLines = (): (line: string) => boolean => {
-        let characterFound = false;
-        return (line: string) => (characterFound = Boolean(line)) && Boolean(line);
+        return (line: string) => Boolean(line);
       };
       property.jsDocComment = (propertyAst.leadingComments[0].value as string)
             .split('\n')
