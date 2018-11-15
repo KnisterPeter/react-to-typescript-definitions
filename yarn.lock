@@ -159,9 +159,9 @@
   version "10.3.0"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.3.0.tgz#078516315a84d56216b5d4fed8f75d59d3b16cac"
 
-"@types/node@9.6.36":
-  version "9.6.36"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.36.tgz#c4a2bdb16d3a79b34e01464b4bd38c1b849efdac"
+"@types/node@9.6.38":
+  version "9.6.38"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.38.tgz#01fb3f7ee5da861fa7dd4c518f1fa7b01ba39b7f"
 
 "@types/prop-types@*", "@types/prop-types@15.5.6":
   version "15.5.6"
