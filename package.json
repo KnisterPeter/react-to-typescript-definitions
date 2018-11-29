@@ -62,7 +62,7 @@
     "source-map-support": "0.5.9",
     "standard-version": "4.4.0",
     "tslint": "5.11.0",
-    "typescript": "3.1.6"
+    "typescript": "3.2.1"
   },
   "dependencies": {
     "astq": "2.3.6",
