@@ -56,7 +56,7 @@
     "cz-conventional-changelog": "2.1.0",
     "diff": "4.0.1",
     "execa": "1.0.0",
-    "nyc": "13.2.0",
+    "nyc": "13.3.0",
     "prop-types": "15.7.1",
     "react": "16.8.1",
     "rimraf": "2.6.3",
