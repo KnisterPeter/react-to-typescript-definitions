@@ -61,7 +61,7 @@
     "react": "16.8.4",
     "rimraf": "2.6.3",
     "source-map-support": "0.5.11",
-    "standard-version": "5.0.1",
+    "standard-version": "5.0.2",
     "tslint": "5.14.0",
     "typescript": "3.3.4000"
   },
