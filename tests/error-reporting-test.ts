@@ -1,6 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import test from 'ava';
-import * as stripAnsi from 'strip-ansi';
+import stripAnsi from 'strip-ansi';
 
 import * as react2dts from '../src/index';
 
