@@ -2,8 +2,8 @@ sudo: false
 language: node_js
 node_js:
 - stable
+- '10'
 - '8'
-- '6'
 matrix:
   fast_finish: true
 branches:
@@ -21,4 +21,3 @@ cache:
 before_script: 'npm run linter'
 script: 'npm run test'
 after_script: 'npm run coverage'
-
