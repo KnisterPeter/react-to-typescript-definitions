@@ -50,7 +50,7 @@
     "babel-preset-es2015": "6.24.1",
     "babel-register": "6.26.0",
     "chokidar-cli": "1.2.2",
-    "codecov": "3.3.0",
+    "codecov": "3.4.0",
     "conventional-changelog-cli": "2.0.21",
     "coveralls": "3.0.3",
     "cz-conventional-changelog": "2.1.0",
