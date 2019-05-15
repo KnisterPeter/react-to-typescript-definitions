@@ -113,8 +113,11 @@ test('Parsing should support an SFC with default export', t => {
 test('Parsing should support an SFC with default export babeled to es6', t => {
   compare(t, 'component', 'stateless-export-as-default.js', 'stateless-export-as-default.d.ts');
 });
-test('Parsing should suppport components that extend PureComponent', t => {
+test('Parsing should support components that extend PureComponent', t => {
   compare(t, 'component', 'pure-component.jsx', 'pure-component.d.ts');
+});
+test('Parsing should support prop-types as reference to constant', t => {
+  compare(t, 'component', 'const-as-proptypes.jsx', 'const-as-proptypes.d.ts');
 });
 test('Parsing should suppport custom eol style', t => {
   textDiff(

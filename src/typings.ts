@@ -112,7 +112,7 @@ function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: s
 
 function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentName: string, propTypes: any,
     exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
-  const typeDecl = dom.create.namedTypeReference(`React.SFC${ propTypes ? `<${interf.name}>` : '' }`);
+  const typeDecl = dom.create.namedTypeReference(`React.FC${ propTypes ? `<${interf.name}>` : '' }`);
   const constDecl = dom.create.const(componentName, typeDecl);
   m.members.push(constDecl);
 
@@ -381,6 +381,19 @@ function getPropTypes(ast: AstQuery, componentName: string): any|undefined {
   const referencedComponentName = getReferencedPropTypesComponentName(ast, propTypes);
   if (referencedComponentName) {
     return getPropTypes(ast, referencedComponentName);
+  }
+
+  if (propTypes) {
+    const referencedVariable = ast.query(`
+      //VariableDeclarator[
+        /:id Identifier[@name == '${propTypes.name}']
+      ]
+      /:init *
+    `);
+
+    if (referencedVariable && referencedVariable.length) {
+      return referencedVariable[0];
+    }
   }
 
   return propTypes;

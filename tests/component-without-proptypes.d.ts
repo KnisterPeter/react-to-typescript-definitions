@@ -8,5 +8,5 @@ declare module 'component' {
     render(): JSX.Element;
   }
 
-  export const test: React.SFC;
+  export const test: React.FC;
 }
