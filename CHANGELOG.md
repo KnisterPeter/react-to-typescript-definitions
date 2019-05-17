@@ -1,6 +1,33 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.0.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v1.2.0...v2.0.0) (2019-05-17)
+
+
+### Bug Fixes
+
+* **deps:** remove stubbed strip-ansi typings, use default import ([75f59b6](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/75f59b6))
+* **deps:** update dependency chalk to v2.4.2 ([dd31c7e](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/dd31c7e))
+* **deps:** update dependency dts-dom to v3.1.1 ([5c20f13](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/5c20f13))
+* **deps:** update dependency dts-dom to v3.2.0 ([e4ad59c](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/e4ad59c))
+* **deps:** update dependency get-stdin to v7 ([61fb667](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/61fb667))
+* **deps:** update dependency strip-ansi to v5 ([a321237](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/a321237))
+* **deps:** update dependency strip-ansi to v5.1.0 ([7d6aee4](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/7d6aee4))
+* **deps:** update dependency strip-ansi to v5.2.0 ([5360d26](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/5360d26))
+* remove unused variable ([70dace6](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/70dace6))
+
+
+### chore
+
+* drop support for node6 ([032a8b1](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/032a8b1))
+
+
+### BREAKING CHANGES
+
+* drop support for node6
+
+
 
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v1.1.0...v1.2.0) (2018-09-26)
