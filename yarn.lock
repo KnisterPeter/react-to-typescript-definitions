@@ -2104,10 +2104,10 @@ dotgitignore@2.1.0:
     find-up "^3.0.0"
     minimatch "^3.0.4"
 
-dts-dom@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/dts-dom/-/dts-dom-3.2.0.tgz#445dd9523fac2518a89b33d2e0be33ca6b9d7aba"
-  integrity sha512-M3PfyWqmL/5gEvz8PoogzOhk8UA/WaSUt2B0qS4PdZRMTZnjxlvSqh9AVNsZJflvPK8qjjPb0m1d/alGiYlk3w==
+dts-dom@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/dts-dom/-/dts-dom-3.3.0.tgz#b040a88bbbac42e02318dbe429eb1c6c393eb96e"
+  integrity sha512-k1ZsLGLxU8cd32cLL2DL5LmM5vvbaPMqnqnIqnvI5Wy22vr8M2LUuk3FFcEDKxSX+6h4G1TGQE7MDv2sRQk5Fg==
 
 duplexer2@~0.1.4:
   version "0.1.4"
