@@ -51,7 +51,7 @@
     "babel-register": "6.26.0",
     "chokidar-cli": "1.2.2",
     "codecov": "3.5.0",
-    "conventional-changelog-cli": "2.0.21",
+    "conventional-changelog-cli": "2.0.23",
     "coveralls": "3.0.5",
     "cz-conventional-changelog": "3.0.2",
     "diff": "4.0.1",
