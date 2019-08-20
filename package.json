@@ -62,7 +62,7 @@
     "rimraf": "3.0.0",
     "source-map-support": "0.5.13",
     "standard-version": "7.0.0",
-    "tslint": "5.18.0",
+    "tslint": "5.19.0",
     "typescript": "3.5.3"
   },
   "dependencies": {
