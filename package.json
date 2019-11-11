@@ -60,7 +60,7 @@
     "prop-types": "15.7.2",
     "react": "16.10.2",
     "rimraf": "3.0.0",
-    "source-map-support": "0.5.13",
+    "source-map-support": "0.5.16",
     "standard-version": "7.0.0",
     "tslint": "5.20.0",
     "typescript": "3.6.4"
