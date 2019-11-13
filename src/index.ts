@@ -1,6 +1,6 @@
 import * as babylon from 'babylon';
 import * as fs from 'fs';
-import * as getStdin from 'get-stdin';
+import getStdin from 'get-stdin';
 import { generateTypings } from './deprecated';
 import { Generator } from './generator';
 import { createTypings } from './typings';
