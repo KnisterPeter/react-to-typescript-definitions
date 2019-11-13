@@ -1,4 +1,4 @@
-import * as ASTQ from 'astq';
+import ASTQ from 'astq';
 
 import { IPropTypes, IProp } from './deprecated';
 import { InstanceOfResolver } from './index';

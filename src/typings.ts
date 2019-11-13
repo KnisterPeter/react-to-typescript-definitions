@@ -1,4 +1,4 @@
-import * as ASTQ from 'astq';
+import ASTQ from 'astq';
 import * as dom from 'dts-dom';
 import { InstanceOfResolver, IOptions } from './index';
 import * as types from './types';

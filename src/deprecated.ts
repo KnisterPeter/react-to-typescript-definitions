@@ -1,4 +1,4 @@
-import * as ASTQ from 'astq';
+import ASTQ from 'astq';
 
 import { parsePropTypes } from './analyzer';
 import { Generator } from './generator';
