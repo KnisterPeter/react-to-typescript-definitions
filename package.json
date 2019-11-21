@@ -52,7 +52,7 @@
     "chokidar-cli": "2.1.0",
     "codecov": "3.6.1",
     "conventional-changelog-cli": "2.0.28",
-    "coveralls": "3.0.7",
+    "coveralls": "3.0.8",
     "cz-conventional-changelog": "3.0.2",
     "diff": "4.0.1",
     "execa": "1.0.0",
