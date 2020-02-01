@@ -11,13 +11,13 @@ Create typescript definitions files (d.ts) from react components.
 
 ## Features
 
-* ES6 and ES7 class syntax
-* Most PropTypes
-  * any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf, symbol, shape
-* Partial support for oneOf PropType
-* required PropTypes
-* instanceOf PropTypes (when using API and giving a resolve function)
-* jsdoc
+- ES6 and ES7 class syntax
+- Most PropTypes
+  - any, array, bool, func, number, object, string, node, element, oneOfType, arrayOf, symbol, shape
+- Partial support for oneOf PropType
+- required PropTypes
+- instanceOf PropTypes (when using API and giving a resolve function)
+- jsdoc
 
 ## Usage
 
@@ -95,7 +95,7 @@ function generateFromAst(name, ast, options)
 
 Options:
 
-* instanceOfResolver  
+- instanceOfResolver  
   A function which gets a type name (as string) and should return the path
   to the file defining the type or undefined if the type is not resolvable.
   This function is required to generate instanceOf PropTypes.

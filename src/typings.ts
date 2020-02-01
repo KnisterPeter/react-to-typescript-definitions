@@ -16,12 +16,16 @@ export interface ImportedPropType {
 }
 
 export interface ImportedPropTypes {
-  propTypesName: string|undefined;
+  propTypesName: string | undefined;
   propTypes: ImportedPropType[];
 }
 
-export function createTypings(moduleName: string|null, programAst: any, options: IOptions,
-    reactImport: string): string {
+export function createTypings(
+  moduleName: string | null,
+  programAst: any,
+  options: IOptions,
+  reactImport: string
+): string {
   // #609: configure eol character
   dom.config.outputEol = options.eol || '\r\n';
 
@@ -41,7 +45,11 @@ export function createTypings(moduleName: string|null, programAst: any, options:
     propTypes: getImportedPropTypes(ast)
   };
   const importedTypes = getInstanceOfPropTypes(ast, importedPropTypes);
-  const importStatements = getImportStatements(ast, importedTypes, options.instanceOfResolver);
+  const importStatements = getImportStatements(
+    ast,
+    importedTypes,
+    options.instanceOfResolver
+  );
   const componentNames = getUniqueNames([
     ...getComponentNamesByPropTypeAssignment(ast),
     ...getComponentNamesByStaticPropTypeAttribute(ast),
@@ -55,7 +63,9 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   if (importStatements.length > 0) {
     importStatements.forEach(importStatement => {
       if (importStatement.name === undefined) {
-        m.members.push(dom.create.importDefault(importStatement.local, importStatement.path));
+        m.members.push(
+          dom.create.importDefault(importStatement.local, importStatement.path)
+        );
       } else {
         throw new Error('Named imports are currently unsupported');
       }
@@ -65,8 +75,16 @@ export function createTypings(moduleName: string|null, programAst: any, options:
     const exportType = getComponentExportType(ast, componentName);
     const propTypes = getPropTypes(ast, componentName);
     if (exportType) {
-      createExportedTypes(m, ast, componentName, reactComponentName, propTypes, importedPropTypes, exportType,
-        options);
+      createExportedTypes(
+        m,
+        ast,
+        componentName,
+        reactComponentName,
+        propTypes,
+        importedPropTypes,
+        exportType,
+        options
+      );
     }
   });
 
@@ -77,10 +95,21 @@ export function createTypings(moduleName: string|null, programAst: any, options:
   }
 }
 
-function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentName: string,
-    reactComponentName: string|undefined, propTypes: any, importedPropTypes: ImportedPropTypes,
-      exportType: dom.DeclarationFlags, options: IOptions): void {
-  const classComponent = isClassComponent(ast, componentName, reactComponentName);
+function createExportedTypes(
+  m: dom.ModuleDeclaration,
+  ast: AstQuery,
+  componentName: string,
+  reactComponentName: string | undefined,
+  propTypes: any,
+  importedPropTypes: ImportedPropTypes,
+  exportType: dom.DeclarationFlags,
+  options: IOptions
+): void {
+  const classComponent = isClassComponent(
+    ast,
+    componentName,
+    reactComponentName
+  );
 
   const interf = dom.create.interface(`${componentName}Props`);
   interf.flags = dom.DeclarationFlags.Export;
@@ -94,24 +123,56 @@ function createExportedTypes(m: dom.ModuleDeclaration, ast: AstQuery, componentN
   }
 
   if (classComponent) {
-    createExportedClassComponent(m, componentName, reactComponentName, exportType, interf);
+    createExportedClassComponent(
+      m,
+      componentName,
+      reactComponentName,
+      exportType,
+      interf
+    );
   } else {
-    createExportedFunctionalComponent(m, componentName, propTypes, exportType, interf);
+    createExportedFunctionalComponent(
+      m,
+      componentName,
+      propTypes,
+      exportType,
+      interf
+    );
   }
 }
 
-function createExportedClassComponent(m: dom.ModuleDeclaration, componentName: string,
-    reactComponentName: string|undefined, exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
+function createExportedClassComponent(
+  m: dom.ModuleDeclaration,
+  componentName: string,
+  reactComponentName: string | undefined,
+  exportType: dom.DeclarationFlags,
+  interf: dom.InterfaceDeclaration
+): void {
   const classDecl = dom.create.class(componentName);
-  classDecl.baseType = dom.create.interface(`React.${reactComponentName || 'Component'}<${interf.name}, any>`);
+  classDecl.baseType = dom.create.interface(
+    `React.${reactComponentName || 'Component'}<${interf.name}, any>`
+  );
   classDecl.flags = exportType;
-  classDecl.members.push(dom.create.method('render', [], dom.create.namedTypeReference('JSX.Element')));
+  classDecl.members.push(
+    dom.create.method(
+      'render',
+      [],
+      dom.create.namedTypeReference('JSX.Element')
+    )
+  );
   m.members.push(classDecl);
 }
 
-function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentName: string, propTypes: any,
-    exportType: dom.DeclarationFlags, interf: dom.InterfaceDeclaration): void {
-  const typeDecl = dom.create.namedTypeReference(`React.FC${ propTypes ? `<${interf.name}>` : '' }`);
+function createExportedFunctionalComponent(
+  m: dom.ModuleDeclaration,
+  componentName: string,
+  propTypes: any,
+  exportType: dom.DeclarationFlags,
+  interf: dom.InterfaceDeclaration
+): void {
+  const typeDecl = dom.create.namedTypeReference(
+    `React.FC${propTypes ? `<${interf.name}>` : ''}`
+  );
   const constDecl = dom.create.const(componentName, typeDecl);
   m.members.push(constDecl);
 
@@ -122,37 +183,59 @@ function createExportedFunctionalComponent(m: dom.ModuleDeclaration, componentNa
   }
 }
 
-function createPropTypeTypings(interf: dom.InterfaceDeclaration, ast: AstQuery, propTypes: any,
-    importedPropTypes: ImportedPropTypes, options: IOptions): void {
-  const res = ast.querySubtree(propTypes, `
+function createPropTypeTypings(
+  interf: dom.InterfaceDeclaration,
+  ast: AstQuery,
+  propTypes: any,
+  importedPropTypes: ImportedPropTypes,
+  options: IOptions
+): void {
+  const res = ast.querySubtree(
+    propTypes,
+    `
     / ObjectProperty
-  `);
+  `
+  );
   res.forEach(propertyAst => {
-    const typeDecl = types.get(ast, propertyAst.value, importedPropTypes, options);
-    const property = dom.create.property(propertyAst.key.name || propertyAst.key.value, typeDecl.type,
-      typeDecl.optional ? dom.DeclarationFlags.Optional : 0);
-    if (propertyAst.leadingComments && propertyAst.leadingComments[0].type === 'CommentBlock') {
-      const trimLines = (): (line: string) => boolean => {
+    const typeDecl = types.get(
+      ast,
+      propertyAst.value,
+      importedPropTypes,
+      options
+    );
+    const property = dom.create.property(
+      propertyAst.key.name || propertyAst.key.value,
+      typeDecl.type,
+      typeDecl.optional ? dom.DeclarationFlags.Optional : 0
+    );
+    if (
+      propertyAst.leadingComments &&
+      propertyAst.leadingComments[0].type === 'CommentBlock'
+    ) {
+      const trimLines = (): ((line: string) => boolean) => {
         return (line: string) => Boolean(line);
       };
       property.jsDocComment = (propertyAst.leadingComments[0].value as string)
-            .split('\n')
-            .map(line => line.trim())
-            .map(line => line.replace(/^\*\*?/, ''))
-            .map(line => line.trim())
-            .filter(trimLines())
-            .reverse()
-            .filter(trimLines())
-            .reverse()
-            .join('\n');
+        .split('\n')
+        .map(line => line.trim())
+        .map(line => line.replace(/^\*\*?/, ''))
+        .map(line => line.trim())
+        .filter(trimLines())
+        .reverse()
+        .filter(trimLines())
+        .reverse()
+        .join('\n');
     }
     interf.members.push(property);
   });
 }
 
-function extractComplexTypes(m: dom.ModuleDeclaration, interf: dom.InterfaceDeclaration,
-    componentName: string): void {
-  interf.members.forEach((member) => {
+function extractComplexTypes(
+  m: dom.ModuleDeclaration,
+  interf: dom.InterfaceDeclaration,
+  componentName: string
+): void {
+  interf.members.forEach(member => {
     if (member.kind === 'property' && isExtractableType(member.type)) {
       const name = `${componentName}${pascalCase(member.name)}`;
       const extractedMember = createModuleMember(name, member.type);
@@ -165,7 +248,11 @@ function extractComplexTypes(m: dom.ModuleDeclaration, interf: dom.InterfaceDecl
   });
 }
 
-type ExtractableType = dom.UnionType | dom.IntersectionType | dom.ObjectType | dom.ArrayTypeReference;
+type ExtractableType =
+  | dom.UnionType
+  | dom.IntersectionType
+  | dom.ObjectType
+  | dom.ArrayTypeReference;
 
 function isExtractableType(type: dom.Type): type is ExtractableType {
   if (typeof type === 'object') {
@@ -174,7 +261,10 @@ function isExtractableType(type: dom.Type): type is ExtractableType {
   return false;
 }
 
-function createModuleMember(name: string, type: ExtractableType): dom.ModuleMember | undefined {
+function createModuleMember(
+  name: string,
+  type: ExtractableType
+): dom.ModuleMember | undefined {
   switch (type.kind) {
     case 'intersection':
     case 'union':
@@ -184,11 +274,16 @@ function createModuleMember(name: string, type: ExtractableType): dom.ModuleMemb
       interf.members = type.members;
       return interf;
     case 'array':
-      return isExtractableType(type.type) ? createModuleMember(name, type.type) : undefined;
+      return isExtractableType(type.type)
+        ? createModuleMember(name, type.type)
+        : undefined;
   }
 }
 
-function createTypeReference(name: string, type: ExtractableType): dom.TypeReference {
+function createTypeReference(
+  name: string,
+  type: ExtractableType
+): dom.TypeReference {
   const namedTypeReference = dom.create.namedTypeReference(name);
   if (type.kind === 'array') {
     return dom.create.array(namedTypeReference);
@@ -198,13 +293,17 @@ function createTypeReference(name: string, type: ExtractableType): dom.TypeRefer
 }
 
 function getUniqueNames(input: string[]): string[] {
-  return Object.keys(input.reduce((all: any, name: string) => {
+  return Object.keys(
+    input.reduce((all: any, name: string) => {
       all[name] = true;
       return all;
-    }, {}));
+    }, {})
+  );
 }
 
-export function propTypeQueryExpression(propTypesName: string|undefined): string {
+export function propTypeQueryExpression(
+  propTypesName: string | undefined
+): string {
   return `
     '${propTypesName}' == 'undefined'
     ?
@@ -216,7 +315,7 @@ export function propTypeQueryExpression(propTypesName: string|undefined): string
   `;
 }
 
-function getReactComponentName(ast: AstQuery): string|undefined {
+function getReactComponentName(ast: AstQuery): string | undefined {
   const res = ast.query(`
     // ImportDeclaration[
       /:source StringLiteral[@value == 'react']
@@ -232,7 +331,7 @@ function getReactComponentName(ast: AstQuery): string|undefined {
   return undefined;
 }
 
-function getPropTypesName(ast: AstQuery): string|undefined {
+function getPropTypesName(ast: AstQuery): string | undefined {
   let res = ast.query(`
     // ImportDeclaration[
       /:source StringLiteral[@value == 'react']
@@ -261,21 +360,32 @@ function getPropTypesName(ast: AstQuery): string|undefined {
 }
 
 function getImportedPropTypes(ast: AstQuery): ImportedPropType[] {
-  return ast.query(`
+  return ast
+    .query(
+      `
     // ImportDeclaration[
       /:source StringLiteral[@value == 'prop-types']
     ]
     /:specifiers ImportSpecifier
-  `).map(({imported, local}) => ({
-    importedName: imported.name,
-    localName: local.name
-  }));
+  `
+    )
+    .map(({ imported, local }) => ({
+      importedName: imported.name,
+      localName: local.name
+    }));
 }
 
-function getInstanceOfPropTypes(ast: AstQuery, importedPropTypes: ImportedPropTypes): string[] {
-  const {propTypesName, propTypes} = importedPropTypes;
-  const instanceOfPropType = propTypes.find(({importedName}) => importedName === 'instanceOf');
-  const localInstanceOfName = instanceOfPropType ? instanceOfPropType.localName : undefined;
+function getInstanceOfPropTypes(
+  ast: AstQuery,
+  importedPropTypes: ImportedPropTypes
+): string[] {
+  const { propTypesName, propTypes } = importedPropTypes;
+  const instanceOfPropType = propTypes.find(
+    ({ importedName }) => importedName === 'instanceOf'
+  );
+  const localInstanceOfName = instanceOfPropType
+    ? instanceOfPropType.localName
+    : undefined;
 
   const res = ast.query(`
     // CallExpression[
@@ -294,38 +404,43 @@ function getInstanceOfPropTypes(ast: AstQuery, importedPropTypes: ImportedPropTy
 }
 
 interface ImportStatement {
-      name: string|undefined;
-      local: string;
-      path: string;
+  name: string | undefined;
+  local: string;
+  path: string;
 }
-function getImportStatements(ast: AstQuery, typeNames: string[],
-    instanceOfResolver: InstanceOfResolver | undefined): ImportStatement[] {
-  return typeNames.map(name => {
-    const res = ast.query(`
+function getImportStatements(
+  ast: AstQuery,
+  typeNames: string[],
+  instanceOfResolver: InstanceOfResolver | undefined
+): ImportStatement[] {
+  return typeNames
+    .map(name => {
+      const res = ast.query(`
       // ImportDeclaration[
         /:specifiers * /:local Identifier[@name == '${name}']
       ]
     `);
-    return {
-      name: res.length > 0 && res[0].specifiers[0].imported ?
-        res[0].specifiers[0].imported.name :
-        undefined,
-      local: name,
-      path: res.length > 0 ? res[0].source.value : undefined
-    };
-  })
-  .map(importStatement => {
-    if (importStatement && instanceOfResolver) {
-      const resolvedPath = importStatement.name ?
-        instanceOfResolver(importStatement.name) :
-        instanceOfResolver(importStatement.local);
-      if (resolvedPath) {
-        importStatement.path = resolvedPath;
+      return {
+        name:
+          res.length > 0 && res[0].specifiers[0].imported
+            ? res[0].specifiers[0].imported.name
+            : undefined,
+        local: name,
+        path: res.length > 0 ? res[0].source.value : undefined
+      };
+    })
+    .map(importStatement => {
+      if (importStatement && instanceOfResolver) {
+        const resolvedPath = importStatement.name
+          ? instanceOfResolver(importStatement.name)
+          : instanceOfResolver(importStatement.local);
+        if (resolvedPath) {
+          importStatement.path = resolvedPath;
+        }
       }
-    }
-    return importStatement;
-  })
-  .filter(importStatement => Boolean(importStatement.path));
+      return importStatement;
+    })
+    .filter(importStatement => Boolean(importStatement.path));
 }
 
 function getComponentNamesByPropTypeAssignment(ast: AstQuery): string[] {
@@ -349,7 +464,7 @@ function getComponentNamesByStaticPropTypeAttribute(ast: AstQuery): string[] {
     ]
   `);
   if (res.length > 0) {
-    return res.map(match => match.id ? match.id.name : '');
+    return res.map(match => (match.id ? match.id.name : ''));
   }
   return [];
 }
@@ -368,16 +483,20 @@ function getComponentNamesByJsxInBody(ast: AstQuery): string[] {
     ]
   `);
   if (res.length > 0) {
-    return res.map(match => match.id ? match.id.name : '');
+    return res.map(match => (match.id ? match.id.name : ''));
   }
   return [];
 }
 
-function getPropTypes(ast: AstQuery, componentName: string): any|undefined {
-  const propTypes = getPropTypesFromAssignment(ast, componentName) ||
+function getPropTypes(ast: AstQuery, componentName: string): any | undefined {
+  const propTypes =
+    getPropTypesFromAssignment(ast, componentName) ||
     getPropTypesFromStaticAttribute(ast, componentName);
 
-  const referencedComponentName = getReferencedPropTypesComponentName(ast, propTypes);
+  const referencedComponentName = getReferencedPropTypesComponentName(
+    ast,
+    propTypes
+  );
   if (referencedComponentName) {
     return getPropTypes(ast, referencedComponentName);
   }
@@ -398,7 +517,10 @@ function getPropTypes(ast: AstQuery, componentName: string): any|undefined {
   return propTypes;
 }
 
-function getPropTypesFromAssignment(ast: AstQuery, componentName: string): any|undefined {
+function getPropTypesFromAssignment(
+  ast: AstQuery,
+  componentName: string
+): any | undefined {
   const res = ast.query(`
     //AssignmentExpression[
       /:left MemberExpression[
@@ -413,7 +535,10 @@ function getPropTypesFromAssignment(ast: AstQuery, componentName: string): any|u
   return undefined;
 }
 
-function getPropTypesFromStaticAttribute(ast: AstQuery, componentName: string): any|undefined {
+function getPropTypesFromStaticAttribute(
+  ast: AstQuery,
+  componentName: string
+): any | undefined {
   if (componentName === '') {
     const res = ast.query(`
       //ClassDeclaration
@@ -443,13 +568,19 @@ function getPropTypesFromStaticAttribute(ast: AstQuery, componentName: string): 
   return undefined;
 }
 
-function getReferencedPropTypesComponentName(ast: AstQuery, propTypes: any|undefined): string|undefined {
+function getReferencedPropTypesComponentName(
+  ast: AstQuery,
+  propTypes: any | undefined
+): string | undefined {
   if (propTypes) {
-    const propTypesReference = ast.querySubtree(propTypes, `
+    const propTypesReference = ast.querySubtree(
+      propTypes,
+      `
       MemberExpression [
         /:property Identifier[@name == 'propTypes']
       ] /:object Identifier
-    `);
+    `
+    );
     if (propTypesReference.length > 0) {
       return propTypesReference[0].name;
     }
@@ -457,7 +588,10 @@ function getReferencedPropTypesComponentName(ast: AstQuery, propTypes: any|undef
   return undefined;
 }
 
-function getComponentExportType(ast: AstQuery, componentName: string): dom.DeclarationFlags|undefined {
+function getComponentExportType(
+  ast: AstQuery,
+  componentName: string
+): dom.DeclarationFlags | undefined {
   if (isDefaultExport(ast, componentName)) {
     return dom.DeclarationFlags.ExportDefault;
   }
@@ -470,8 +604,11 @@ function getComponentExportType(ast: AstQuery, componentName: string): dom.Decla
 }
 
 function isDefaultExport(ast: AstQuery, componentName: string): boolean {
-  return isUnnamedDefaultExport(ast, componentName) || isNamedDefaultExport(ast, componentName) ||
-    isNamedExportAsDefault(ast, componentName);
+  return (
+    isUnnamedDefaultExport(ast, componentName) ||
+    isNamedDefaultExport(ast, componentName) ||
+    isNamedExportAsDefault(ast, componentName)
+  );
 }
 
 function isUnnamedDefaultExport(ast: AstQuery, componentName: string): boolean {
@@ -554,8 +691,11 @@ function isNamedExport(ast: AstQuery, componentName: string): boolean {
   return res.length > 0;
 }
 
-function isClassComponent(ast: AstQuery, componentName: string,
-    reactComponentName: string|undefined): boolean {
+function isClassComponent(
+  ast: AstQuery,
+  componentName: string,
+  reactComponentName: string | undefined
+): boolean {
   if (componentName === '') {
     const res = ast.query(`
         // ClassDeclaration

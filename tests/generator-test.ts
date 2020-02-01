@@ -32,18 +32,27 @@ test('The Generator should write an optional property', t => {
 });
 test('The Generator should write a property interface', t => {
   const generator = setup();
-  generator.props('Name', {prop: {type: 'type', optional: true}});
-  t.is(generator.toString(), 'export interface NameProps {\n\tprop?: type;\n}\n');
+  generator.props('Name', { prop: { type: 'type', optional: true } });
+  t.is(
+    generator.toString(),
+    'export interface NameProps {\n\tprop?: type;\n}\n'
+  );
 });
 test('The Generator should write a class with props declaration', t => {
   const generator = setup();
   generator.class('Name', true);
-  t.is(generator.toString(), 'class Name extends React.Component<NameProps, any> {\n}\n');
+  t.is(
+    generator.toString(),
+    'class Name extends React.Component<NameProps, any> {\n}\n'
+  );
 });
 test('The Generator should write a class without props declaration', t => {
   const generator = setup();
   generator.class('Name', false);
-  t.is(generator.toString(), 'class Name extends React.Component<any, any> {\n}\n');
+  t.is(
+    generator.toString(),
+    'class Name extends React.Component<any, any> {\n}\n'
+  );
 });
 test('The Generator should write an indented block comment', t => {
   const generator = setup();
@@ -63,7 +72,7 @@ test('The Generator should write a named export declaration', t => {
 
 test('Generating typings with given custom generator should delare a module if name given', t => {
   const generator = setup();
-  let name: string|undefined;
+  let name: string | undefined;
   generator.declareModule = moduleName => {
     name = moduleName;
   };
@@ -71,15 +80,15 @@ test('Generating typings with given custom generator should delare a module if n
   const source = `
     export class Test {}
   `;
-  generateFromSource('module', source, {generator});
+  generateFromSource('module', source, { generator });
 
   t.is(name, 'module');
 });
 
 test('Generating typings with given custom generator should import react', t => {
   const generator = setup();
-  let decl: string|undefined;
-  let from: string|undefined;
+  let decl: string | undefined;
+  let from: string | undefined;
   generator.import = (_decl, _from) => {
     decl = _decl;
     from = _from;
@@ -88,7 +97,7 @@ test('Generating typings with given custom generator should import react', t => 
   const source = `
     export class Test {}
   `;
-  generateFromSource(null, source, {generator});
+  generateFromSource(null, source, { generator });
 
   t.is(decl, '* as React');
   t.is(from, 'react');

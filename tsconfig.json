@@ -2,13 +2,7 @@
   "compilerOptions": {
     "alwaysStrict": true,
     "declaration": true,
-    "lib": [
-      "dom",
-      "es5",
-      "es2015.core",
-      "es2015.iterable",
-      "es2015.promise"
-    ],
+    "lib": ["dom", "es5", "es2015.core", "es2015.iterable", "es2015.promise"],
     "listFiles": false,
     "module": "commonjs",
     "noFallthroughCasesInSwitch": true,
@@ -25,10 +19,5 @@
     "target": "es5",
     "esModuleInterop": true
   },
-  "exclude": [
-    "index.d.ts",
-    "dist",
-    "node_modules",
-    "tests/*.d.ts"
-  ]
+  "exclude": ["index.d.ts", "dist", "node_modules", "tests/*.d.ts"]
 }

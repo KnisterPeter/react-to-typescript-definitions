@@ -1,7 +1,6 @@
 import { IPropTypes, ExportType } from './deprecated';
 
 export class Generator {
-
   private static readonly NL = '\n';
 
   private indentLevel = 0;
@@ -54,7 +53,12 @@ export class Generator {
     }
   }
 
-  public prop(name: string, type: string, optional: boolean, documentation?: string): void {
+  public prop(
+    name: string,
+    type: string,
+    optional: boolean,
+    documentation?: string
+  ): void {
     this.indent();
     if (documentation) {
       this.comment(documentation);
@@ -100,7 +104,9 @@ export class Generator {
   }
 
   public class(name: string, props: boolean, fn?: () => void): void {
-    this.code += `class ${name} extends React.Component<${props ? `${name}Props` : 'any'}, any> {`;
+    this.code += `class ${name} extends React.Component<${
+      props ? `${name}Props` : 'any'
+    }, any> {`;
     this.nl();
     this.indentLevel++;
     if (fn) {
@@ -115,5 +121,4 @@ export class Generator {
   public toString(): string {
     return this.code;
   }
-
 }

@@ -6,14 +6,14 @@ import { IProp } from '../src/deprecated';
 
 const instanceOfResolver = (): any => undefined;
 const reactPropTypesMemberExpression: any = {
-    type: 'MemberExpression',
-    object: {
-      name: 'React'
-    },
-    property: {
-      name: 'PropTypes'
-    }
-  };
+  type: 'MemberExpression',
+  object: {
+    name: 'React'
+  },
+  property: {
+    name: 'PropTypes'
+  }
+};
 
 test('The PropType parser should return any on unknown PropTypes', t => {
   const ast: any = {
@@ -192,48 +192,51 @@ test('The PropType parser should return number[] for arrayOf(React.PropTypes.num
   t.is(result.type, 'number[]');
   t.is(result.optional, true);
 });
-test('The PropType parser should return number|string for' +
-    'oneOfType([React.PropTypes.number, React.PropTypes.string]) prop types', t => {
-  const ast: any = {
-    type: 'CallExpression',
-    loc: {},
-    callee: {
-      type: 'MemberExpression',
+test(
+  'The PropType parser should return number|string for' +
+    'oneOfType([React.PropTypes.number, React.PropTypes.string]) prop types',
+  t => {
+    const ast: any = {
+      type: 'CallExpression',
       loc: {},
-      object: reactPropTypesMemberExpression,
-      property: {
-        name: 'oneOfType'
-      }
-    },
-    arguments: [
-      {
-        type: 'ArrayExpression',
+      callee: {
+        type: 'MemberExpression',
         loc: {},
-        elements: [
-          {
-            type: 'MemberExpression',
-            loc: {},
-            object: reactPropTypesMemberExpression,
-            property: {
-              name: 'number'
+        object: reactPropTypesMemberExpression,
+        property: {
+          name: 'oneOfType'
+        }
+      },
+      arguments: [
+        {
+          type: 'ArrayExpression',
+          loc: {},
+          elements: [
+            {
+              type: 'MemberExpression',
+              loc: {},
+              object: reactPropTypesMemberExpression,
+              property: {
+                name: 'number'
+              }
+            },
+            {
+              type: 'MemberExpression',
+              loc: {},
+              object: reactPropTypesMemberExpression,
+              property: {
+                name: 'string'
+              }
             }
-          },
-          {
-            type: 'MemberExpression',
-            loc: {},
-            object: reactPropTypesMemberExpression,
-            property: {
-              name: 'string'
-            }
-          }
-        ]
-      }
-    ]
-  };
-  const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
-  t.is(result.type, 'number|string');
-  t.is(result.optional, true);
-});
+          ]
+        }
+      ]
+    };
+    const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
+    t.is(result.type, 'number|string');
+    t.is(result.optional, true);
+  }
+);
 test('The PropType parser should return Message for instanceOf(Message) prop types', t => {
   const ast: any = {
     type: 'CallExpression',
