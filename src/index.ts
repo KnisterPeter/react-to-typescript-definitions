@@ -6,13 +6,12 @@ import { Generator } from './generator';
 import { createTypings } from './typings';
 
 export interface InstanceOfResolver {
-  (name: string): string|undefined;
+  (name: string): string | undefined;
 }
 
 // the IOptions is for backward compatibility
-export type IOptions  = Options;
+export type IOptions = Options;
 export interface Options {
-
   /**
    * Resolves type names to import paths.
    *
@@ -50,7 +49,7 @@ export interface Options {
   /**
    * EOL character. This would be changed to whatever is liked to
    * terminate lines. Defaults to '\r\n'
-   * 
+   *
    * @type {string}
    * @memberOf Options
    */
@@ -87,17 +86,32 @@ export function cli(options: any): void {
   }
 }
 
-export function generateFromFile(moduleName: string|null, path: string, options: IOptions = {},
-    reactImport = 'react'): string {
+export function generateFromFile(
+  moduleName: string | null,
+  path: string,
+  options: IOptions = {},
+  reactImport = 'react'
+): string {
   if (!options.filename) {
     options.filename = path;
   }
-  return generateFromSource(moduleName, fs.readFileSync(path).toString(), options, reactImport);
+  return generateFromSource(
+    moduleName,
+    fs.readFileSync(path).toString(),
+    options,
+    reactImport
+  );
 }
 
-export function generateFromSource(moduleName: string|null, code: string, options: IOptions = {},
-    reactImport = 'react'): string {
-  const additionalBabylonPlugins = Array.isArray(options.babylonPlugins) ? options.babylonPlugins : [];
+export function generateFromSource(
+  moduleName: string | null,
+  code: string,
+  options: IOptions = {},
+  reactImport = 'react'
+): string {
+  const additionalBabylonPlugins = Array.isArray(options.babylonPlugins)
+    ? options.babylonPlugins
+    : [];
   const ast = babylon.parse(code, {
     sourceType: 'module',
     allowReturnOutsideFunction: true,
@@ -127,8 +141,12 @@ export function generateFromSource(moduleName: string|null, code: string, option
   return generateFromAst(moduleName, ast, options, reactImport);
 }
 
-export function generateFromAst(moduleName: string|null, ast: any, options: IOptions = {},
-    reactImport = 'react'): string {
+export function generateFromAst(
+  moduleName: string | null,
+  ast: any,
+  options: IOptions = {},
+  reactImport = 'react'
+): string {
   // tslint:disable-next-line:deprecation
   if (options.generator) {
     return generateTypings(moduleName, ast, options);
