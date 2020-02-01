@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import test, { TestContext } from 'ava';
+import test, { ExecutionContext } from 'ava';
 import chalk from 'chalk';
 import * as diff from 'diff';
 import * as fs from 'fs';
@@ -17,7 +17,7 @@ function normalize(input: string): string {
     .replace(/ => /g, '=>');
 }
 
-function textDiff(t: TestContext, actual: string, expected: string): void {
+function textDiff(t: ExecutionContext, actual: string, expected: string): void {
   if (diff.diffChars(normalize(expected), normalize(actual)).length > 1) {
     const differences = diff.diffChars(expected, actual);
     const result = differences
@@ -32,7 +32,7 @@ function textDiff(t: TestContext, actual: string, expected: string): void {
   }
 }
 
-function compare(t: TestContext, moduleName: string|null, file1: string, file2: string,
+function compare(t: ExecutionContext, moduleName: string|null, file1: string, file2: string,
     opts: react2dts.IOptions = {}, reactImport = 'react'): void {
   textDiff(
     t,

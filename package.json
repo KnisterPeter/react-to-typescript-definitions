@@ -23,7 +23,6 @@
     "pretest": "npm run clean && npm run build:inline",
     "test": "nyc ava",
     "coverage": "nyc report --reporter=lcov && codecov",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -w",
     "prerelease": "npm test && npm run build",
     "release": "standard-version",
     "postrelease": "git push --follow-tags origin master && npm publish"
@@ -51,16 +50,13 @@
     "babel-register": "6.26.0",
     "chokidar-cli": "2.1.0",
     "codecov": "3.6.4",
-    "conventional-changelog-cli": "2.0.31",
     "coveralls": "3.0.9",
-    "cz-conventional-changelog": "3.1.0",
     "diff": "4.0.2",
     "execa": "4.0.0",
     "nyc": "15.0.0",
     "prop-types": "15.7.2",
     "react": "16.12.0",
     "rimraf": "3.0.1",
-    "source-map-support": "0.5.16",
     "standard-version": "7.1.0",
     "tslint": "5.20.1",
     "typescript": "3.7.5"
@@ -76,20 +72,12 @@
     "pascal-case": "3.1.1",
     "strip-ansi": "6.0.0"
   },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "ava": {
     "files": [
       "dist/tests/**/*-test.js"
     ],
     "source": [
       "dist/src/**/*.js"
-    ],
-    "require": [
-      "source-map-support/register"
     ]
   },
   "nyc": {
