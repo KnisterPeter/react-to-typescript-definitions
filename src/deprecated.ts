@@ -1,8 +1,7 @@
 import ASTQ from 'astq';
-
 import { parsePropTypes } from './analyzer';
 import { Generator } from './generator';
-import { IOptions, InstanceOfResolver } from './index';
+import { InstanceOfResolver, IOptions } from './index';
 
 export enum ExportType {
   default,
@@ -28,8 +27,8 @@ export function generateTypings(
   options: IOptions
 ): string {
   const parsingResult = parseAst(ast, options.instanceOfResolver);
-  // tslint:disable-next-line deprecation
   return deprecatedGenerator(
+    // tslint:disable-next-line: deprecation
     options.generator as Generator,
     moduleName,
     parsingResult

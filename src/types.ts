@@ -3,9 +3,9 @@ import chalk from 'chalk';
 import * as dom from 'dts-dom';
 import { IOptions } from './index';
 import {
-  propTypeQueryExpression,
   AstQuery,
-  ImportedPropTypes
+  ImportedPropTypes,
+  propTypeQueryExpression
 } from './typings';
 
 export interface TypeDeclaration {
@@ -297,10 +297,12 @@ function printErrorWithContext(e: any, ast: any, options: IOptions): void {
   console.error(`Line ${e.loc.start.line - 1}: ${lines[e.loc.start.line - 2]}`);
   // tslint:disable-next-line prefer-template
   console.error(
-    `Line ${e.loc.start.line}: ` +
-      errorLine.substring(0, e.loc.start.column) +
-      chalk.red(errorLine.substring(e.loc.start.column, e.loc.end.column)) +
-      errorLine.substring(e.loc.end.column)
+    `Line ${e.loc.start.line}: ${errorLine.substring(
+      0,
+      e.loc.start.column
+    )}${chalk.red(
+      errorLine.substring(e.loc.start.column, e.loc.end.column)
+    )}${errorLine.substring(e.loc.end.column)}`
   );
   console.error(`Line ${e.loc.start.line + 1}: ${lines[e.loc.start.line]}`);
   console.error();
