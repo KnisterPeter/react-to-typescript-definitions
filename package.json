@@ -45,7 +45,7 @@
     "@types/node": "13.13.0",
     "@types/prop-types": "15.7.3",
     "@types/react": "16.9.34",
-    "ava": "3.7.0",
+    "ava": "3.7.1",
     "babel-core": "6.26.3",
     "babel-preset-es2015": "6.24.1",
     "babel-register": "6.26.0",
