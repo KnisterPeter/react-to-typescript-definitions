@@ -70,7 +70,7 @@
     "chalk": "4.0.0",
     "dts-dom": "3.6.0",
     "get-stdin": "7.0.0",
-    "meow": "6.1.1",
+    "meow": "7.0.0",
     "pascal-case": "3.1.1",
     "strip-ansi": "6.0.0"
   },
