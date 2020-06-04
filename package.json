@@ -61,7 +61,7 @@
     "rimraf": "3.0.2",
     "standard-version": "8.0.0",
     "tslint": "6.1.2",
-    "typescript": "3.9.3"
+    "typescript": "3.9.5"
   },
   "dependencies": {
     "astq": "2.3.6",
