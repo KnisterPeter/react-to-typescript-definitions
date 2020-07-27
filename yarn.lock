@@ -526,10 +526,10 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
-ava@3.10.1:
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/ava/-/ava-3.10.1.tgz#a4e68b1a2bb248fa0d96529d23dd83f57082e944"
-  integrity sha512-+w86ZHyFHIGCABi7NUrn/WJMyC+fDj0BSIlFNVS45WDKAD5vxbIiDWeclctxOOc2KDPfQD7tFOURSBz0FBLD0A==
+ava@3.11.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/ava/-/ava-3.11.0.tgz#484f25efa7cf6ec354defd75f19c3cc28fcf0141"
+  integrity sha512-y5U8BGeSRjs/OypsC4CJxr+L1KtLKU5kUyHr5hcghXn7HNr2f4LE/4gvl0Q5lNkLX1obdRW1oODphNdU/glwmA==
   dependencies:
     "@concordance/react" "^2.0.0"
     acorn "^7.3.1"
@@ -539,7 +539,7 @@ ava@3.10.1:
     arrify "^2.0.1"
     callsites "^3.1.0"
     chalk "^4.1.0"
-    chokidar "^3.4.0"
+    chokidar "^3.4.1"
     chunkd "^2.0.1"
     ci-info "^2.0.0"
     ci-parallel-vars "^1.0.1"
@@ -553,7 +553,7 @@ ava@3.10.1:
     currently-unhandled "^0.4.1"
     debug "^4.1.1"
     del "^5.1.0"
-    emittery "^0.7.0"
+    emittery "^0.7.1"
     equal-length "^1.0.0"
     figures "^3.2.0"
     globby "^11.0.1"
@@ -561,14 +561,14 @@ ava@3.10.1:
     import-local "^3.0.2"
     indent-string "^4.0.0"
     is-error "^2.2.2"
-    is-plain-object "^3.0.1"
+    is-plain-object "^4.1.1"
     is-promise "^4.0.0"
-    lodash "^4.17.15"
+    lodash "^4.17.19"
     matcher "^3.0.0"
     md5-hex "^3.0.1"
     mem "^6.1.0"
     ms "^2.1.2"
-    ora "^4.0.4"
+    ora "^4.0.5"
     p-map "^4.0.0"
     picomatch "^2.2.2"
     pkg-conf "^3.1.0"
@@ -585,7 +585,7 @@ ava@3.10.1:
     trim-off-newlines "^1.0.1"
     update-notifier "^4.1.0"
     write-file-atomic "^3.0.3"
-    yargs "^15.4.0"
+    yargs "^15.4.1"
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -1236,7 +1236,7 @@ chokidar-cli@2.1.0:
     lodash.throttle "^4.1.1"
     yargs "^13.3.0"
 
-chokidar@^3.2.3, chokidar@^3.4.0:
+chokidar@^3.2.3, chokidar@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.1.tgz#e905bdecf10eaa0a0b1db0c664481cc4cbc22ba1"
   integrity sha512-TQTJyr2stihpC4Sya9hs2Xh+O2wf+igjL36Y75xx2WdHuiICcn/XJza46Jwt0eT5hVpQOzo3FpY3cj3RVYLX0g==
@@ -1876,7 +1876,7 @@ ecc-jsbn@~0.1.1:
     jsbn "~0.1.0"
     safer-buffer "^2.1.0"
 
-emittery@^0.7.0:
+emittery@^0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.7.1.tgz#c02375a927a40948c0345cc903072597f5270451"
   integrity sha512-d34LN4L6h18Bzz9xpoku2nPwKxCPlPMr3EEKTkoEBi+1/+b0lcRkRJ1UVyyZaKNeqGR3swcGl6s390DNO4YVgQ==
@@ -2714,10 +2714,10 @@ is-plain-obj@^1.1.0:
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
   integrity sha1-caUMhCnfync8kqOQpKA7OfzVHT4=
 
-is-plain-object@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-3.0.1.tgz#662d92d24c0aa4302407b0d45d21f2251c85f85b"
-  integrity sha512-Xnpx182SBMrr/aBik8y+GuR4U1L9FqMSojwDQwPMmxyC6bvEqly9UBCxhauBF5vNh2gwWJNX6oDV7O+OM4z34g==
+is-plain-object@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-4.1.1.tgz#1a14d6452cbd50790edc7fdaa0aed5a40a35ebb5"
+  integrity sha512-5Aw8LLVsDlZsETVMhoMXzqsXwQqr/0vlnBYzIXJbYo2F4yYlhLHs+Ez7Bod7IIQKWkJbJfxrWD7pA1Dw1TKrwA==
 
 is-promise@^4.0.0:
   version "4.0.0"
@@ -3483,7 +3483,7 @@ optionator@^0.8.1:
     type-check "~0.3.2"
     word-wrap "~1.2.3"
 
-ora@^4.0.4:
+ora@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/ora/-/ora-4.0.5.tgz#7410b5cc2d99fa637fd5099bbb9f02bfbb5a361e"
   integrity sha512-jCDgm9DqvRcNIAEv2wZPrh7E5PcQiDUnbnWbAfu4NGAE2ZNqPFbDixmWldy1YG2QfLeQhuiu6/h5VRrk6cG50w==
@@ -4989,7 +4989,7 @@ yargs@^13.3.0:
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
 
-yargs@^15.0.2, yargs@^15.3.1, yargs@^15.4.0:
+yargs@^15.0.2, yargs@^15.3.1, yargs@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.4.1.tgz#0d87a16de01aee9d8bec2bfbf74f67851730f4f8"
   integrity sha512-aePbxDmcYW++PaqBsJ+HYUFwCdv4LVvdnhBy78E57PIor8/OVvhMrADFFEDh8DHDFRv/O9i3lPhsENjO7QX0+A==
