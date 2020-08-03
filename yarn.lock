@@ -526,10 +526,10 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha1-x57Zf380y48robyXkLzDZkdLS3k=
 
-ava@3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/ava/-/ava-3.11.0.tgz#484f25efa7cf6ec354defd75f19c3cc28fcf0141"
-  integrity sha512-y5U8BGeSRjs/OypsC4CJxr+L1KtLKU5kUyHr5hcghXn7HNr2f4LE/4gvl0Q5lNkLX1obdRW1oODphNdU/glwmA==
+ava@3.11.1:
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/ava/-/ava-3.11.1.tgz#580bfc974b858fb13f7ce948b9651da4e5b17bc8"
+  integrity sha512-yGPD0msa5Qronw7GHDNlLaB7oU5zryYtXeuvny40YV6TMskSghqK7Ky3NisM/sr+aqI3DY7sfmORx8dIWQgMoQ==
   dependencies:
     "@concordance/react" "^2.0.0"
     acorn "^7.3.1"
