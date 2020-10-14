@@ -57,7 +57,7 @@
     "nyc": "15.1.0",
     "prettier": "2.1.2",
     "prop-types": "15.7.2",
-    "react": "16.13.1",
+    "react": "16.14.0",
     "rimraf": "3.0.2",
     "standard-version": "9.0.0",
     "tslint": "6.1.3",
