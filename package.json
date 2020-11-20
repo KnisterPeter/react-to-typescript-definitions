@@ -55,7 +55,7 @@
     "diff": "5.0.0",
     "execa": "4.1.0",
     "nyc": "15.1.0",
-    "prettier": "2.1.2",
+    "prettier": "2.2.0",
     "prop-types": "15.7.2",
     "react": "17.0.1",
     "rimraf": "3.0.2",
