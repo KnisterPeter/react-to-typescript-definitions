@@ -1898,9 +1898,9 @@ ecc-jsbn@~0.1.1:
     safer-buffer "^2.1.0"
 
 emittery@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.8.0.tgz#28e3f2f450bebb969df42b00fd3d6b3de6087905"
-  integrity sha512-XMGToId3CejfmZg/0qOzdTT3WFuAN8fQYtcKXccabRfCzGiWMSTydMshHGLyx9C/ejMl4nw9tvqrn12QVFPIUg==
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.8.1.tgz#bb23cc86d03b30aa75a7f734819dee2e1ba70860"
+  integrity sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==
 
 emoji-regex@^7.0.1:
   version "7.0.3"
