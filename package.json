@@ -64,7 +64,7 @@
     "typescript": "4.2.3"
   },
   "dependencies": {
-    "astq": "2.3.6",
+    "astq": "2.7.5",
     "babel-generator": "6.26.1",
     "babylon": "7.0.0-beta.47",
     "chalk": "4.1.0",
