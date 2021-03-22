@@ -132,6 +132,7 @@ export function generateFromSource(
       'asyncGenerators',
       'functionBind',
       'functionSent',
+      'optionalChaining',
       ...additionalBabylonPlugins
     ]
   });
