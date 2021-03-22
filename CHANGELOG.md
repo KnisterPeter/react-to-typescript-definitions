@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v2.0.0...v3.0.0) (2021-03-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* Drop support for node 8
+
+### Features
+
+* parse files which uses optional chaining feature ([3432de8](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/3432de8a5d479572ff3fcd308e3e2ffb0bed0fce))
+
+
+### Bug Fixes
+
+* **deps:** update dependency dts-dom to v3.4.0 ([d87a65e](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/d87a65ecbe844ad78845abbf40afecd2d130a5b8))
+* **deps:** update dependency dts-dom to v3.5.0 ([1c87f5c](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/1c87f5ca6d1c1737db794818ac4802df248db534))
+* **deps:** update dependency dts-dom to v3.6.0 ([4aa8889](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/4aa8889383fa36d51f3e39e12f9e877fdb933f93))
+* **deps:** update dependency meow to v6.0.1 ([8967eb7](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/8967eb74d9e373204da2f5a668bb02f1150ead6b))
+* **deps:** update dependency meow to v6.1.0 ([8ce686d](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/8ce686d9ac95a710f912d8292fee2c437a7f6bcc))
+* correctly import pascalcase function ([686bd9f](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/686bd9fb328934cd65bca62eca003cb6592e180f))
+* **deps:** update dependency pascal-case to v3 ([ca6fecc](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/ca6fecc1fdfb09278aff0d12c0fa5c55e5ed8773))
+* correct usage of execa ([ccb4699](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/ccb469976184ee939d30641bd4d9817327785eeb))
+* **deps:** update dependency chalk to v3 ([963d6fc](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/963d6fc83bca1a05b2d76f2fa0fc05a2f09c5590))
+* **deps:** update dependency dts-dom to v3.3.0 ([49135b1](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/49135b1ac5b94b24446048f6acd1f3460a6debcd))
+* **deps:** update dependency meow to v6 ([435ae07](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/435ae078fdca10cac301335b0862a095959d7ac2))
+* **deps:** update dependency strip-ansi to v6 ([fd7e788](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/fd7e788361126a6945697e443e9309f1bec5e87c))
+
+
+* drop support for node 8 ([ca0a130](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/ca0a130d7814da3897118b57a301b81a271ccf9a))
+
 ## [2.0.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v1.2.0...v2.0.0) (2019-05-17)
 
 ### Bug Fixes
