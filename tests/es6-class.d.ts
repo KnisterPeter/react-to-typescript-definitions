@@ -10,6 +10,7 @@ declare module 'component' {
   export interface ComponentOptionalObjectWithShape {
     color?: string;
     fontSize?: number;
+    "aria-label"?: string;
   }
 
   export type ComponentRequiredUnion = ((...args: any[])=>any) | boolean;

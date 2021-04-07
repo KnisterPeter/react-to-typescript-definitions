@@ -32,7 +32,8 @@ Component.propTypes = {
 	//optionalObjectOf: React.PropTypes.objectOf(React.PropTypes.number),
 	optionalObjectWithShape: React.PropTypes.shape({
 		color: React.PropTypes.string,
-		fontSize: React.PropTypes.number
+		fontSize: React.PropTypes.number,
+		'aria-label': React.PropTypes.string,
 	}),
 	requiredFunc: React.PropTypes.func.isRequired,
 	requiredAny: React.PropTypes.any.isRequired,
