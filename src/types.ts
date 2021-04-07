@@ -160,7 +160,7 @@ function getComplexType(
         (entry: any) => {
           const typeDecl = get(ast, entry.value, importedPropTypes, options);
           return dom.create.property(
-            entry.key.name,
+            entry.key.type === 'StringLiteral' ? `${entry.key.value}` : entry.key.name,
             typeDecl.type,
             typeDecl.optional
               ? dom.DeclarationFlags.Optional
