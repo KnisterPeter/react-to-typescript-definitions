@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v3.0.0...v3.0.1) (2021-04-07)
+
+
+### Bug Fixes
+
+* handle nested string literal props ([46edf00](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/46edf00dc24c5e8dfd3dde44bf52fc2dd48950ff))
+
 ## [3.0.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v2.0.0...v3.0.0) (2021-03-22)
 
 
