@@ -71,10 +71,13 @@ export function createTypings(
       }
     });
   }
+  const alreadyDefined: string[] = [];
+
   componentNames.forEach((componentName) => {
     const exportType = getComponentExportType(ast, componentName);
     const propTypes = getPropTypes(ast, componentName);
     if (exportType) {
+      alreadyDefined.push(componentName);
       createExportedTypes(
         m,
         ast,
@@ -85,6 +88,59 @@ export function createTypings(
         exportType,
         options
       );
+    }
+  });
+
+  // top level object variables
+  const componentObject = getComponentNamesByObject(ast, componentNames);
+
+  componentObject.forEach(({ name, properties = {} }) => {
+    const obj = dom.create.objectType([]);
+    let hasType;
+
+    Object.keys(properties).forEach((k) => {
+      const { key, value } = properties[k];
+      componentNames.forEach((componentName) => {
+        // if a property matches an existing component
+        // add it to the object definition
+        if (value.type === 'Identifier' && value.name === componentName) {
+          const exportType = getComponentExportType(ast, componentName);
+          const propTypes = getPropTypes(ast, value.name);
+          // if it was exported individually, it will already have been typed earlier
+          if (!alreadyDefined.includes(componentName)) {
+            createExportedTypes(
+              m,
+              ast,
+              value.name,
+              reactComponentName,
+              propTypes,
+              importedPropTypes,
+              exportType,
+              options
+            );
+          }
+
+          if (propTypes) {
+            hasType = true;
+            const type1 = dom.create.namedTypeReference(value.name);
+            const typeBase = dom.create.typeof(type1);
+            const b = dom.create.property(key.name, typeBase);
+            obj.members.push(b);
+          }
+        }
+      });
+    });
+    if (hasType) {
+      const exportType = getComponentExportType(ast, name);
+
+      const objConst = dom.create.const(name, obj);
+      m.members.push(objConst);
+
+      if (exportType === dom.DeclarationFlags.ExportDefault) {
+        m.members.push(dom.create.exportDefault(name));
+      } else {
+        objConst.flags = exportType;
+      }
     }
   });
 
@@ -102,7 +158,7 @@ function createExportedTypes(
   reactComponentName: string | undefined,
   propTypes: any,
   importedPropTypes: ImportedPropTypes,
-  exportType: dom.DeclarationFlags,
+  exportType: dom.DeclarationFlags | undefined,
   options: IOptions
 ): void {
   const classComponent = isClassComponent(
@@ -123,13 +179,19 @@ function createExportedTypes(
   }
 
   if (classComponent) {
-    createExportedClassComponent(
-      m,
-      componentName,
-      reactComponentName,
-      exportType,
-      interf
-    );
+    if (!exportType) {
+      createClassComponent(m, componentName, reactComponentName, interf);
+    } else {
+      createExportedClassComponent(
+        m,
+        componentName,
+        reactComponentName,
+        exportType,
+        interf
+      );
+    }
+  } else if (!exportType) {
+    createFunctionalComponent(m, componentName, propTypes, interf);
   } else {
     createExportedFunctionalComponent(
       m,
@@ -141,18 +203,16 @@ function createExportedTypes(
   }
 }
 
-function createExportedClassComponent(
+function createClassComponent(
   m: dom.ModuleDeclaration,
   componentName: string,
   reactComponentName: string | undefined,
-  exportType: dom.DeclarationFlags,
   interf: dom.InterfaceDeclaration
-): void {
+): dom.ClassDeclaration {
   const classDecl = dom.create.class(componentName);
   classDecl.baseType = dom.create.interface(
     `React.${reactComponentName || 'Component'}<${interf.name}, any>`
   );
-  classDecl.flags = exportType;
   classDecl.members.push(
     dom.create.method(
       'render',
@@ -161,6 +221,38 @@ function createExportedClassComponent(
     )
   );
   m.members.push(classDecl);
+  return classDecl;
+}
+
+function createExportedClassComponent(
+  m: dom.ModuleDeclaration,
+  componentName: string,
+  reactComponentName: string | undefined,
+  exportType: dom.DeclarationFlags,
+  interf: dom.InterfaceDeclaration
+): void {
+  const classDecl = createClassComponent(
+    m,
+    componentName,
+    reactComponentName,
+    interf
+  );
+  classDecl.flags = exportType;
+}
+
+function createFunctionalComponent(
+  m: dom.ModuleDeclaration,
+  componentName: string,
+  propTypes: any,
+  interf: dom.InterfaceDeclaration
+): dom.ConstDeclaration {
+  const typeDecl = dom.create.namedTypeReference(
+    `React.FC${propTypes ? `<${interf.name}>` : ''}`
+  );
+  const constDecl = dom.create.const(componentName, typeDecl);
+  m.members.push(constDecl);
+
+  return constDecl;
 }
 
 function createExportedFunctionalComponent(
@@ -170,12 +262,12 @@ function createExportedFunctionalComponent(
   exportType: dom.DeclarationFlags,
   interf: dom.InterfaceDeclaration
 ): void {
-  const typeDecl = dom.create.namedTypeReference(
-    `React.FC${propTypes ? `<${interf.name}>` : ''}`
+  const constDecl = createFunctionalComponent(
+    m,
+    componentName,
+    propTypes,
+    interf
   );
-  const constDecl = dom.create.const(componentName, typeDecl);
-  m.members.push(constDecl);
-
   if (exportType === dom.DeclarationFlags.ExportDefault) {
     m.members.push(dom.create.exportDefault(componentName));
   } else {
@@ -484,6 +576,38 @@ function getComponentNamesByJsxInBody(ast: AstQuery): string[] {
   `);
   if (res.length > 0) {
     return res.map((match) => (match.id ? match.id.name : ''));
+  }
+  return [];
+}
+
+function getComponentNamesByObject(
+  ast: AstQuery,
+  componentNames: string[]
+): { name: string; properties: object | undefined }[] {
+  const res = ast.query(`
+      /:program *
+      / VariableDeclaration
+        / VariableDeclarator[
+          /:init ObjectExpression
+          // ObjectProperty
+        ],
+      /:program *
+      / ExportNamedDeclaration
+        // VariableDeclarator[
+          /:init ObjectExpression
+            // ObjectProperty
+        ]
+  `);
+  if (res.length > 0) {
+    return (
+      res
+        // only interested in components that exist
+        .filter((match) => !componentNames.includes(match))
+        .map((match) => ({
+          name: match.id ? match.id.name : '',
+          properties: match.init?.properties,
+        }))
+    );
   }
   return [];
 }
