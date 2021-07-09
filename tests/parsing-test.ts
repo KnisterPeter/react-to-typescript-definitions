@@ -111,6 +111,22 @@ test('Parsing should create definition from class extending Component', (t) => {
     'import-react-component.d.ts'
   );
 });
+test('Parsing should create definition from component exported as an object of components', (t) => {
+  compare(
+    t,
+    'component',
+    'multiple-components-object.jsx',
+    'multiple-components-object.d.ts'
+  );
+});
+test("Parsing should create definition from default export that's an object of components", (t) => {
+  compare(
+    t,
+    'component',
+    'multiple-components-object-default.jsx',
+    'multiple-components-object-default.d.ts'
+  );
+});
 test('Parsing should create definition from class import PropTypes and instanceOf dependency', (t) => {
   compare(
     t,
