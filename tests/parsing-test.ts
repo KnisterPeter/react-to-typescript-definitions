@@ -127,6 +127,30 @@ test("Parsing should create definition from default export that's an object of c
     'multiple-components-object-default.d.ts'
   );
 });
+test("Parsing should create definition from unnamed default export that's an object of components", (t) => {
+  compare(
+    t,
+    'component',
+    'multiple-components-object-unnamed-default.jsx',
+    'multiple-components-object-unnamed-default.d.ts'
+  );
+});
+test('Parsing should add dot notation members for component', (t) => {
+  compare(
+    t,
+    'component',
+    'multiple-components-dot-notation.jsx',
+    'multiple-components-dot-notation.d.ts'
+  );
+});
+test('Parsing should add dot notation members for default export component', (t) => {
+  compare(
+    t,
+    'component',
+    'multiple-components-dot-notation-default.jsx',
+    'multiple-components-dot-notation-default.d.ts'
+  );
+});
 test('Parsing should create definition from class import PropTypes and instanceOf dependency', (t) => {
   compare(
     t,
