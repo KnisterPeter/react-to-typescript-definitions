@@ -13,11 +13,11 @@ declare module 'component' {
 
     const Component: React.FC<ComponentProps>;
 
-    const Composed: {
+    const _default: {
         Component: typeof Component;
         Asdf: typeof Component2;
     };
 
-    export default Composed;
+    export default _default;
 
 }

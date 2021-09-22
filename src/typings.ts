@@ -73,10 +73,12 @@ export function createTypings(
   }
   const alreadyDefined: string[] = [];
 
+  const componentDots = getComponentDotProperties(ast, componentNames);
   componentNames.forEach((componentName) => {
     const exportType = getComponentExportType(ast, componentName);
     const propTypes = getPropTypes(ast, componentName);
-    if (exportType) {
+    const intersection = getIntersection(componentDots, componentName);
+    if (exportType || componentDots.length) {
       alreadyDefined.push(componentName);
       createExportedTypes(
         m,
@@ -86,6 +88,7 @@ export function createTypings(
         propTypes,
         importedPropTypes,
         exportType,
+        intersection,
         options
       );
     }
@@ -94,41 +97,45 @@ export function createTypings(
   // top level object variables
   const componentObject = getComponentNamesByObject(ast, componentNames);
 
-  componentObject.forEach(({ name, properties = {} }) => {
+  componentObject.forEach(({ name, properties }) => {
     const obj = dom.create.objectType([]);
     let hasType;
 
     Object.keys(properties).forEach((k) => {
       const { key, value } = properties[k];
-      componentNames.forEach((componentName) => {
-        // if a property matches an existing component
-        // add it to the object definition
-        if (value.type === 'Identifier' && value.name === componentName) {
-          const exportType = getComponentExportType(ast, componentName);
-          const propTypes = getPropTypes(ast, value.name);
-          // if it was exported individually, it will already have been typed earlier
-          if (!alreadyDefined.includes(componentName)) {
-            createExportedTypes(
-              m,
-              ast,
-              value.name,
-              reactComponentName,
-              propTypes,
-              importedPropTypes,
-              exportType,
-              options
-            );
-          }
+      // if a property matches an existing component
+      // add it to the object definition
+      if (value.type === 'Identifier' && componentNames.includes(value.name)) {
+        const exportType =
+          name === '_default'
+            ? undefined
+            : getComponentExportType(ast, value.name);
+        const propTypes = getPropTypes(ast, value.name);
+        const intersection = getIntersection(componentDots, name);
 
-          if (propTypes) {
-            hasType = true;
-            const type1 = dom.create.namedTypeReference(value.name);
-            const typeBase = dom.create.typeof(type1);
-            const b = dom.create.property(key.name, typeBase);
-            obj.members.push(b);
-          }
+        // if it was exported individually, it will already have been typed earlier
+        if (!alreadyDefined.includes(value.name)) {
+          createExportedTypes(
+            m,
+            ast,
+            value.name,
+            reactComponentName,
+            propTypes,
+            importedPropTypes,
+            exportType,
+            intersection,
+            options
+          );
         }
-      });
+
+        if (propTypes) {
+          hasType = true;
+          const type1 = dom.create.namedTypeReference(value.name);
+          const typeBase = dom.create.typeof(type1);
+          const b = dom.create.property(key.name, typeBase);
+          obj.members.push(b);
+        }
+      }
     });
     if (hasType) {
       const exportType = getComponentExportType(ast, name);
@@ -136,7 +143,10 @@ export function createTypings(
       const objConst = dom.create.const(name, obj);
       m.members.push(objConst);
 
-      if (exportType === dom.DeclarationFlags.ExportDefault) {
+      if (
+        exportType === dom.DeclarationFlags.ExportDefault ||
+        name === '_default'
+      ) {
         m.members.push(dom.create.exportDefault(name));
       } else {
         objConst.flags = exportType;
@@ -150,6 +160,24 @@ export function createTypings(
     return dom.emit(m, { tripleSlashDirectives });
   }
 }
+function getIntersection(
+  componentDots: ComponentProperties[],
+  componentName: string
+): string | null {
+  const intersection = componentDots.find((v) => v.name === componentName);
+  if (intersection) {
+    const types = intersection.properties.map(
+      (prop: ComponentProperties['properties'][0]) => {
+        return `\t\t${prop.key}: typeof ${prop.value};`;
+      }
+    );
+
+    return ` & {
+      ${types.join('\n')}
+    }`;
+  }
+  return null;
+}
 
 function createExportedTypes(
   m: dom.ModuleDeclaration,
@@ -159,6 +187,7 @@ function createExportedTypes(
   propTypes: any,
   importedPropTypes: ImportedPropTypes,
   exportType: dom.DeclarationFlags | undefined,
+  intersection: any,
   options: IOptions
 ): void {
   const classComponent = isClassComponent(
@@ -177,32 +206,71 @@ function createExportedTypes(
   if (propTypes || classComponent) {
     m.members.push(interf);
   }
-
   if (classComponent) {
-    if (!exportType) {
-      createClassComponent(m, componentName, reactComponentName, interf);
-    } else {
-      createExportedClassComponent(
-        m,
-        componentName,
-        reactComponentName,
-        exportType,
-        interf
-      );
-    }
-  } else if (!exportType) {
-    createFunctionalComponent(m, componentName, propTypes, interf);
+    createClassOrExportedClass(
+      m,
+      componentName,
+      reactComponentName,
+      exportType,
+      interf
+    );
   } else {
+    createFunctionalOrExportedFunctionalComponent(
+      m,
+      componentName,
+      propTypes,
+      exportType!,
+      intersection,
+      interf
+    );
+  }
+}
+function createClassOrExportedClass(
+  m: dom.ModuleDeclaration,
+  componentName: string,
+  reactComponentName: string | undefined,
+  exportType: dom.DeclarationFlags | undefined,
+  interf: dom.InterfaceDeclaration
+): void {
+  if (exportType) {
+    createExportedClassComponent(
+      m,
+      componentName,
+      reactComponentName,
+      exportType,
+      interf
+    );
+  } else {
+    createClassComponent(m, componentName, reactComponentName, interf);
+  }
+}
+function createFunctionalOrExportedFunctionalComponent(
+  m: dom.ModuleDeclaration,
+  componentName: string,
+  propTypes: any,
+  exportType: dom.DeclarationFlags | undefined,
+  intersection: any,
+  interf: dom.InterfaceDeclaration
+): void {
+  if (exportType) {
     createExportedFunctionalComponent(
       m,
       componentName,
       propTypes,
       exportType,
+      intersection,
+      interf
+    );
+  } else {
+    createFunctionalComponent(
+      m,
+      componentName,
+      propTypes,
+      intersection,
       interf
     );
   }
 }
-
 function createClassComponent(
   m: dom.ModuleDeclaration,
   componentName: string,
@@ -244,10 +312,13 @@ function createFunctionalComponent(
   m: dom.ModuleDeclaration,
   componentName: string,
   propTypes: any,
+  intersection: any,
   interf: dom.InterfaceDeclaration
 ): dom.ConstDeclaration {
   const typeDecl = dom.create.namedTypeReference(
-    `React.FC${propTypes ? `<${interf.name}>` : ''}`
+    `React.FC${propTypes ? `<${interf.name}>` : ''}${
+      intersection ? intersection : ''
+    }`
   );
   const constDecl = dom.create.const(componentName, typeDecl);
   m.members.push(constDecl);
@@ -260,12 +331,14 @@ function createExportedFunctionalComponent(
   componentName: string,
   propTypes: any,
   exportType: dom.DeclarationFlags,
+  intersection: any,
   interf: dom.InterfaceDeclaration
 ): void {
   const constDecl = createFunctionalComponent(
     m,
     componentName,
     propTypes,
+    intersection,
     interf
   );
   if (exportType === dom.DeclarationFlags.ExportDefault) {
@@ -579,37 +652,107 @@ function getComponentNamesByJsxInBody(ast: AstQuery): string[] {
   }
   return [];
 }
+type ComponentProperties = {
+  name: string;
+  properties: {
+    key: any;
+    value: any;
+    type?: any;
+  }[];
+};
 
 function getComponentNamesByObject(
   ast: AstQuery,
   componentNames: string[]
-): { name: string; properties: object | undefined }[] {
-  const res = ast.query(`
-      /:program *
-      / VariableDeclaration
-        / VariableDeclarator[
-          /:init ObjectExpression
-          // ObjectProperty
-        ],
-      /:program *
-      / ExportNamedDeclaration
-        // VariableDeclarator[
-          /:init ObjectExpression
-            // ObjectProperty
+): ComponentProperties[] {
+  let arr: ComponentProperties[] = [];
+  componentNames.forEach((name) => {
+    const res = ast.query(`
+    /:program *
+    / VariableDeclaration
+    / VariableDeclarator[
+      /:init ObjectExpression
+      // ObjectProperty
+        /:value Identifier[@name == '${name}']
+    ],
+    /:program *
+    / ExportNamedDeclaration
+    // VariableDeclarator[
+      /:init ObjectExpression
+      // ObjectProperty
+        /:value Identifier[@name == '${name}']
+    ],
+    /:program *
+    / ExportDefaultDeclaration [
+      // ObjectProperty
+        /:value Identifier[@name == '${name}']
+      ] /:declaration ObjectExpression
+    `);
+
+    if (res.length > 0) {
+      const matches: ComponentProperties[] = [];
+      // this accounts for export const X = {...} and export default {...}
+      // we need to give the default exported object a name hence '_default'
+      res.forEach((match) => {
+        if (
+          arr.findIndex(
+            (val) =>
+              val.name === match.id?.name ||
+              (val.name === '_default' && !match.id?.name)
+          ) === -1
+        ) {
+          matches.push({
+            name: match.id?.name || '_default',
+            properties: match.init?.properties || match.properties,
+          });
+        }
+      });
+
+      arr = [...arr, ...matches];
+    }
+  });
+  return arr;
+}
+
+function getComponentDotProperties(
+  ast: AstQuery,
+  componentNames: string[]
+): ComponentProperties[] {
+  let arr: ComponentProperties[] = [];
+  componentNames.forEach((name) => {
+    const res = ast.query(`
+    /:program *
+      // AssignmentExpression[
+        /:left MemberExpression[
+            /:object Identifier[@name == '${name}']
         ]
-  `);
-  if (res.length > 0) {
-    return (
-      res
-        // only interested in components that exist
-        .filter((match) => !componentNames.includes(match))
-        .map((match) => ({
-          name: match.id ? match.id.name : '',
-          properties: match.init?.properties,
-        }))
-    );
-  }
-  return [];
+      &&
+        /:right Identifier
+    ]
+    `);
+    if (res.length > 0) {
+      const properties: ComponentProperties['properties'] = [];
+      res.forEach((match) => {
+        if (!componentNames.includes(match.right?.name)) {
+          return;
+        }
+        properties.push({
+          key: match.left?.property?.name,
+          value: match.right?.name,
+        });
+      });
+      if (properties.length > 0) {
+        arr = [
+          ...arr,
+          {
+            name,
+            properties,
+          },
+        ];
+      }
+    }
+  });
+  return arr;
 }
 
 function getPropTypes(ast: AstQuery, componentName: string): any | undefined {
