@@ -72,7 +72,7 @@
     "get-stdin": "8.0.0",
     "meow": "8.1.2",
     "pascal-case": "3.1.2",
-    "strip-ansi": "6.0.0"
+    "strip-ansi": "6.0.1"
   },
   "ava": {
     "files": [
