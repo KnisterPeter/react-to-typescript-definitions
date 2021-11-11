@@ -40,7 +40,7 @@ export function parsePropTypes(
 function getOptionalDocumentation(propertyNode: any): string {
   return (
     ((propertyNode.leadingComments || []) as any[]).filter(
-      comment => comment.type === 'CommentBlock'
+      (comment) => comment.type === 'CommentBlock'
     )[0] || {}
   ).value;
 }
@@ -55,7 +55,7 @@ export function getTypeFromPropType(
 ): IProp {
   const result: IProp = {
     type: 'any',
-    optional: true
+    optional: true,
   };
   if (isNode(node)) {
     const { isRequired, type } = isRequiredPropType(node, instanceOfResolver);
@@ -133,7 +133,7 @@ function getReactPropTypeFromExpression(
         return {
           name: 'instanceOf',
           type: node.arguments[0].name,
-          importPath: instanceOfResolver(node.arguments[0].name)
+          importPath: instanceOfResolver(node.arguments[0].name),
         };
       case 'arrayOf':
         const arrayType = getTypeFromPropType(
@@ -142,7 +142,7 @@ function getReactPropTypeFromExpression(
         );
         return {
           name: 'array',
-          arrayType: arrayType.type
+          arrayType: arrayType.type,
         };
       case 'oneOfType':
         const unionTypes = node.arguments[0].elements.map((element: IASTNode) =>
@@ -150,7 +150,7 @@ function getReactPropTypeFromExpression(
         );
         return {
           name: 'union',
-          types: unionTypes.map((type: any) => type.type)
+          types: unionTypes.map((type: any) => type.type),
         };
     }
   }
@@ -168,6 +168,6 @@ function isRequiredPropType(
     type: getReactPropTypeFromExpression(
       isRequired ? node.object : node,
       instanceOfResolver
-    )
+    ),
   };
 }

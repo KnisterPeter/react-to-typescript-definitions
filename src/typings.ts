@@ -37,12 +37,12 @@ export function createTypings(
     },
     querySubtree(subtree: any, query: string): any[] {
       return astq.query(subtree, query);
-    }
+    },
   };
   const reactComponentName = getReactComponentName(ast);
   const importedPropTypes: ImportedPropTypes = {
     propTypesName: getPropTypesName(ast),
-    propTypes: getImportedPropTypes(ast)
+    propTypes: getImportedPropTypes(ast),
   };
   const importedTypes = getInstanceOfPropTypes(ast, importedPropTypes);
   const importStatements = getImportStatements(
@@ -53,7 +53,7 @@ export function createTypings(
   const componentNames = getUniqueNames([
     ...getComponentNamesByPropTypeAssignment(ast),
     ...getComponentNamesByStaticPropTypeAttribute(ast),
-    ...getComponentNamesByJsxInBody(ast)
+    ...getComponentNamesByJsxInBody(ast),
   ]);
   const tripleSlashDirectives: dom.TripleSlashDirective[] = [];
   const m = dom.create.module(moduleName || 'moduleName');
@@ -61,7 +61,7 @@ export function createTypings(
   m.members.push(dom.create.importAll('React', reactImport));
 
   if (importStatements.length > 0) {
-    importStatements.forEach(importStatement => {
+    importStatements.forEach((importStatement) => {
       if (importStatement.name === undefined) {
         m.members.push(
           dom.create.importDefault(importStatement.local, importStatement.path)
@@ -71,7 +71,7 @@ export function createTypings(
       }
     });
   }
-  componentNames.forEach(componentName => {
+  componentNames.forEach((componentName) => {
     const exportType = getComponentExportType(ast, componentName);
     const propTypes = getPropTypes(ast, componentName);
     if (exportType) {
@@ -89,7 +89,7 @@ export function createTypings(
   });
 
   if (moduleName === null) {
-    return m.members.map(member => dom.emit(member)).join('');
+    return m.members.map((member) => dom.emit(member)).join('');
   } else {
     return dom.emit(m, { tripleSlashDirectives });
   }
@@ -196,7 +196,7 @@ function createPropTypeTypings(
     / ObjectProperty
   `
   );
-  res.forEach(propertyAst => {
+  res.forEach((propertyAst) => {
     const typeDecl = types.get(
       ast,
       propertyAst.value,
@@ -217,9 +217,9 @@ function createPropTypeTypings(
       };
       property.jsDocComment = (propertyAst.leadingComments[0].value as string)
         .split('\n')
-        .map(line => line.trim())
-        .map(line => line.replace(/^\*\*?/, ''))
-        .map(line => line.trim())
+        .map((line) => line.trim())
+        .map((line) => line.replace(/^\*\*?/, ''))
+        .map((line) => line.trim())
         .filter(trimLines())
         .reverse()
         .filter(trimLines())
@@ -235,7 +235,7 @@ function extractComplexTypes(
   interf: dom.InterfaceDeclaration,
   componentName: string
 ): void {
-  interf.members.forEach(member => {
+  interf.members.forEach((member) => {
     if (member.kind === 'property' && isExtractableType(member.type)) {
       const name = `${componentName}${pascalCase(member.name)}`;
       const extractedMember = createModuleMember(name, member.type);
@@ -371,7 +371,7 @@ function getImportedPropTypes(ast: AstQuery): ImportedPropType[] {
     )
     .map(({ imported, local }) => ({
       importedName: imported.name,
-      localName: local.name
+      localName: local.name,
     }));
 }
 
@@ -400,7 +400,7 @@ function getInstanceOfPropTypes(
     /:arguments *
   `);
 
-  return res.map(identifer => identifer.name);
+  return res.map((identifer) => identifer.name);
 }
 
 interface ImportStatement {
@@ -414,7 +414,7 @@ function getImportStatements(
   instanceOfResolver: InstanceOfResolver | undefined
 ): ImportStatement[] {
   return typeNames
-    .map(name => {
+    .map((name) => {
       const res = ast.query(`
       // ImportDeclaration[
         /:specifiers * /:local Identifier[@name == '${name}']
@@ -426,10 +426,10 @@ function getImportStatements(
             ? res[0].specifiers[0].imported.name
             : undefined,
         local: name,
-        path: res.length > 0 ? res[0].source.value : undefined
+        path: res.length > 0 ? res[0].source.value : undefined,
       };
     })
-    .map(importStatement => {
+    .map((importStatement) => {
       if (importStatement && instanceOfResolver) {
         const resolvedPath = importStatement.name
           ? instanceOfResolver(importStatement.name)
@@ -440,7 +440,7 @@ function getImportStatements(
       }
       return importStatement;
     })
-    .filter(importStatement => Boolean(importStatement.path));
+    .filter((importStatement) => Boolean(importStatement.path));
 }
 
 function getComponentNamesByPropTypeAssignment(ast: AstQuery): string[] {
@@ -452,7 +452,7 @@ function getComponentNamesByPropTypeAssignment(ast: AstQuery): string[] {
       ]
   `);
   if (res.length > 0) {
-    return res.map(match => match.object.name);
+    return res.map((match) => match.object.name);
   }
   return [];
 }
@@ -464,7 +464,7 @@ function getComponentNamesByStaticPropTypeAttribute(ast: AstQuery): string[] {
     ]
   `);
   if (res.length > 0) {
-    return res.map(match => (match.id ? match.id.name : ''));
+    return res.map((match) => (match.id ? match.id.name : ''));
   }
   return [];
 }
@@ -483,7 +483,7 @@ function getComponentNamesByJsxInBody(ast: AstQuery): string[] {
     ]
   `);
   if (res.length > 0) {
-    return res.map(match => (match.id ? match.id.name : ''));
+    return res.map((match) => (match.id ? match.id.name : ''));
   }
   return [];
 }

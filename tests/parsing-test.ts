@@ -19,7 +19,7 @@ function textDiff(t: ExecutionContext, actual: string, expected: string): void {
   if (diff.diffChars(normalize(expected), normalize(actual)).length > 1) {
     const differences = diff.diffChars(expected, actual);
     const result = differences
-      .map(part => {
+      .map((part) => {
         const value = part.value.trim()
           ? part.value
           : (part.added ? '+' : '-') + part.value;
@@ -56,33 +56,33 @@ function compare(
   );
 }
 
-test('Parsing should create definition from es6 class component', t => {
+test('Parsing should create definition from es6 class component', (t) => {
   const opts: react2dts.IOptions = {
-    instanceOfResolver: (): string => './path/to/Message'
+    instanceOfResolver: (): string => './path/to/Message',
   };
   compare(t, 'component', 'es6-class.jsx', 'es6-class.d.ts', opts);
 });
-test('Parsing should create definition from es7 class component', t => {
+test('Parsing should create definition from es7 class component', (t) => {
   const opts: react2dts.IOptions = {
-    instanceOfResolver: (): string => './path/to/Message'
+    instanceOfResolver: (): string => './path/to/Message',
   };
   compare(t, 'component', 'es7-class.jsx', 'es7-class.d.ts', opts);
 });
-test('Parsing should create top-level module definition from es7 class component', t => {
+test('Parsing should create top-level module definition from es7 class component', (t) => {
   const opts: react2dts.IOptions = {
-    instanceOfResolver: (): string => './path/to/Message'
+    instanceOfResolver: (): string => './path/to/Message',
   };
   compare(t, null, 'es7-class.jsx', 'es7-class-top-level-module.d.ts', opts);
 });
-test('Parsing should create definition from babeled es7 class component', t => {
+test('Parsing should create definition from babeled es7 class component', (t) => {
   const opts: react2dts.IOptions = {
-    instanceOfResolver: (): string => './path/to/Message'
+    instanceOfResolver: (): string => './path/to/Message',
   };
   compare(t, 'component', 'es7-class-babeled.js', 'es7-class.d.ts', opts);
 });
-test('Parsing should create definition from es7 class component babeled to es6', t => {
+test('Parsing should create definition from es7 class component babeled to es6', (t) => {
   const opts: react2dts.IOptions = {
-    instanceOfResolver: (): string => './path/to/Message'
+    instanceOfResolver: (): string => './path/to/Message',
   };
   compare(
     t,
@@ -92,7 +92,7 @@ test('Parsing should create definition from es7 class component babeled to es6',
     opts
   );
 });
-test('Parsing should create definition from es7 class component with separate default export', t => {
+test('Parsing should create definition from es7 class component with separate default export', (t) => {
   compare(
     t,
     'component',
@@ -100,10 +100,10 @@ test('Parsing should create definition from es7 class component with separate de
     'es7-class-separate-export.d.ts'
   );
 });
-test('Parsing should create definition from stateless function component', t => {
+test('Parsing should create definition from stateless function component', (t) => {
   compare(t, 'component', 'stateless.jsx', 'stateless.d.ts');
 });
-test('Parsing should create definition from class extending Component', t => {
+test('Parsing should create definition from class extending Component', (t) => {
   compare(
     t,
     'component',
@@ -111,7 +111,7 @@ test('Parsing should create definition from class extending Component', t => {
     'import-react-component.d.ts'
   );
 });
-test('Parsing should create definition from class import PropTypes and instanceOf dependency', t => {
+test('Parsing should create definition from class import PropTypes and instanceOf dependency', (t) => {
   compare(
     t,
     'component',
@@ -119,7 +119,7 @@ test('Parsing should create definition from class import PropTypes and instanceO
     'instance-of-proptype-names.d.ts'
   );
 });
-test('Parsing should create definition from file without propTypes', t => {
+test('Parsing should create definition from file without propTypes', (t) => {
   compare(
     t,
     'component',
@@ -127,7 +127,7 @@ test('Parsing should create definition from file without propTypes', t => {
     'component-without-proptypes.d.ts'
   );
 });
-test('Parsing should create definition from file with references in propTypes', t => {
+test('Parsing should create definition from file with references in propTypes', (t) => {
   compare(
     t,
     'component',
@@ -135,7 +135,7 @@ test('Parsing should create definition from file with references in propTypes', 
     'references-in-proptypes.d.ts'
   );
 });
-test('Parsing should create definition from file with reference as propTypes', t => {
+test('Parsing should create definition from file with reference as propTypes', (t) => {
   compare(
     t,
     'component',
@@ -143,7 +143,7 @@ test('Parsing should create definition from file with reference as propTypes', t
     'reference-as-proptypes.d.ts'
   );
 });
-test('Parsing should create definition from file with unnamed default export', t => {
+test('Parsing should create definition from file with unnamed default export', (t) => {
   compare(
     t,
     'path',
@@ -151,7 +151,7 @@ test('Parsing should create definition from file with unnamed default export', t
     'unnamed-default-export.d.ts'
   );
 });
-test('Parsing should create definition from file with named export specifiers', t => {
+test('Parsing should create definition from file with named export specifiers', (t) => {
   compare(
     t,
     'component',
@@ -159,7 +159,7 @@ test('Parsing should create definition from file with named export specifiers', 
     'named-export-specifiers.d.ts'
   );
 });
-test('Parsing should create preact definition', t => {
+test('Parsing should create preact definition', (t) => {
   compare(
     t,
     'path',
@@ -169,13 +169,13 @@ test('Parsing should create preact definition', t => {
     'preact'
   );
 });
-test('Parsing should suppport props-types repo', t => {
+test('Parsing should suppport props-types repo', (t) => {
   compare(t, 'path', 'prop-types.jsx', 'prop-types.d.ts', {});
 });
-test('Parsing should suppport props-types repo (with a default import)', t => {
+test('Parsing should suppport props-types repo (with a default import)', (t) => {
   compare(t, 'path', 'prop-types-default-import.jsx', 'prop-types.d.ts', {});
 });
-test('Parsing should support an SFC with default export', t => {
+test('Parsing should support an SFC with default export', (t) => {
   compare(
     t,
     'component',
@@ -183,7 +183,7 @@ test('Parsing should support an SFC with default export', t => {
     'stateless-default-export.d.ts'
   );
 });
-test('Parsing should support an SFC with default export babeled to es6', t => {
+test('Parsing should support an SFC with default export babeled to es6', (t) => {
   compare(
     t,
     'component',
@@ -191,13 +191,13 @@ test('Parsing should support an SFC with default export babeled to es6', t => {
     'stateless-export-as-default.d.ts'
   );
 });
-test('Parsing should support components that extend PureComponent', t => {
+test('Parsing should support components that extend PureComponent', (t) => {
   compare(t, 'component', 'pure-component.jsx', 'pure-component.d.ts');
 });
-test('Parsing should support prop-types as reference to constant', t => {
+test('Parsing should support prop-types as reference to constant', (t) => {
   compare(t, 'component', 'const-as-proptypes.jsx', 'const-as-proptypes.d.ts');
 });
-test('Parsing should suppport custom eol style', t => {
+test('Parsing should suppport custom eol style', (t) => {
   textDiff(
     t,
     react2dts.generateFromFile(
@@ -212,8 +212,8 @@ test('Parsing should suppport custom eol style', t => {
       .replace('\r\n', '\n')
   );
 });
-test('Parsing should suppport users to set additional babylon plugins', t => {
+test('Parsing should suppport users to set additional babylon plugins', (t) => {
   compare(t, 'Component', 'babylon-plugin.jsx', 'babylon-plugin.d.ts', {
-    babylonPlugins: ['dynamicImport']
+    babylonPlugins: ['dynamicImport'],
   });
 });

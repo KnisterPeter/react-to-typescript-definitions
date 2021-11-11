@@ -7,7 +7,7 @@ type Args = { args: any[] };
 const originalConsoleError = console.error;
 
 test.beforeEach((t: ExecutionContext<Args>) => {
-  console.error = function(...args: any[]): void {
+  console.error = function (...args: any[]): void {
     if (!t.context.args) {
       t.context.args = [];
     }

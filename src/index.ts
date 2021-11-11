@@ -133,8 +133,8 @@ export function generateFromSource(
       'functionBind',
       'functionSent',
       'optionalChaining',
-      ...additionalBabylonPlugins
-    ]
+      ...additionalBabylonPlugins,
+    ],
   });
   if (!options.source) {
     options.source = code;

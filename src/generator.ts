@@ -43,7 +43,7 @@ export class Generator {
 
   public props(name: string, props: IPropTypes, fn?: () => void): void {
     this.interface(`${name}Props`, () => {
-      Object.keys(props).forEach(propName => {
+      Object.keys(props).forEach((propName) => {
         const prop = props[propName];
         this.prop(propName, prop.type, prop.optional, prop.documentation);
       });

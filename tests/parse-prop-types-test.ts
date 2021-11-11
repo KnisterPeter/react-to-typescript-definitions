@@ -8,70 +8,70 @@ const instanceOfResolver = (): any => undefined;
 const reactPropTypesMemberExpression: any = {
   type: 'MemberExpression',
   object: {
-    name: 'React'
+    name: 'React',
   },
   property: {
-    name: 'PropTypes'
-  }
+    name: 'PropTypes',
+  },
 };
 
-test('The PropType parser should return any on unknown PropTypes', t => {
+test('The PropType parser should return any on unknown PropTypes', (t) => {
   const ast: any = {
     type: '',
-    loc: {}
+    loc: {},
   };
   const expected = {
     type: 'any',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return any[] for generic array prop types', t => {
+test('The PropType parser should return any[] for generic array prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'array'
-    }
+      name: 'array',
+    },
   };
   const expected = {
     type: 'any[]',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return boolean for bool prop types', t => {
+test('The PropType parser should return boolean for bool prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'bool'
-    }
+      name: 'bool',
+    },
   };
   const expected = {
     type: 'boolean',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return a generic function for func prop types', t => {
+test('The PropType parser should return a generic function for func prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'func'
-    }
+      name: 'func',
+    },
   };
   const expected = {
     type: '(...args: any[]) => any',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return a generic required function for func.isRequired prop types', t => {
+test('The PropType parser should return a generic required function for func.isRequired prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
@@ -79,93 +79,93 @@ test('The PropType parser should return a generic required function for func.isR
       type: 'MemberExpression',
       object: reactPropTypesMemberExpression,
       property: {
-        name: 'func'
-      }
+        name: 'func',
+      },
     },
     property: {
-      name: 'isRequired'
-    }
+      name: 'isRequired',
+    },
   };
   const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
   t.is(result.type, '(...args: any[]) => any');
   t.is(result.optional, false);
 });
-test('The PropType parser should return number for number prop types', t => {
+test('The PropType parser should return number for number prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'number'
-    }
+      name: 'number',
+    },
   };
   const expected = {
     type: 'number',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return Object for object prop types', t => {
+test('The PropType parser should return Object for object prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'object'
-    }
+      name: 'object',
+    },
   };
   const expected = {
     type: 'Object',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return string for string prop types', t => {
+test('The PropType parser should return string for string prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'string'
-    }
+      name: 'string',
+    },
   };
   const expected = {
     type: 'string',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return React.ReactNode for node prop types', t => {
+test('The PropType parser should return React.ReactNode for node prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'node'
-    }
+      name: 'node',
+    },
   };
   const expected = {
     type: 'React.ReactNode',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return React.ReactElement<any> for element prop types', t => {
+test('The PropType parser should return React.ReactElement<any> for element prop types', (t) => {
   const ast: any = {
     type: 'MemberExpression',
     loc: {},
     object: reactPropTypesMemberExpression,
     property: {
-      name: 'element'
-    }
+      name: 'element',
+    },
   };
   const expected = {
     type: 'React.ReactElement<any>',
-    optional: true
+    optional: true,
   };
   t.deepEqual(getTypeFromPropType(ast, instanceOfResolver), expected);
 });
-test('The PropType parser should return number[] for arrayOf(React.PropTypes.number) prop types', t => {
+test('The PropType parser should return number[] for arrayOf(React.PropTypes.number) prop types', (t) => {
   const ast: any = {
     type: 'CallExpression',
     loc: {},
@@ -174,8 +174,8 @@ test('The PropType parser should return number[] for arrayOf(React.PropTypes.num
       loc: {},
       object: reactPropTypesMemberExpression,
       property: {
-        name: 'arrayOf'
-      }
+        name: 'arrayOf',
+      },
     },
     arguments: [
       {
@@ -183,10 +183,10 @@ test('The PropType parser should return number[] for arrayOf(React.PropTypes.num
         loc: {},
         object: reactPropTypesMemberExpression,
         property: {
-          name: 'number'
-        }
-      }
-    ]
+          name: 'number',
+        },
+      },
+    ],
   };
   const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
   t.is(result.type, 'number[]');
@@ -195,7 +195,7 @@ test('The PropType parser should return number[] for arrayOf(React.PropTypes.num
 test(
   'The PropType parser should return number|string for' +
     'oneOfType([React.PropTypes.number, React.PropTypes.string]) prop types',
-  t => {
+  (t) => {
     const ast: any = {
       type: 'CallExpression',
       loc: {},
@@ -204,8 +204,8 @@ test(
         loc: {},
         object: reactPropTypesMemberExpression,
         property: {
-          name: 'oneOfType'
-        }
+          name: 'oneOfType',
+        },
       },
       arguments: [
         {
@@ -217,27 +217,27 @@ test(
               loc: {},
               object: reactPropTypesMemberExpression,
               property: {
-                name: 'number'
-              }
+                name: 'number',
+              },
             },
             {
               type: 'MemberExpression',
               loc: {},
               object: reactPropTypesMemberExpression,
               property: {
-                name: 'string'
-              }
-            }
-          ]
-        }
-      ]
+                name: 'string',
+              },
+            },
+          ],
+        },
+      ],
     };
     const result: IProp = getTypeFromPropType(ast, instanceOfResolver);
     t.is(result.type, 'number|string');
     t.is(result.optional, true);
   }
 );
-test('The PropType parser should return Message for instanceOf(Message) prop types', t => {
+test('The PropType parser should return Message for instanceOf(Message) prop types', (t) => {
   const ast: any = {
     type: 'CallExpression',
     loc: {},
@@ -246,23 +246,23 @@ test('The PropType parser should return Message for instanceOf(Message) prop typ
       loc: {},
       object: reactPropTypesMemberExpression,
       property: {
-        name: 'instanceOf'
-      }
+        name: 'instanceOf',
+      },
     },
     arguments: [
       {
         type: 'Identifier',
         loc: {},
-        name: 'Message'
-      }
-    ]
+        name: 'Message',
+      },
+    ],
   };
   const result: IProp = getTypeFromPropType(ast, (): string => './some/path');
   t.is(result.type, 'Message');
   t.is(result.optional, true);
   t.is(result.importPath, './some/path');
 });
-test('The PropType parser should return any for unresolved instanceOf(Message) prop types', t => {
+test('The PropType parser should return any for unresolved instanceOf(Message) prop types', (t) => {
   const ast: any = {
     type: 'CallExpression',
     loc: {},
@@ -271,16 +271,16 @@ test('The PropType parser should return any for unresolved instanceOf(Message) p
       loc: {},
       object: reactPropTypesMemberExpression,
       property: {
-        name: 'instanceOf'
-      }
+        name: 'instanceOf',
+      },
     },
     arguments: [
       {
         type: 'Identifier',
         loc: {},
-        name: 'Message'
-      }
-    ]
+        name: 'Message',
+      },
+    ],
   };
   const result: IProp = getTypeFromPropType(ast);
   t.is(result.type, 'any');

@@ -1,3 +1,7 @@
 {
-  "extends": "@knisterpeter/standard-tslint"
+  "extends": "@knisterpeter/standard-tslint",
+  "rules": {
+    "trailing-comma": false,
+    "space-before-function-paren": false
+  }
 }

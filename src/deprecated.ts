@@ -5,7 +5,7 @@ import { InstanceOfResolver, IOptions } from './index';
 
 export enum ExportType {
   default,
-  named
+  named,
 }
 
 // tslint:disable:next-line interface-name
@@ -44,7 +44,7 @@ function deprecatedGenerator(
   const generateTypings = () => {
     generator.import('* as React', 'react');
     if (propTypes) {
-      Object.keys(propTypes).forEach(propName => {
+      Object.keys(propTypes).forEach((propName) => {
         const prop = propTypes[propName];
         if (prop.importPath) {
           generator.import(prop.type, prop.importPath);
@@ -146,7 +146,7 @@ function parseAst(
     exportType,
     classname,
     functionname,
-    propTypes: propTypes || {}
+    propTypes: propTypes || {},
   };
 }
 

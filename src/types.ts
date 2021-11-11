@@ -5,7 +5,7 @@ import { IOptions } from './index';
 import {
   AstQuery,
   ImportedPropTypes,
-  propTypeQueryExpression
+  propTypeQueryExpression,
 } from './typings';
 
 export interface TypeDeclaration {
@@ -16,7 +16,7 @@ export interface TypeDeclaration {
 function getTypeDeclaration(type: any, optional: boolean): TypeDeclaration {
   return {
     type,
-    optional
+    optional,
   };
 }
 
@@ -50,7 +50,7 @@ export function get(
   }
   return {
     type: 'any',
-    optional: true
+    optional: true,
   };
 }
 
@@ -80,7 +80,7 @@ function getSimpleType(
               'args',
               dom.create.array('any'),
               dom.ParameterFlags.Rest
-            )
+            ),
           ],
           'any'
         ),
@@ -136,7 +136,7 @@ function getComplexType(
         get(ast, subtree, importedPropTypes, options)
       ) as TypeDeclaration[];
       return getTypeDeclaration(
-        dom.create.union(typeDecls.map(type => type.type)),
+        dom.create.union(typeDecls.map((type) => type.type)),
         !required
       );
     case 'arrayOf':
@@ -160,7 +160,9 @@ function getComplexType(
         (entry: any) => {
           const typeDecl = get(ast, entry.value, importedPropTypes, options);
           return dom.create.property(
-            entry.key.type === 'StringLiteral' ? `${entry.key.value}` : entry.key.name,
+            entry.key.type === 'StringLiteral'
+              ? `${entry.key.value}`
+              : entry.key.name,
             typeDecl.type,
             typeDecl.optional
               ? dom.DeclarationFlags.Optional
