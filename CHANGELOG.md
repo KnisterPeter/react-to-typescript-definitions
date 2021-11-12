@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v3.0.1...v3.1.0) (2021-11-12)
+
+
+### Features
+
+* create definitions for components exported as object with component properties ([38603a0](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/38603a05f7d20dcde74201b171194bc4a94e4552))
+* create intersection types for components with dot notation component members ([40bccb0](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/40bccb0f631d88ce1e2dfc51e4110a37df182b99))
+
 ### [3.0.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v3.0.0...v3.0.1) (2021-04-07)
 
 ### Bug Fixes
