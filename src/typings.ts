@@ -30,6 +30,7 @@ export function createTypings(
   dom.config.outputEol = options.eol || '\r\n';
 
   const astq = new ASTQ();
+  astq.adapter('mozast', true);
   const ast = {
     ast: programAst,
     query(query: string): any[] {
