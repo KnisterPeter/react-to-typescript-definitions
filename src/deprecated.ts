@@ -152,6 +152,7 @@ function parseAst(
 
 function getClassName(ast: any): string | undefined {
   const astq = new ASTQ();
+  astq.adapter('mozast', true);
   const classDeclarationNodes = astq.query(
     ast,
     `
@@ -190,6 +191,7 @@ function getClassExportType(
   classname: string
 ): ExportType | undefined {
   const astq = new ASTQ();
+  astq.adapter('mozast', true);
   const exportTypeNodes = astq.query(
     ast,
     `

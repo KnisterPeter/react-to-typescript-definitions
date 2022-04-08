@@ -24,6 +24,7 @@ export function parsePropTypes(
   instanceOfResolver?: InstanceOfResolver
 ): IPropTypes {
   const astq = new ASTQ();
+  astq.adapter('mozast', true);
   return astq
     .query(node, `/ObjectProperty`)
     .reduce((propTypes: IPropTypes, propertyNode: IASTNode) => {
