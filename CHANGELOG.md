@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v3.1.0...v3.1.1) (2022-06-07)
+
+
+### Bug Fixes
+
+* upgrade astq ([db5a2f9](https://github.com/KnisterPeter/react-to-typescript-definitions/commit/db5a2f9ddae22b9974c8b46c2645f97484ae82c1))
+
 ## [3.1.0](https://github.com/KnisterPeter/react-to-typescript-definitions/compare/v3.0.1...v3.1.0) (2021-11-12)
 
 
