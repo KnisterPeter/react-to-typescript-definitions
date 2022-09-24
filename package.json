@@ -42,7 +42,7 @@
     "@types/babel-generator": "6.25.5",
     "@types/diff": "5.0.2",
     "@types/execa": "0.9.0",
-    "@types/node": "18.7.19",
+    "@types/node": "18.7.20",
     "@types/prop-types": "15.7.5",
     "@types/react": "18.0.21",
     "ava": "4.3.3",
