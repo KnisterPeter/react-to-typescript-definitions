@@ -1786,10 +1786,10 @@ dotgitignore@^2.1.0:
     find-up "^3.0.0"
     minimatch "^3.0.4"
 
-dts-dom@3.6.0:
-  version "3.6.0"
-  resolved "https://registry.npmjs.org/dts-dom/-/dts-dom-3.6.0.tgz"
-  integrity sha512-on5jxTgt+A6r0Zyyz6ZRHXaAO7J1VPnOd6+AmvI1vH440AlAZZNc5rUHzgPuTjGlrVr1rOWQYNl7ZJK6rDohbw==
+dts-dom@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/dts-dom/-/dts-dom-3.7.0.tgz#a7a5112fba66c2c86d4915dab833ea59cb91e7fd"
+  integrity sha512-WnmiiHfhtcYS+DyGd2Rq3J6QA3ATVBdKtlrhutc/VzQVFoBgNDm+gnYc5gZizsXAI0xQ2frZntT5IJFeB2qQIg==
 
 duplexer2@~0.1.4:
   version "0.1.4"
