@@ -2188,10 +2188,10 @@ get-pkg-repo@^4.0.0:
     through2 "^2.0.0"
     yargs "^16.2.0"
 
-get-stdin@8.0.0:
-  version "8.0.0"
-  resolved "https://registry.npmjs.org/get-stdin/-/get-stdin-8.0.0.tgz"
-  integrity sha512-sY22aA6xchAzprjyqmSEQv4UbAAzRN0L2dQB0NlN5acTTK9Don6nhoc3eAbUnpZiCANAMfd/+40kVdKfFygohg==
+get-stdin@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-9.0.0.tgz#3983ff82e03d56f1b2ea0d3e60325f39d703a575"
+  integrity sha512-dVKBjfWisLAicarI2Sf+JuBE/DghV4UzNAVe9yhEJuzeREd3JhOTE9cUaJTeSa77fsbQUK3pcOpJfM59+VKZaA==
 
 get-stream@^6.0.0:
   version "6.0.1"
