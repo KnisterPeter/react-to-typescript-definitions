@@ -105,6 +105,11 @@ function getSimpleType(
         dom.create.namedTypeReference('React.ReactElement<any>'),
         !required
       );
+    case 'elementType':
+      return getTypeDeclaration(
+        dom.create.namedTypeReference('React.ElementType<any>'),
+        !required
+      );
     case 'symbol':
       return getTypeDeclaration(
         dom.create.namedTypeReference('Symbol'),
