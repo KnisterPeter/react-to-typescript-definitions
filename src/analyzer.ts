@@ -89,6 +89,9 @@ export function getTypeFromPropType(
       case 'element':
         result.type = 'React.ReactElement<any>';
         break;
+      case 'elementType':
+        result.type = 'React.ElementType<any>';
+        break;
       case 'union':
         result.type = type.types
           .map((unionType: string) => unionType)
