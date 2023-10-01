@@ -43,7 +43,7 @@
     "@types/diff": "5.0.5",
     "@types/execa": "0.9.0",
     "@types/node": "20.8.0",
-    "@types/prop-types": "15.7.7",
+    "@types/prop-types": "15.7.8",
     "@types/react": "18.2.23",
     "ava": "4.3.3",
     "babel-core": "6.26.3",
