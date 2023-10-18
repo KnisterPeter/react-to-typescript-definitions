@@ -275,10 +275,10 @@
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-1.1.2.tgz"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-"@types/babel-generator@6.25.6":
-  version "6.25.6"
-  resolved "https://registry.yarnpkg.com/@types/babel-generator/-/babel-generator-6.25.6.tgz#6d474e4e9dc21e750802cae79f5a42c9a9f209a6"
-  integrity sha512-VBituuMj7lMPRkYGWNXuWIMs6T/raddG2lhGaP+75eLjBl5S8AH7/IjHVAq3zK7CtwkyJ9jEkgTQS3DIHOidRQ==
+"@types/babel-generator@6.25.7":
+  version "6.25.7"
+  resolved "https://registry.yarnpkg.com/@types/babel-generator/-/babel-generator-6.25.7.tgz#c7bc7359750dad9b5f3460e42a843dfaeefff31c"
+  integrity sha512-tlZke08SHDiIJ8gy6J+cvtWLtTMVSZdtmQ84qZO7mHa8LbK8ugGmli7cCtENLh0kXzcYa/VBYIoMoWLCZiLY2Q==
   dependencies:
     "@types/babel-types" "*"
 
