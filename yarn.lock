@@ -543,21 +543,21 @@ assert-plus@1.0.0, assert-plus@^1.0.0:
   resolved "https://registry.npmjs.org/assert-plus/-/assert-plus-1.0.0.tgz"
   integrity sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU=
 
-astq@2.7.9:
-  version "2.7.9"
-  resolved "https://registry.yarnpkg.com/astq/-/astq-2.7.9.tgz#f5357af5bd9698eb67ad6dcde748e3aa35bb8f82"
-  integrity sha512-ozV31NBBC9CuvRQ6BA9yUvrHjrOEfjPYiUR3tEi8MkpIVC6Aa/ji1biZbboKEadK6YsUvTkRF2b5MhxZAvdodQ==
+astq@2.7.10:
+  version "2.7.10"
+  resolved "https://registry.yarnpkg.com/astq/-/astq-2.7.10.tgz#a503a86f527fa15af094ec6bea95cbc6b5149e09"
+  integrity sha512-mCD/stnHxGON9Eid1eDWmbUO1TF9ao7rf0QLdSikkWYHy6k/72nbTNtes2pDKJ2+0NGR4Kiwp1ARm4IAw3zhTw==
   dependencies:
-    asty "1.8.18"
+    asty "1.8.19"
     cache-lru "1.1.11"
     pegjs "0.10.0"
     pegjs-otf "1.2.20"
     pegjs-util "1.4.21"
 
-asty@1.8.18:
-  version "1.8.18"
-  resolved "https://registry.yarnpkg.com/asty/-/asty-1.8.18.tgz#1d4eaa85507ffa183f2f947e352d11fc8b512957"
-  integrity sha512-pb7Dg4d5+Y6M5byuldyTXAnyEd5XPDsc0GELKt4I1sDrrVuwIvJzM7htKhpdykDb+1I74p4CqqQMYgmFuCBO1g==
+asty@1.8.19:
+  version "1.8.19"
+  resolved "https://registry.yarnpkg.com/asty/-/asty-1.8.19.tgz#edc311db971a41b7bf487c414e75eef22d6db44c"
+  integrity sha512-TdrCKHUFEYzbrSfKR8BQwJAQsaavTFVUejFYfAe35o6uiLI3fPzRu6lYuIMnzSLJ6ZlbXE2JkWH+tSuGBNlBrA==
 
 asynckit@^0.4.0:
   version "0.4.0"
